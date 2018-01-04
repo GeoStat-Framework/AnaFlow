@@ -463,7 +463,9 @@ def aniso(e):
     0.23639985871871511
     '''
 
-    assert(0.0 <= e <= 1.0), "Anisotropieratio must be within 0 and 1"
+    if not (0.0 <= e <= 1.0):
+        raise ValueError(
+            "Anisotropieratio 'e' must be within 0 and 1")
 
     if e == 1.0:
         res = 1./3.
@@ -527,17 +529,21 @@ def well_solution(rad, time, T, S, Qw,
         grid_shape = rad.shape
         rad = rad.reshape(-1)
 
-    assert (np.all(rad > 0.0)),\
-        "The given radii need to be greater than the wellradius"
-    assert (np.all(time > 0.0)),\
-        "The given times need to be >= 0"
-    if not struc_grid:
-        assert (rad.shape == time.shape),\
-            "For unstructured grid the number of time- & radial-pts must equal"
-    assert (T > 0.0),\
-        "The Transmissivity needs to be positiv"
-    assert (S > 0.0),\
-        "The Storage needs to be positiv"
+    if not (np.all(rad > 0.0)):
+        raise ValueError(
+            "The given radii need to be greater than the wellradius")
+    if not (np.all(time > 0.0)):
+        raise ValueError(
+            "The given times need to be > 0")
+    if not struc_grid and not (rad.shape == time.shape):
+        raise ValueError(
+            "For unstructured grid the number of time- & radii-pts must equal")
+    if not (T > 0.0):
+        raise ValueError(
+            "The Transmissivity needs to be positiv")
+    if not (S > 0.0):
+        raise ValueError(
+            "The Storage needs to be positiv")
 
     res = np.zeros(time.shape + rad.shape)
 

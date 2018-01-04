@@ -89,12 +89,15 @@ def thiem(rad, Rref,
     rad = np.squeeze(rad)
 
     # check the input
-    assert (Rref > 0.0),\
-        "The reference-radius needs to be greater than 0"
-    assert (np.all(rad > 0.0)),\
-        "The given radii need to be greater than the wellradius"
-    assert (T > 0.0),\
-        "The Transmissivity needs to be positiv"
+    if not (Rref > 0.0):
+        raise ValueError(
+            "The reference-radius needs to be greater than 0")
+    if not (np.all(rad > 0.0)):
+        raise ValueError(
+            "The given radii need to be greater than the wellradius")
+    if not (T > 0.0):
+        raise ValueError(
+            "The Transmissivity needs to be positiv")
 
     return -Qw/(2.0*np.pi*T)*np.log(rad/Rref) + href
 
@@ -156,21 +159,27 @@ def ext_thiem2D(rad, Rref,
     rad = np.squeeze(rad)
 
     # check the input
-    assert (Rref > 0.0),\
-        "The upper boundary needs to be greater than the wellradius"
-    assert (np.all(rad > 0.0)),\
-        "The given radii need to be greater than the wellradius"
-    assert (TG > 0.0),\
-        "The Transmissivity needs to be positiv"
-    if Twell is not None:
-        assert (Twell > 0.0),\
-            "The Transmissivity at the well needs to be positiv"
-    assert (sig2 > 0.0),\
-        "The variance needs to be positiv"
-    assert (corr > 0.0),\
-        "The correlationlength needs to be positiv"
-    assert (prop > 0.0),\
-        "The proportionalityfactor needs to be positiv"
+    if not (Rref > 0.0):
+        raise ValueError(
+            "The upper boundary needs to be greater than the wellradius")
+    if not (np.all(rad > 0.0)):
+        raise ValueError(
+            "The given radii need to be greater than the wellradius")
+    if not (TG > 0.0):
+        raise ValueError(
+            "The Transmissivity needs to be positiv")
+    if Twell is not None and not (Twell > 0.0):
+        raise ValueError(
+            "The Transmissivity at the well needs to be positiv")
+    if not (sig2 > 0.0):
+        raise ValueError(
+            "The variance needs to be positiv")
+    if not (corr > 0.0):
+        raise ValueError(
+            "The correlationlength needs to be positiv")
+    if not (prop > 0.0):
+        raise ValueError(
+            "The proportionalityfactor needs to be positiv")
 
     # define some substitions to shorten the result
     if Twell is not None:
@@ -257,28 +266,36 @@ def ext_thiem3D(rad, Rref,
     rad = np.squeeze(rad)
 
     # check the input
-    assert (Rref > 0.0),\
-        "The upper boundary needs to be greater than the wellradius"
-    assert (np.all(rad > 0.0)),\
-        "The given radii need to be greater than the wellradius"
-    if Kwell != "KA" and Kwell != "KH":
-        assert(isinstance(Kwell, float)),\
-            "The well-conductivity should be given as float or 'KA' resp. 'KH'"
-    if isinstance(Kwell, float):
-        assert (Kwell > 0.),\
-            "The well-conductivity needs to be positiv"
-    assert (KG > 0.0),\
-        "The Transmissivity needs to be positiv"
-    assert (sig2 > 0.0),\
-        "The variance needs to be positiv"
-    assert (corr > 0.0),\
-        "The correlationlength needs to be positiv"
-    assert (L > 0.0),\
-        "The aquifer-thickness needs to be positiv"
-    assert (0.0 < e <= 1.0),\
-        "The anisotropy-ratio must be > 0 and <= 1"
-    assert (prop > 0.0),\
-        "The proportionalityfactor needs to be positiv"
+    if not (Rref > 0.0):
+        raise ValueError(
+            "The upper boundary needs to be greater than the wellradius")
+    if not (np.all(rad > 0.0)):
+        raise ValueError(
+            "The given radii need to be greater than the wellradius")
+    if Kwell != "KA" and Kwell != "KH" and not(isinstance(Kwell, float)):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'")
+    if isinstance(Kwell, float) and not (Kwell > 0.):
+        raise ValueError(
+            "The well-conductivity needs to be positiv")
+    if not (KG > 0.0):
+        raise ValueError(
+            "The Transmissivity needs to be positiv")
+    if not (sig2 > 0.0):
+        raise ValueError(
+            "The variance needs to be positiv")
+    if not (corr > 0.0):
+        raise ValueError(
+            "The correlationlength needs to be positiv")
+    if not (L > 0.0):
+        raise ValueError(
+            "The aquifer-thickness needs to be positiv")
+    if not (0.0 < e <= 1.0):
+        raise ValueError(
+            "The anisotropy-ratio must be > 0 and <= 1")
+    if not (prop > 0.0):
+        raise ValueError(
+            "The proportionalityfactor needs to be positiv")
 
     # define some substitions to shorten the result
     Kefu = KG*np.exp(sig2*(0.5 - aniso(e)))
@@ -379,27 +396,36 @@ def theis(rad, time,
         rad = rad.reshape(-1)
 
     # check the input
-    assert (rwell >= 0.0),\
-        "The wellradius needs to be >= 0"
-    assert (rinf > rwell),\
-        "The upper boundary needs to be greater than the wellradius"
-    assert (np.all(rad >= rwell) and np.all(rad > 0.0)),\
-        "The given radii need to be greater than the wellradius"
-    assert (np.all(time > 0.0)),\
-        "The given times need to be > 0"
-    if not struc_grid:
-        assert (rad.shape == time.shape),\
-            "For unstructured grid the number of time- & radial-pts must equal"
-    assert (T > 0.0),\
-        "The Transmissivity needs to be positiv"
-    assert (S > 0.0),\
-        "The Storage needs to be positiv"
-    assert (isinstance(stehfestn, int)),\
-        "The boundary for the Stehfest-algorithm needs to be an integer"
-    assert (stehfestn > 1),\
-        "The boundary for the Stehfest-algorithm needs to be > 1"
-    assert (stehfestn % 2 == 0),\
-        "The boundary for the Stehfest-algorithm needs to be even"
+    if not (rwell >= 0.0):
+        raise ValueError(
+            "The wellradius needs to be >= 0")
+    if not (rinf > rwell):
+        raise ValueError(
+            "The upper boundary needs to be greater than the wellradius")
+    if not (np.all(rad >= rwell) and np.all(rad > 0.0)):
+        raise ValueError(
+            "The given radii need to be greater than the wellradius")
+    if not (np.all(time > 0.0)):
+        raise ValueError(
+            "The given times need to be > 0")
+    if not struc_grid and not (rad.shape == time.shape):
+        raise ValueError(
+            "For unstructured grid the number of time- & radii-pts must equal")
+    if not (T > 0.0):
+        raise ValueError(
+            "The Transmissivity needs to be positiv")
+    if not (S > 0.0):
+        raise ValueError(
+            "The Storage needs to be positiv")
+    if not (isinstance(stehfestn, int)):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be an integer")
+    if not (stehfestn > 1):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be > 1")
+    if not (stehfestn % 2 == 0):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be even")
 
     if rwell == 0.0 and rinf == np.inf:
         res = well_solution(rad, time, T, S, Qw)
@@ -522,42 +548,57 @@ def ext_theis2D(rad, time,
         rad = rad.reshape(-1)
 
     # check the input
-    assert (rwell >= 0.0),\
-        "The wellradius needs to be >= 0"
-    assert (rinf > rwell),\
-        "The upper boundary needs to be greater than the wellradius"
-    assert (np.all(rad >= rwell) and np.all(rad > 0.0)),\
-        "The given radii need to be greater than the wellradius"
-    assert (np.all(time > 0.0)),\
-        "The given times need to be >= 0"
-    if not struc_grid:
-        assert (rad.shape == time.shape),\
-            "For unstructured grid the number of time- & radial-pts must equal"
-    assert (TG > 0.0),\
-        "The Transmissivity needs to be positiv"
-    if Twell is not None:
-        assert (Twell > 0.0),\
-            "The Transmissivity at the well needs to be positiv"
-    assert (sig2 > 0.0),\
-        "The variance needs to be positiv"
-    assert (corr > 0.0),\
-        "The correlationlength needs to be positiv"
-    assert (S > 0.0),\
-        "The Storage needs to be positiv"
-    assert (prop > 0.0),\
-        "The proportionalityfactor needs to be positiv"
-    assert (isinstance(stehfestn, int)),\
-        "The boundary for the Stehfest-algorithm needs to be an integer"
-    assert (stehfestn > 1),\
-        "The boundary for the Stehfest-algorithm needs to be > 1"
-    assert (stehfestn % 2 == 0),\
-        "The boundary for the Stehfest-algorithm needs to be even"
-    assert (isinstance(parts, int)),\
-        "The numbor of partitions needs to be an integer"
-    assert (parts > 1),\
-        "The numbor of partitions needs to be at least 2"
-    assert (0.0 < T_err < 1.0),\
-        "The relative error of Transmissivity needs to be within (0,1)"
+    if not (rwell >= 0.0):
+        raise ValueError(
+            "The wellradius needs to be >= 0")
+    if not (rinf > rwell):
+        raise ValueError(
+            "The upper boundary needs to be greater than the wellradius")
+    if not (np.all(rad >= rwell) and np.all(rad > 0.0)):
+        raise ValueError(
+            "The given radii need to be greater than the wellradius")
+    if not (np.all(time > 0.0)):
+        raise ValueError(
+            "The given times need to be >= 0")
+    if not struc_grid and not (rad.shape == time.shape):
+        raise ValueError(
+            "For unstructured grid the number of time- & radii-pts must equal")
+    if not (TG > 0.0):
+        raise ValueError(
+            "The Transmissivity needs to be positiv")
+    if Twell is not None and not (Twell > 0.0):
+        raise ValueError(
+            "The Transmissivity at the well needs to be positiv")
+    if not (sig2 > 0.0):
+        raise ValueError(
+            "The variance needs to be positiv")
+    if not (corr > 0.0):
+        raise ValueError(
+            "The correlationlength needs to be positiv")
+    if not (S > 0.0):
+        raise ValueError(
+            "The Storage needs to be positiv")
+    if not (prop > 0.0):
+        raise ValueError(
+            "The proportionalityfactor needs to be positiv")
+    if not (isinstance(stehfestn, int)):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be an integer")
+    if not (stehfestn > 1):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be > 1")
+    if not (stehfestn % 2 == 0):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be even")
+    if not (isinstance(parts, int)):
+        raise ValueError(
+            "The numbor of partitions needs to be an integer")
+    if not (parts > 1):
+        raise ValueError(
+            "The numbor of partitions needs to be at least 2")
+    if not (0.0 < T_err < 1.0):
+        raise ValueError(
+            "The relative error of Transmissivity needs to be within (0,1)")
 
     # genearte rlast from a given relativ-error to farfield-transmissivity
     rlast = T_CG_error(T_err, TG, sig2, corr, prop, Twell=Twell)
@@ -689,47 +730,63 @@ def ext_theis3D(rad, time,
         rad = rad.reshape(-1)
 
     # check the input
-    assert (rwell >= 0.0),\
-        "The wellradius needs to be >= 0"
-    assert (rinf > rwell),\
-        "The upper boundary needs to be greater than the wellradius"
-    assert (np.all(rad >= rwell) and np.all(rad > 0.0)),\
-        "The given radii need to be greater than the wellradius"
-    assert (np.all(time > 0.0)),\
-        "The given times need to be >= 0"
-    if not struc_grid:
-        assert (rad.shape == time.shape),\
-            "For unstructured grid the number of time- & radial-pts must equal"
-    if Kwell != "KA" and Kwell != "KH":
-        assert(isinstance(Kwell, float)),\
-            "The well-conductivity should be given as float or 'KA' resp. 'KH'"
-    if isinstance(Kwell, float):
-        assert (Kwell > 0.),\
-            "The well-conductivity needs to be positiv"
-    assert (KG > 0.0),\
-        "The conductivity needs to be positiv"
-    assert (sig2 > 0.0),\
-        "The variance needs to be positiv"
-    assert (corr > 0.0),\
-        "The correlationlength needs to be positiv"
-    assert (S > 0.0),\
-        "The Storage needs to be positiv"
-    assert (L > 0.0),\
-        "The aquifer-thickness needs to be positiv"
-    assert (prop > 0.0),\
-        "The proportionalityfactor needs to be positiv"
-    assert (isinstance(stehfestn, int)),\
-        "The boundary for the Stehfest-algorithm needs to be an integer"
-    assert (stehfestn > 1),\
-        "The boundary for the Stehfest-algorithm needs to be > 1"
-    assert (stehfestn % 2 == 0),\
-        "The boundary for the Stehfest-algorithm needs to be even"
-    assert (isinstance(parts, int)),\
-        "The numbor of partitions needs to be an integer"
-    assert (parts > 1),\
-        "The numbor of partitions needs to be at least 2"
-    assert (0.0 < K_err < 1.0),\
-        "The relative error of Transmissivity needs to be within (0,1)"
+    if not (rwell >= 0.0):
+        raise ValueError(
+            "The wellradius needs to be >= 0")
+    if not (rinf > rwell):
+        raise ValueError(
+            "The upper boundary needs to be greater than the wellradius")
+    if not (np.all(rad >= rwell) and np.all(rad > 0.0)):
+        raise ValueError(
+            "The given radii need to be greater than the wellradius")
+    if not (np.all(time > 0.0)):
+        raise ValueError(
+            "The given times need to be >= 0")
+    if not struc_grid and not (rad.shape == time.shape):
+        raise ValueError(
+            "For unstructured grid the number of time- & radii-pts must equal")
+    if Kwell != "KA" and Kwell != "KH" and not(isinstance(Kwell, float)):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'")
+    if isinstance(Kwell, float) and not (Kwell > 0.):
+        raise ValueError(
+            "The well-conductivity needs to be positiv")
+    if not (KG > 0.0):
+        raise ValueError(
+            "The conductivity needs to be positiv")
+    if not (sig2 > 0.0):
+        raise ValueError(
+            "The variance needs to be positiv")
+    if not (corr > 0.0):
+        raise ValueError(
+            "The correlationlength needs to be positiv")
+    if not (S > 0.0):
+        raise ValueError(
+            "The Storage needs to be positiv")
+    if not (L > 0.0):
+        raise ValueError(
+            "The aquifer-thickness needs to be positiv")
+    if not (prop > 0.0):
+        raise ValueError(
+            "The proportionalityfactor needs to be positiv")
+    if not (isinstance(stehfestn, int)):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be an integer")
+    if not (stehfestn > 1):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be > 1")
+    if not (stehfestn % 2 == 0):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be even")
+    if not (isinstance(parts, int)):
+        raise ValueError(
+            "The numbor of partitions needs to be an integer")
+    if not (parts > 1):
+        raise ValueError(
+            "The numbor of partitions needs to be at least 2")
+    if not (0.0 < K_err < 1.0):
+        raise ValueError(
+            "The relative error of Transmissivity needs to be within (0,1)")
 
     # genearte rlast from a given relativ-error to farfield-transmissivity
     rlast = K_CG_error(K_err, KG, sig2, corr, e, prop, Kwell=Kwell)
@@ -838,33 +895,45 @@ def diskmodel(rad, time,
         rad = rad.reshape(-1)
 
     # check the input
-    assert (rwell >= 0.0),\
-        "The wellradius needs to be >= 0"
-    assert (rinf > rwell),\
-        "The upper boundary needs to be greater than the wellradius"
-    assert (all(Rpart[i] < Rpart[i+1] for i in range(len(Rpart)-1))),\
-        "The radii of the zones need to be sorted"
-    assert (np.all(Rpart > rwell)),\
-        "The radii of the zones need to be greater than the wellradius"
-    assert (np.all(Rpart < rinf)),\
-        "The radii of the zones need to be less than the outer radius"
-    assert (np.all(rad >= rwell) and np.all(rad > 0.0)),\
-        "The given radii need to be greater than the wellradius"
-    assert (np.all(time > 0.0)),\
-        "The given times need to be >= 0"
-    if not struc_grid:
-        assert (rad.shape == time.shape),\
-            "For unstructured grid the number of time- & radial-pts must equal"
-    assert (np.all(Tpart > 0.0)),\
-        "The Transmissivities need to be positiv"
-    assert (np.all(Spart > 0.0)),\
-        "The Storages need to be positiv"
-    assert (isinstance(stehfestn, int)),\
-        "The boundary for the Stehfest-algorithm needs to be an integer"
-    assert (stehfestn > 1),\
-        "The boundary for the Stehfest-algorithm needs to be > 1"
-    assert (stehfestn % 2 == 0),\
-        "The boundary for the Stehfest-algorithm needs to be even"
+    if not (rwell >= 0.0):
+        raise ValueError(
+            "The wellradius needs to be >= 0")
+    if not (rinf > rwell):
+        raise ValueError(
+            "The upper boundary needs to be greater than the wellradius")
+    if not (all(Rpart[i] < Rpart[i+1] for i in range(len(Rpart)-1))):
+        raise ValueError(
+            "The radii of the zones need to be sorted")
+    if not (np.all(Rpart > rwell)):
+        raise ValueError(
+            "The radii of the zones need to be greater than the wellradius")
+    if not (np.all(Rpart < rinf)):
+        raise ValueError(
+            "The radii of the zones need to be less than the outer radius")
+    if not (np.all(rad >= rwell) and np.all(rad > 0.0)):
+        raise ValueError(
+            "The given radii need to be greater than the wellradius")
+    if not (np.all(time > 0.0)):
+        raise ValueError(
+            "The given times need to be >= 0")
+    if not struc_grid and not (rad.shape == time.shape):
+        raise ValueError(
+            "For unstructured grid the number of time- & radii-pts must equal")
+    if not (np.all(Tpart > 0.0)):
+        raise ValueError(
+            "The Transmissivities need to be positiv")
+    if not (np.all(Spart > 0.0)):
+        raise ValueError(
+            "The Storages need to be positiv")
+    if not (isinstance(stehfestn, int)):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be an integer")
+    if not (stehfestn > 1):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be > 1")
+    if not (stehfestn % 2 == 0):
+        raise ValueError(
+            "The boundary for the Stehfest-algorithm needs to be even")
 
     rpart = np.append(np.array([rwell]), Rpart)
     rpart = np.append(rpart, np.array([rinf]))

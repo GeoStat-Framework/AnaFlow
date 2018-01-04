@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-anaflow
+AnaFlow
 
 python libary containing analytical and semi-analytical solutions
 for pumping-test:
@@ -12,6 +12,7 @@ for pumping-test:
     ext_theis3D - transient-state, confiend- and heterogeneous aquifer in 3D
     diskmodel - transient-state, confiend- and heterogeneous aquifer in 2D
 
+by Sebastian Mueller 2017
 """
 from setuptools import setup, find_packages
 

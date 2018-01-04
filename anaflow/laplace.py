@@ -146,12 +146,15 @@ def stehfest(func, time, bound=12, kwargs=None):
     time = np.array(time).reshape(-1)
 
     # check the input
-    assert (np.all(time > 0.0)),\
-        "The time-values need to be positiv for the stehfest-algorithm"
-    assert (bound > 1),\
-        "The boundary needs to be >1 for the stehfest-algorithm"
-    assert (bound % 2 == 0),\
-        "The boundary needs to be even for the stehfest-algorithm"
+    if not (np.all(time > 0.0)):
+        raise ValueError(
+            "The time-values need to be positiv for the stehfest-algorithm")
+    if not (bound > 1):
+        raise ValueError(
+            "The boundary needs to be >1 for the stehfest-algorithm")
+    if not (bound % 2 == 0):
+        raise ValueError(
+            "The boundary needs to be even for the stehfest-algorithm")
 
     # get all coefficient factors at once
     c_fac = _c_array(bound)
