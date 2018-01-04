@@ -29,4 +29,18 @@ For example: ``import anaflow.helper``
  - `laplace    ` -- Functions concerning the laplace-transform
  - `helper     ` -- Several helper-functions
 
+Installation
+------------
+Just download the code an run the following command from the
+source code directory:
+
+    pip install -U .
+
+It is highly recomended to install the scipy-scikit `umfpack` to get a solver
+for sparse linear systems:
+
+    pip install -U scikit-umfpack
+
+Have a look at: https://pypi.python.org/pypi/scikit-umfpack
+
 Created December 2017, Copyright Sebastian Mueller 2017
