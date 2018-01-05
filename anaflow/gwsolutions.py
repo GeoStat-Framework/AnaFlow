@@ -32,12 +32,12 @@ import warnings
 
 import numpy as np
 import scipy.sparse as sps
-from scipy.special import i0, i1, k0, k1, exp1, expi
+from scipy.special import (i0, i1, k0, k1, exp1, expi)
 
 from anaflow.laplace import stehfest as sf
-from anaflow.helper import well_solution, aniso, radii,\
-                           T_CG, T_CG_error,\
-                           K_CG, K_CG_error
+from anaflow.helper import (well_solution, aniso, radii,
+                            T_CG, T_CG_error,
+                            K_CG, K_CG_error)
 
 __all__ = ["thiem", "theis",
            "ext_thiem2D", "ext_theis2D",

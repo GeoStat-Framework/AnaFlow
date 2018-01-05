@@ -41,16 +41,18 @@ Utility tools
  __version__       --- Anaflow version string
 
 """
-from __future
+from __future__ import absolute_import
 
 from anaflow.gwsolutions import (thiem, theis,
                                  ext_thiem2D, ext_theis2D,
                                  ext_thiem3D, ext_theis3D,
                                  diskmodel)
-from anflow.laplace import (stehfest)
+from anaflow.laplace import (stehfest)
 
 __all__ = ["thiem", "theis",
-           "ext_thiem2D", "ext_theis2D",
-           "ext_thiem3D", "ext_theis3D",
+           "ext_thiem2D",
+           "ext_theis2D",
+           "ext_thiem3D",
+           "ext_theis3D",
            "diskmodel",
            "stehfest"]
