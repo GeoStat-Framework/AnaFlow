@@ -1,0 +1,309 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>anaflow.laplace &#8212; AnaFlow 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../modules.html">AnaFlow 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for anaflow.laplace</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Anaflow subpackage providing functions concerning the laplace transformation.</span>
+
+<span class="sd">.. currentmodule:: anaflow.laplace</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+<span class="sd">The following functions are provided</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">   :toctree: generated/</span>
+
+<span class="sd">   stehfest</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">floor</span><span class="p">,</span> <span class="n">factorial</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;stehfest&quot;</span><span class="p">]</span>
+
+
+<span class="n">C_LOOKUP</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.000000000000000000e+00</span><span class="p">,</span>
+                         <span class="o">-</span><span class="mf">2.000000000000000000e+00</span><span class="p">]),</span>
+            <span class="mi">4</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">2.000000000000000000e+00</span><span class="p">,</span>
+                         <span class="mf">2.600000000000000000e+01</span><span class="p">,</span>
+                         <span class="o">-</span><span class="mf">4.800000000000000000e+01</span><span class="p">,</span>
+                         <span class="mf">2.400000000000000000e+01</span><span class="p">]),</span>
+            <span class="mi">6</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.000000000000000000e+00</span><span class="p">,</span>
+                         <span class="o">-</span><span class="mf">4.900000000000000000e+01</span><span class="p">,</span>
+                         <span class="mf">3.660000000000000000e+02</span><span class="p">,</span>
+                         <span class="o">-</span><span class="mf">8.580000000000000000e+02</span><span class="p">,</span>
+                         <span class="mf">8.100000000000000000e+02</span><span class="p">,</span>
+                         <span class="o">-</span><span class="mf">2.700000000000000000e+02</span><span class="p">]),</span>
+            <span class="mi">8</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">3.333333333333333148e-01</span><span class="p">,</span>
+                         <span class="mf">4.833333333333333570e+01</span><span class="p">,</span>
+                         <span class="o">-</span><span class="mf">9.060000000000000000e+02</span><span class="p">,</span>
+                         <span class="mf">5.464666666666666060e+03</span><span class="p">,</span>
+                         <span class="o">-</span><span class="mf">1.437666666666666606e+04</span><span class="p">,</span>
+                         <span class="mf">1.873000000000000000e+04</span><span class="p">,</span>
+                         <span class="o">-</span><span class="mf">1.194666666666666606e+04</span><span class="p">,</span>
+                         <span class="mf">2.986666666666666515e+03</span><span class="p">]),</span>
+            <span class="mi">10</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">8.333333333333332871e-02</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">3.208333333333333570e+01</span><span class="p">,</span>
+                          <span class="mf">1.279000000000000000e+03</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">1.562366666666666606e+04</span><span class="p">,</span>
+                          <span class="mf">8.424416666666665697e+04</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">2.369575000000000000e+05</span><span class="p">,</span>
+                          <span class="mf">3.759116666666666861e+05</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">3.400716666666666861e+05</span><span class="p">,</span>
+                          <span class="mf">1.640625000000000000e+05</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">3.281250000000000000e+04</span><span class="p">]),</span>
+            <span class="mi">12</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.666666666666666644e-02</span><span class="p">,</span>
+                          <span class="mf">1.601666666666666572e+01</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">1.247000000000000000e+03</span><span class="p">,</span>
+                          <span class="mf">2.755433333333333212e+04</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">2.632808333333333139e+05</span><span class="p">,</span>
+                          <span class="mf">1.324138699999999953e+06</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">3.891705533333333209e+06</span><span class="p">,</span>
+                          <span class="mf">7.053286333333333023e+06</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">8.005336500000000000e+06</span><span class="p">,</span>
+                          <span class="mf">5.552830500000000000e+06</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">2.155507200000000186e+06</span><span class="p">,</span>
+                          <span class="mf">3.592512000000000116e+05</span><span class="p">]),</span>
+            <span class="mi">14</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.777777777777777884e-03</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">6.402777777777778567e+00</span><span class="p">,</span>
+                          <span class="mf">9.240499999999999545e+02</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">3.459792777777777519e+04</span><span class="p">,</span>
+                          <span class="mf">5.403211111111111240e+05</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">4.398346366666667163e+06</span><span class="p">,</span>
+                          <span class="mf">2.108759177777777612e+07</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">6.394491304444444180e+07</span><span class="p">,</span>
+                          <span class="mf">1.275975795499999970e+08</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">1.701371880833333433e+08</span><span class="p">,</span>
+                          <span class="mf">1.503274670333333313e+08</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">8.459216150000000000e+07</span><span class="p">,</span>
+                          <span class="mf">2.747888476666666567e+07</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">3.925554966666666791e+06</span><span class="p">]),</span>
+            <span class="mi">16</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">3.968253968253968251e-04</span><span class="p">,</span>
+                          <span class="mf">2.133730158730158699e+00</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">5.510166666666666515e+02</span><span class="p">,</span>
+                          <span class="mf">3.350016111111111240e+04</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">8.126651111111111240e+05</span><span class="p">,</span>
+                          <span class="mf">1.007618376666666567e+07</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">7.324138297777777910e+07</span><span class="p">,</span>
+                          <span class="mf">3.390596320730158687e+08</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">1.052539536278571367e+09</span><span class="p">,</span>
+                          <span class="mf">2.259013328583333492e+09</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">3.399701984433333397e+09</span><span class="p">,</span>
+                          <span class="mf">3.582450461699999809e+09</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">2.591494081366666794e+09</span><span class="p">,</span>
+                          <span class="mf">1.227049828766666651e+09</span><span class="p">,</span>
+                          <span class="o">-</span><span class="mf">3.427345554285714030e+08</span><span class="p">,</span>
+                          <span class="mf">4.284181942857142538e+07</span><span class="p">])}</span>
+
+
+<div class="viewcode-block" id="stehfest"><a class="viewcode-back" href="../../anaflow.html#anaflow.stehfest">[docs]</a><span class="k">def</span> <span class="nf">stehfest</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The stehfest-algorithm for numerical laplace inversion.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : function</span>
+<span class="sd">        function in laplace-space that shall be inverted.</span>
+<span class="sd">        The first argument needs to be the laplace-variable: func(s, **kwargs)</span>
+<span class="sd">    time : float</span>
+<span class="sd">        time-points to evaluate the function at</span>
+<span class="sd">    bound : int, optional</span>
+<span class="sd">        Here you can specify the number of interations within this</span>
+<span class="sd">        algorithm. Default: 12</span>
+<span class="sd">    kwargs : dict, optional</span>
+<span class="sd">        Keyword-arguments that are forwarded to the function given in &quot;func&quot;.</span>
+<span class="sd">        Default: None</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    stehfest : ndarray</span>
+<span class="sd">        Array with all evaluations in Time-space.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The parameter &quot;time&quot; needs to be strictly positiv.</span>
+<span class="sd">    The algorithm gets unstable for &quot;bound&quot; values above 20.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; f = lambda x: x**-1</span>
+<span class="sd">    &gt;&gt;&gt; stehfest(f, [1,10,100])</span>
+<span class="sd">    array([ 1.,  1.,  1.])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># check and save if &#39;t&#39; is scalar</span>
+    <span class="n">is_scal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+    <span class="c1"># ensure that t is handled as an 1d-array</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># check the input</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">time</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The time-values need to be positiv for the stehfest-algorithm&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">bound</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The boundary needs to be &gt;1 for the stehfest-algorithm&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">bound</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The boundary needs to be even for the stehfest-algorithm&quot;</span><span class="p">)</span>
+
+    <span class="c1"># get all coefficient factors at once</span>
+    <span class="n">c_fac</span> <span class="o">=</span> <span class="n">_c_array</span><span class="p">(</span><span class="n">bound</span><span class="p">)</span>
+    <span class="n">t_fac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span><span class="o">/</span><span class="n">time</span>
+
+    <span class="c1"># store every function-argument needed in one array</span>
+    <span class="n">fargs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">t_fac</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bound</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># get every function-value needed with one call of &#39;func&#39;</span>
+    <span class="n">lap_val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">fargs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">lap_val</span> <span class="o">=</span> <span class="n">lap_val</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">fargs</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="n">lap_val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+
+    <span class="c1"># do all the sumation with fancy indexing in numpy</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">lap_val</span><span class="p">,</span> <span class="n">c_fac</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rollaxis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rollaxis</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">ndim</span><span class="p">),</span> <span class="n">t_fac</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># reformat the result according to the input</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">is_scal</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asscalar</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="k">def</span> <span class="nf">_c_array</span><span class="p">(</span><span class="n">bound</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Array of coefficients for the stehfest-algorithm.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bound : int, optional</span>
+<span class="sd">        The number of interations. Default: 12</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    c_array : ndarray</span>
+<span class="sd">        Array with all coefficinets needed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">bound</span> <span class="ow">in</span> <span class="n">C_LOOKUP</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">C_LOOKUP</span><span class="p">[</span><span class="n">bound</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_carr</span><span class="p">(</span><span class="n">bound</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_carr</span><span class="p">(</span><span class="n">bound</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">bound</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bound</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">_c</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">def</span> <span class="nf">_c</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">((</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)),</span> <span class="nb">min</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">_d</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="n">bound</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">def</span> <span class="nf">_d</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="n">bound</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">))</span>
+    <span class="n">res</span> <span class="o">/=</span> <span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">bound</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="n">l</span><span class="p">))</span>
+    <span class="n">res</span> <span class="o">/=</span> <span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../modules.html">AnaFlow 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Sebastian Mueller.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>
