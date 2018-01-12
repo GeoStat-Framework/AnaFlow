@@ -40,9 +40,9 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
-    'sphinx.ext.autosummary',
-    'sphinxcontrib.fulltoc'
+    'sphinx.ext.autosummary'
     ]
+#     'sphinxcontrib.fulltoc'
 
 numpydoc_show_class_members = False
 
