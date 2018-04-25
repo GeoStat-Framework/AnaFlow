@@ -975,14 +975,16 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The relative error of Transmissivity needs to be within (0,1)&quot;</span><span class="p">)</span>
 
-    <span class="c1"># genearte rlast from a given relativ-error to farfield-transmissivity</span>
+    <span class="c1"># genearte rlast from a given relativ-error to farfield-conductivity</span>
     <span class="n">rlast</span> <span class="o">=</span> <span class="n">K_CG_error</span><span class="p">(</span><span class="n">K_err</span><span class="p">,</span> <span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="n">Kwell</span><span class="p">)</span>
 
-    <span class="c1"># generate the partition points and the evaluation-points of transmissivity</span>
-    <span class="n">rpart</span><span class="p">,</span> <span class="n">fpart</span> <span class="o">=</span> <span class="n">radii</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">rwell</span><span class="o">=</span><span class="n">rwell</span><span class="p">,</span> <span class="n">rinf</span><span class="o">=</span><span class="n">rinf</span><span class="p">,</span> <span class="n">rlast</span><span class="o">=</span><span class="n">rlast</span><span class="p">)</span>
+    <span class="c1"># generate the partition points</span>
+    <span class="n">rpart</span> <span class="o">=</span> <span class="n">specialrange_cut</span><span class="p">(</span><span class="n">rwell</span><span class="p">,</span> <span class="n">rinf</span><span class="p">,</span> <span class="n">parts</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">rlast</span><span class="p">)</span>
 
-    <span class="c1"># calculate the transmissivity values within each partition</span>
-    <span class="n">Tpart</span> <span class="o">=</span> <span class="n">K_CG</span><span class="p">(</span><span class="n">fpart</span><span class="p">,</span> <span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="n">Kwell</span><span class="p">)</span>
+    <span class="c1"># calculate the harmonic mean conductivity values within each partition</span>
+    <span class="n">Tpart</span> <span class="o">=</span> <span class="n">rad_hmean_func</span><span class="p">(</span><span class="n">K_CG</span><span class="p">,</span> <span class="n">rpart</span><span class="p">,</span>
+                           <span class="n">KG</span><span class="o">=</span><span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="o">=</span><span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="o">=</span><span class="n">corr</span><span class="p">,</span>
+                           <span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="n">Kwell</span><span class="p">)</span>
 
     <span class="c1"># write the paramters in kwargs to use the stehfest-algorithm</span>
     <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rad&quot;</span><span class="p">:</span> <span class="n">rad</span><span class="p">,</span>

@@ -17,7 +17,7 @@ Dependencies
 Installation
 ------------
 Just download the code from: https://github.com/MuellerSeb/AnaFlow/archive/master.zip
-and unzip the file.
+and unzip the file. 
 
 Then run the following command from the source code directory:
 
