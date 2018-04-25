@@ -1,6 +1,7 @@
 
 AnaFlow: A python-package containing analytical solutions for the groundwater flow equation
 ===========================================================================================
+[![DOI](https://zenodo.org/badge/116264578.svg)](https://zenodo.org/badge/latestdoi/116264578)
 
 You can find the documentation under: http://anaflow.readthedocs.io
 
