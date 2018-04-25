@@ -1,0 +1,785 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AnaFlow &mdash; AnaFlow 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="AnaFlow 0.1 documentation" href="index.html"/>
+        <link rel="next" title="Groundwater equation solutions" href="gwsol.html"/>
+        <link rel="prev" title="AnaFlow: A python-package containing analytical solutions for groundwater flow" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> AnaFlow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">AnaFlow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#contents">Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gwsol.html">Groundwater equation solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laplace.html">Laplace Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="helper.html">Helper functions</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">AnaFlow</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>AnaFlow</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/main.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-anaflow"></span><div class="section" id="anaflow">
+<h1>AnaFlow<a class="headerlink" href="#anaflow" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<p>Anaflow provides several analytical and semi-analytical solutions for the
+groundwater-flow-equation.</p>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>The following functions are provided directly</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.thiem" title="anaflow.thiem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thiem</span></code></a>(rad,&nbsp;Rref,&nbsp;T,&nbsp;Qw[,&nbsp;href])</td>
+<td>The Thiem solution for steady-state flow under a pumping condition in a confined and homogeneous aquifer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.theis" title="anaflow.theis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">theis</span></code></a>(rad,&nbsp;time,&nbsp;T,&nbsp;S,&nbsp;Qw[,&nbsp;struc_grid,&nbsp;…])</td>
+<td>The Theis solution for transient flow under a pumping condition in a confined and homogeneous aquifer.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.ext_thiem2D" title="anaflow.ext_thiem2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ext_thiem2D</span></code></a>(rad,&nbsp;Rref,&nbsp;TG,&nbsp;sig2,&nbsp;corr,&nbsp;Qw[,&nbsp;…])</td>
+<td>The extended Thiem solution for steady-state flow under a pumping condition in a confined aquifer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.ext_theis2D" title="anaflow.ext_theis2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ext_theis2D</span></code></a>(rad,&nbsp;time,&nbsp;TG,&nbsp;sig2,&nbsp;corr,&nbsp;S,&nbsp;Qw)</td>
+<td>The extended Theis solution for transient flow under a pumping condition in a confined aquifer.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.ext_thiem3D" title="anaflow.ext_thiem3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ext_thiem3D</span></code></a>(rad,&nbsp;Rref,&nbsp;KG,&nbsp;sig2,&nbsp;corr,&nbsp;e,&nbsp;Qw,&nbsp;L)</td>
+<td>The extended Thiem solution for steady-state flow under a pumping condition in a confined aquifer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.ext_theis3D" title="anaflow.ext_theis3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ext_theis3D</span></code></a>(rad,&nbsp;time,&nbsp;KG,&nbsp;sig2,&nbsp;corr,&nbsp;e,&nbsp;S,&nbsp;…)</td>
+<td>The extended Theis solution for transient flow under a pumping condition in a confined aquifer.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.diskmodel" title="anaflow.diskmodel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">diskmodel</span></code></a>(rad,&nbsp;time,&nbsp;Tpart,&nbsp;Spart,&nbsp;Rpart,&nbsp;Qw)</td>
+<td>A diskmodel for transient flow under a pumping condition in a confined aquifer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.stehfest" title="anaflow.stehfest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stehfest</span></code></a>(func,&nbsp;time[,&nbsp;bound,&nbsp;arg_dict])</td>
+<td>The stehfest-algorithm for numerical laplace inversion.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<p>Using any of these subpackages requires an explicit import.  For example,
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">anaflow.helper</span></code>.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="gwsol.html#module-anaflow.gwsolutions" title="anaflow.gwsolutions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gwsolutions</span></code></a></td>
+<td>Anaflow subpackage providing solutions for the groundwater flow equation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="laplace.html#module-anaflow.laplace" title="anaflow.laplace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">laplace</span></code></a></td>
+<td>Anaflow subpackage providing functions concerning the laplace transformation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="helper.html#module-anaflow.helper" title="anaflow.helper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">helper</span></code></a></td>
+<td>Anaflow subpackage providing several helper functions.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="anaflow.thiem">
+<code class="descclassname">anaflow.</code><code class="descname">thiem</code><span class="sig-paren">(</span><em>rad</em>, <em>Rref</em>, <em>T</em>, <em>Qw</em>, <em>href=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/gwsolutions.html#thiem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.thiem" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Thiem solution for steady-state flow under a pumping condition
+in a confined and homogeneous aquifer.</p>
+<p>This solution was presented in ‘’Thiem 1906’‘<a class="reference internal" href="#r6" id="id1">[R6]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>Rref</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Reference radius with known head (see <cite>href</cite>)</li>
+<li><strong>T</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given transmissivity of the aquifer</li>
+<li><strong>Qw</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Pumpingrate at the well</li>
+<li><strong>href</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Reference head at the reference-radius <cite>Rref</cite>. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>thiem</strong> – Array with all heads at the given radii.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R6]</a></td><td>Thiem, G.,
+‘’Hydrologische Methoden, J.M. Gebhardt’‘, Leipzig, 1906.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">rad</span></code>, <code class="docutils literal notranslate"><span class="pre">Rref</span></code> and <code class="docutils literal notranslate"><span class="pre">T</span></code> will be checked for positivity.</p>
+<p>If you want to use cartesian coordiantes, just use the formula
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">sqrt(x**2</span> <span class="pre">+</span> <span class="pre">y**2)</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">thiem</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="go">array([-0.3664678 , -0.25615   , -0.19161822])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.theis">
+<code class="descclassname">anaflow.</code><code class="descname">theis</code><span class="sig-paren">(</span><em>rad</em>, <em>time</em>, <em>T</em>, <em>S</em>, <em>Qw</em>, <em>struc_grid=True</em>, <em>rwell=0.0</em>, <em>rinf=inf</em>, <em>hinf=0.0</em>, <em>stehfestn=12</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/gwsolutions.html#theis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.theis" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Theis solution for transient flow under a pumping condition
+in a confined and homogeneous aquifer.</p>
+<p>This solution was presented in ‘’Theis 1935’‘<a class="reference internal" href="#r7" id="id2">[R7]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>time</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all time-points where the function should be evaluated</li>
+<li><strong>T</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given transmissivity of the aquifer</li>
+<li><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given storativity of the aquifer</li>
+<li><strong>Qw</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Pumpingrate at the well</li>
+<li><strong>struc_grid</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#bool" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If this is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the <cite>rad</cite> and <cite>time</cite> array will be merged
+and interpreted as single, r-t points. In this case they need to have
+the same shapes. Otherwise a structured r-t grid is created.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
+<li><strong>rwell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Inner radius of the pumping-well. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>rinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Radius of the outer boundary of the aquifer. Default: <code class="docutils literal notranslate"><span class="pre">np.inf</span></code></li>
+<li><strong>hinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Reference head at the outer boundary <cite>rinf</cite>. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>stehfestn</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – If <cite>rwell</cite> or <cite>rinf</cite> are not default, the solution is calculated in
+Laplace-space. The back-transformation is performed with the stehfest-
+algorithm. Here you can specify the number of interations within this
+algorithm. Default: <code class="docutils literal notranslate"><span class="pre">12</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>theis</strong> – Array with all heads at the given radii and time-points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R7]</a></td><td>Theis, C.,
+‘’The relation between the lowering of the piezometric surface and the
+rate and duration of discharge of a well using groundwater storage’‘,
+Trans. Am. Geophys. Union, 16, 519–524, 1935</td></tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">rad</span></code>, <code class="docutils literal notranslate"><span class="pre">Rref</span></code> and <code class="docutils literal notranslate"><span class="pre">T</span></code> will be checked for positivity.</p>
+<p>If you want to use cartesian coordiantes, just use the formula
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">sqrt(x**2</span> <span class="pre">+</span> <span class="pre">y**2)</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">theis</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="go">array([[-0.24959541, -0.14506368, -0.08971485],</span>
+<span class="go">       [-0.43105106, -0.32132823, -0.25778313]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.ext_thiem2D">
+<code class="descclassname">anaflow.</code><code class="descname">ext_thiem2D</code><span class="sig-paren">(</span><em>rad</em>, <em>Rref</em>, <em>TG</em>, <em>sig2</em>, <em>corr</em>, <em>Qw</em>, <em>href=0.0</em>, <em>Twell=None</em>, <em>prop=1.6</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/gwsolutions.html#ext_thiem2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.ext_thiem2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extended Thiem solution for steady-state flow under
+a pumping condition in a confined aquifer.</p>
+<p>This solution was presented in ‘’Zech 2013’‘<a class="reference internal" href="#r4" id="id3">[R4]</a>.</p>
+<p>The type curve is describing the effective drawdown
+in a 2D statistical framework, where the transmissivity distribution is
+following a log-normal distribution with a gaussian correlation function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>Rref</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Reference radius with known head (see <cite>href</cite>)</li>
+<li><strong>TG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean transmissivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the transmissivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of transmissivity-distribution</li>
+<li><strong>Qw</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Pumpingrate at the well</li>
+<li><strong>href</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Reference head at the reference-radius <cite>Rref</cite>. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>Twell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Explicit transmissivity value at the well. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ext_thiem2D</strong> – Array with all heads at the given radii.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[R4]</a></td><td>Zech, A.
+‘’Impact of Aqifer Heterogeneity on Subsurface Flow and Salt
+Transport at Different Scales: from a method determine parameters
+of heterogeneous permeability at local scale to a large-scale model
+for the sedimentary basin of Thuringia.’’
+PhD thesis, Friedrich-Schiller-Universität Jena, 2013</td></tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">rad</span></code>, <code class="docutils literal notranslate"><span class="pre">Rref</span></code>, <code class="docutils literal notranslate"><span class="pre">TG</span></code>, <code class="docutils literal notranslate"><span class="pre">sig2</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">Twell</span></code>
+and <code class="docutils literal notranslate"><span class="pre">prop</span></code> will be checked for positivity.</p>
+<p>If you want to use cartesian coordiantes, just use the formula
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">sqrt(x**2</span> <span class="pre">+</span> <span class="pre">y**2)</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ext_thiem2D</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="go">array([-0.53084596, -0.35363029, -0.25419375])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.ext_theis2D">
+<code class="descclassname">anaflow.</code><code class="descname">ext_theis2D</code><span class="sig-paren">(</span><em>rad</em>, <em>time</em>, <em>TG</em>, <em>sig2</em>, <em>corr</em>, <em>S</em>, <em>Qw</em>, <em>struc_grid=True</em>, <em>rwell=0.0</em>, <em>rinf=inf</em>, <em>hinf=0.0</em>, <em>Twell=None</em>, <em>T_err=0.01</em>, <em>prop=1.6</em>, <em>stehfestn=12</em>, <em>parts=30</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/gwsolutions.html#ext_theis2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.ext_theis2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extended Theis solution for transient flow under
+a pumping condition in a confined aquifer.
+The type curve is describing the effective drawdown
+in a 2D statistical framework, where the transmissivity distribution is
+following a log-normal distribution with a gaussian correlation function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>time</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all time-points where the function should be evaluated</li>
+<li><strong>TG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean transmissivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the transmissivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of transmissivity-distribution</li>
+<li><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given storativity of the aquifer</li>
+<li><strong>Qw</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Pumpingrate at the well</li>
+<li><strong>struc_grid</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#bool" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If this is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the <cite>rad</cite> and <cite>time</cite> array will be merged
+and interpreted as single, r-t points. In this case they need to have
+the same shapes. Otherwise a structured r-t grid is created.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
+<li><strong>rwell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Inner radius of the pumping-well. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>rinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Radius of the outer boundary of the aquifer. Default: <code class="docutils literal notranslate"><span class="pre">np.inf</span></code></li>
+<li><strong>hinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Reference head at the outer boundary <code class="docutils literal notranslate"><span class="pre">rinf</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>Twell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Explicit transmissivity value at the well. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>T_err</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Absolute error for the farfield transmissivity for calculating the
+cutoff-point of the solution. Default: <code class="docutils literal notranslate"><span class="pre">0.01</span></code></li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+<li><strong>stehfestn</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Since the solution is calculated in Laplace-space, the
+back-transformation is performed with the stehfest-algorithm.
+Here you can specify the number of interations within this
+algorithm. Default: <code class="docutils literal notranslate"><span class="pre">12</span></code></li>
+<li><strong>parts</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Since the solution is calculated by setting the transmissity to local
+constant values, one needs to specify the number of partitions of the
+transmissivity. Default: <code class="docutils literal notranslate"><span class="pre">30</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ext_theis2D</strong> – Array with all heads at the given radii and time-points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">rad</span></code>, <code class="docutils literal notranslate"><span class="pre">Rref</span></code>, <code class="docutils literal notranslate"><span class="pre">TG</span></code>, <code class="docutils literal notranslate"><span class="pre">sig2</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">S</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Twell</span></code> and <code class="docutils literal notranslate"><span class="pre">prop</span></code> will be checked for positivity.</p>
+<p><code class="docutils literal notranslate"><span class="pre">T_err</span></code> must be greater 0 and less or equal 1.</p>
+<p>If you want to use cartesian coordiantes, just use the formula
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">sqrt(x**2</span> <span class="pre">+</span> <span class="pre">y**2)</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ext_theis2D</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="go">array([[-0.3381231 , -0.17430066, -0.09492601],</span>
+<span class="go">       [-0.58557452, -0.40907021, -0.31112835]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.ext_thiem3D">
+<code class="descclassname">anaflow.</code><code class="descname">ext_thiem3D</code><span class="sig-paren">(</span><em>rad</em>, <em>Rref</em>, <em>KG</em>, <em>sig2</em>, <em>corr</em>, <em>e</em>, <em>Qw</em>, <em>L</em>, <em>href=0.0</em>, <em>Kwell='KH'</em>, <em>prop=1.6</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/gwsolutions.html#ext_thiem3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.ext_thiem3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extended Thiem solution for steady-state flow under
+a pumping condition in a confined aquifer.</p>
+<p>This solution was presented in ‘’Zech 2013’‘<a class="reference internal" href="#r5" id="id4">[R5]</a>.</p>
+<p>The type curve is describing the effective drawdown
+in a 3D statistical framework, where the conductivity distribution is
+following a log-normal distribution with a gaussian correlation function
+and taking vertical anisotropy into account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>Rref</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Reference radius with known head (see <cite>href</cite>)</li>
+<li><strong>KG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean conductivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the conductivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of conductivity-distribution</li>
+<li><strong>e</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Anisotropy-ratio of the vertical and horizontal corralation-lengths</li>
+<li><strong>Qw</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Pumpingrate at the well</li>
+<li><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Thickness of the aquifer</li>
+<li><strong>href</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Reference head at the reference-radius <cite>Rref</cite>. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>Kwell</strong> (<em>string/float</em><em>, </em><em>optional</em>) – Explicit conductivity value at the well. One can choose between the
+harmonic mean (<code class="docutils literal notranslate"><span class="pre">&quot;KH&quot;</span></code>), the arithmetic mean (<code class="docutils literal notranslate"><span class="pre">&quot;KA&quot;</span></code>) or an
+arbitrary float value. Default: <code class="docutils literal notranslate"><span class="pre">&quot;KH&quot;</span></code></li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ext_thiem3D</strong> – Array with all heads at the given radii.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[R5]</a></td><td>Zech, A.
+‘’Impact of Aqifer Heterogeneity on Subsurface Flow and Salt
+Transport at Different Scales: from a method determine parameters
+of heterogeneous permeability at local scale to a large-scale model
+for the sedimentary basin of Thuringia.’’
+PhD thesis, Friedrich-Schiller-Universität Jena, 2013</td></tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">rad</span></code>, <code class="docutils literal notranslate"><span class="pre">Rref</span></code>, <code class="docutils literal notranslate"><span class="pre">KG</span></code>, <code class="docutils literal notranslate"><span class="pre">sig2</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">Kwell</span></code>
+and <code class="docutils literal notranslate"><span class="pre">prop</span></code> will be checked for positivity.</p>
+<p>The anisotropy <code class="docutils literal notranslate"><span class="pre">e</span></code> factor must be greater 0 and less or equal 1.</p>
+<p>If you want to use cartesian coordiantes, just use the formula
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">sqrt(x**2</span> <span class="pre">+</span> <span class="pre">y**2)</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ext_thiem3D</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([-0.48828026, -0.31472059, -0.22043022])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.ext_theis3D">
+<code class="descclassname">anaflow.</code><code class="descname">ext_theis3D</code><span class="sig-paren">(</span><em>rad</em>, <em>time</em>, <em>KG</em>, <em>sig2</em>, <em>corr</em>, <em>e</em>, <em>S</em>, <em>Qw</em>, <em>L</em>, <em>struc_grid=True</em>, <em>rwell=0.0</em>, <em>rinf=inf</em>, <em>hinf=0.0</em>, <em>Kwell='KH'</em>, <em>K_err=0.01</em>, <em>prop=1.6</em>, <em>stehfestn=12</em>, <em>parts=30</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/gwsolutions.html#ext_theis3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.ext_theis3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>The extended Theis solution for transient flow under
+a pumping condition in a confined aquifer.
+The type curve is describing the effective drawdown
+in a 3D statistical framework, where the transmissivity distribution is
+following a log-normal distribution with a gaussian correlation function
+and taking vertical anisotropy into account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>time</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all time-points where the function should be evaluated</li>
+<li><strong>KG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean conductivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the conductivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of conductivity-distribution</li>
+<li><strong>e</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Anisotropy-ratio of the vertical and horizontal corralation-lengths</li>
+<li><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given storativity of the aquifer</li>
+<li><strong>Qw</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Pumpingrate at the well</li>
+<li><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Thickness of the aquifer</li>
+<li><strong>struc_grid</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#bool" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If this is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the <cite>rad</cite> and <cite>time</cite> array will be merged
+and interpreted as single, r-t points. In this case they need to have
+the same shapes. Otherwise a structured r-t grid is created.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
+<li><strong>rwell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Inner radius of the pumping-well. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>rinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Radius of the outer boundary of the aquifer. Default: <code class="docutils literal notranslate"><span class="pre">np.inf</span></code></li>
+<li><strong>hinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Reference head at the outer boundary <cite>rinf</cite>. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>Kwell</strong> (<em>string/float</em><em>, </em><em>optional</em>) – Explicit conductivity value at the well. One can choose between the
+harmonic mean (<code class="docutils literal notranslate"><span class="pre">&quot;KH&quot;</span></code>), the arithmetic mean (<code class="docutils literal notranslate"><span class="pre">&quot;KA&quot;</span></code>) or an
+arbitrary float value. Default: <code class="docutils literal notranslate"><span class="pre">&quot;KH&quot;</span></code></li>
+<li><strong>K_err</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Absolute error for the farfield conductivity for calculating the
+cutoff-point of the solution, if <code class="docutils literal notranslate"><span class="pre">rinf=inf</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">0.01</span></code></li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+<li><strong>stehfestn</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Since the solution is calculated in Laplace-space, the
+back-transformation is performed with the stehfest-algorithm.
+Here you can specify the number of interations within this
+algorithm. Default: <code class="docutils literal notranslate"><span class="pre">12</span></code></li>
+<li><strong>parts</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Since the solution is calculated by setting the transmissity to local
+constant values, one needs to specify the number of partitions of the
+transmissivity. Default: <code class="docutils literal notranslate"><span class="pre">30</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ext_theis3D</strong> – Array with all heads at the given radii and time-points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">rad</span></code>, <code class="docutils literal notranslate"><span class="pre">Rref</span></code>, <code class="docutils literal notranslate"><span class="pre">KG</span></code>, <code class="docutils literal notranslate"><span class="pre">sig2</span></code>, <code class="docutils literal notranslate"><span class="pre">corr</span></code>, <code class="docutils literal notranslate"><span class="pre">S</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Twell</span></code> and <code class="docutils literal notranslate"><span class="pre">prop</span></code> will be checked for positivity.</p>
+<p>The Anisotropy-ratio <code class="docutils literal notranslate"><span class="pre">e</span></code> must be greater 0 and less or equal 1.</p>
+<p><code class="docutils literal notranslate"><span class="pre">T_err</span></code> must be greater 0 and less or equal 1.</p>
+<p>If you want to use cartesian coordiantes, just use the formula
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">sqrt(x**2</span> <span class="pre">+</span> <span class="pre">y**2)</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ext_theis3D</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([[-0.32845576, -0.16741654, -0.09134294],</span>
+<span class="go">       [-0.54238241, -0.36982686, -0.27754856]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.diskmodel">
+<code class="descclassname">anaflow.</code><code class="descname">diskmodel</code><span class="sig-paren">(</span><em>rad</em>, <em>time</em>, <em>Tpart</em>, <em>Spart</em>, <em>Rpart</em>, <em>Qw</em>, <em>struc_grid=True</em>, <em>rwell=0.0</em>, <em>rinf=inf</em>, <em>hinf=0.0</em>, <em>stehfestn=12</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/gwsolutions.html#diskmodel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.diskmodel" title="Permalink to this definition">¶</a></dt>
+<dd><p>A diskmodel for transient flow under a pumping condition
+in a confined aquifer. The solutions assumes concentric disks around the
+pumpingwell, where each disk has its own transmissivity and storativity
+value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>time</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all time-points where the function should be evaluated</li>
+<li><strong>Tpart</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Given transmissivity values for each disk</li>
+<li><strong>Spart</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Given storativity values for each disk</li>
+<li><strong>Rpart</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Given radii separating the disks</li>
+<li><strong>Qw</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Pumpingrate at the well</li>
+<li><strong>struc_grid</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#bool" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If this is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the <cite>rad</cite> and <cite>time</cite> array will be merged
+and interpreted as single, r-t points. In this case they need to have
+the same shapes. Otherwise a structured r-t grid is created.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
+<li><strong>rwell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Inner radius of the pumping-well. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>rinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Radius of the outer boundary of the aquifer. Default: <code class="docutils literal notranslate"><span class="pre">np.inf</span></code></li>
+<li><strong>hinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Reference head at the outer boundary <cite>rinf</cite>. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>stehfestn</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Since the solution is calculated in Laplace-space, the
+back-transformation is performed with the stehfest-algorithm.
+Here you can specify the number of interations within this
+algorithm. Default: <code class="docutils literal notranslate"><span class="pre">12</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>diskmodel</strong> – Array with all heads at the given radii and time-points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">rad</span></code>, <code class="docutils literal notranslate"><span class="pre">time</span></code>, <code class="docutils literal notranslate"><span class="pre">Tpart</span></code> and <code class="docutils literal notranslate"><span class="pre">Spart</span></code> will be checked
+for positivity.</p>
+<p>If you want to use cartesian coordiantes, just use the formula
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">sqrt(x**2</span> <span class="pre">+</span> <span class="pre">y**2)</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">diskmodel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mf">2e-3</span><span class="p">],</span> <span class="p">[</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="o">-</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="go">array([[-0.20312814, -0.09605675, -0.06636862],</span>
+<span class="go">       [-0.29785979, -0.18784251, -0.15582597]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.stehfest">
+<code class="descclassname">anaflow.</code><code class="descname">stehfest</code><span class="sig-paren">(</span><em>func</em>, <em>time</em>, <em>bound=12</em>, <em>arg_dict=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/laplace.html#stehfest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.stehfest" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stehfest-algorithm for numerical laplace inversion.</p>
+<p>The Inversion was derivide in ‘’Stehfest 1970’‘<a class="reference internal" href="#r1" id="id5">[R1]</a>
+and is given by the formula</p>
+<div class="math">
+<p><img src="_images/math/8209035a089e4dd96aac9baa527f28fac5ba5c57.png" alt="f\left(t\right) &amp;=\frac{\ln2}{t}\sum_{n=1}^{N}c_{n}\cdot\tilde{f}
+\left(n\cdot\frac{\ln2}{t}\right)\\
+c_{n} &amp;=\left(-1\right)^{n+\frac{N}{2}}\cdot
+\sum_{k=\left\lfloor \frac{n+1}{2}\right\rfloor }
+^{\min\left\{ n,\frac{N}{2}\right\} }
+\frac{k^{\frac{N}{2}+1}\cdot\binom{2k}{k}}
+{\left(\frac{N}{2}-k\right)!\cdot\left(n-k\right)!
+\cdot\left(2k-n\right)!}"/></p>
+</div><p>In the algorithm
+<img class="math" src="_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> corresponds to <code class="docutils literal notranslate"><span class="pre">bound</span></code>,
+<img class="math" src="_images/math/405a53280bd24b61d3142c94e47c3e4a21c9d059.png" alt="\tilde{f}"/> to <code class="docutils literal notranslate"><span class="pre">func</span></code> and
+<img class="math" src="_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/> to <code class="docutils literal notranslate"><span class="pre">time</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#callable" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">callable</span></code></a>) – <p>function in laplace-space that shall be inverted.
+The first argument needs to be the laplace-variable:
+<code class="docutils literal notranslate"><span class="pre">func(s,</span> <span class="pre">**kwargs)</span></code></p>
+<p><cite>func</cite> should be capable of taking numpy arrays as input for <cite>s</cite> and
+the first shape component of the output of <cite>func</cite> should match the
+shape of <cite>s</cite>.</p>
+</li>
+<li><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – time-points to evaluate the function at</li>
+<li><strong>bound</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Here you can specify the number of interations within this
+algorithm. Default: <code class="docutils literal notranslate"><span class="pre">12</span></code></li>
+<li><strong>arg_dict</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#dict" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> or <a class="reference external" href="https://docs.python.org/3.5/library/constants.html#None" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">None</span></code></a>, optional) – Keyword-arguments given as a dictionary that are forwarded to the
+function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>. Will be merged with <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>
+This is designed for overlapping keywords in <code class="docutils literal notranslate"><span class="pre">stehfest</span></code> and
+<code class="docutils literal notranslate"><span class="pre">func</span></code>.Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>**kwargs</strong> – Keyword-arguments that are forwarded to the function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Will be merged with <code class="docutils literal notranslate"><span class="pre">arg_dict</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array with all evaluations in Time-space.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <cite>func</cite> is not callable.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <cite>time</cite> is not positive.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <cite>bound</cite> is not positive.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <cite>bound</cite> is not even.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[R1]</a></td><td>Stehfest, H., ‘’Algorithm 368:
+Numerical inversion of laplace transforms [d5].’’
+Communications of the ACM, 13(1):47–49, 1970</td></tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">time</span></code> needs to be strictly positiv.</p>
+<p>The algorithm gets unstable for <code class="docutils literal notranslate"><span class="pre">bound</span></code> values above 20.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**-</span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stehfest</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+<span class="go">array([ 1.,  1.,  1.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="submodules">
+<h1>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gwsol.html">Groundwater equation solutions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="laplace.html">Laplace Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="helper.html">Helper functions</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="gwsol.html" class="btn btn-neutral float-right" title="Groundwater equation solutions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="AnaFlow: A python-package containing analytical solutions for groundwater flow" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sebastian Mueller.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,22 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-===============================================
-Laplace transformation (:mod:`anaflow.laplace`)
-===============================================
+Anaflow subpackage providing functions concerning the laplace transformation.
 
 .. currentmodule:: anaflow.laplace
-
-Anaflow subpackage providing functions concerning the laplace transformation.
 
 Functions
 ---------
 The following functions are provided
 
 .. autosummary::
-   :toctree: generated/
 
-   stehfest - The stehfest-algorithm for numerical laplace inversion.
-
+   stehfest
 """
 
 from __future__ import absolute_import, division, print_function
@@ -101,33 +95,79 @@ C_LOOKUP = {2: np.array([2.000000000000000000e+00,
                           4.284181942857142538e+07])}
 
 
-def stehfest(func, time, bound=12, kwargs=None):
+def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
     '''
     The stehfest-algorithm for numerical laplace inversion.
 
+    The Inversion was derivide in ''Stehfest 1970''[R1]_
+    and is given by the formula
+
+    .. math::
+       f\\left(t\\right) &=\\frac{\\ln2}{t}\\sum_{n=1}^{N}c_{n}\\cdot\\tilde{f}
+       \\left(n\\cdot\\frac{\\ln2}{t}\\right)\\\\
+       c_{n} &=\\left(-1\\right)^{n+\\frac{N}{2}}\\cdot
+       \\sum_{k=\\left\\lfloor \\frac{n+1}{2}\\right\\rfloor }
+       ^{\\min\\left\\{ n,\\frac{N}{2}\\right\\} }
+       \\frac{k^{\\frac{N}{2}+1}\\cdot\\binom{2k}{k}}
+       {\\left(\\frac{N}{2}-k\\right)!\\cdot\\left(n-k\\right)!
+       \\cdot\\left(2k-n\\right)!}
+
+    In the algorithm
+    :math:`N` corresponds to ``bound``,
+    :math:`\\tilde{f}` to ``func`` and
+    :math:`t` to ``time``.
+
     Parameters
     ----------
-    func : function
+    func : :any:`callable`
         function in laplace-space that shall be inverted.
-        The first argument needs to be the laplace-variable: func(s, **kwargs)
-    time : float
+        The first argument needs to be the laplace-variable:
+        ``func(s, **kwargs)``
+
+        `func` should be capable of taking numpy arrays as input for `s` and
+        the first shape component of the output of `func` should match the
+        shape of `s`.
+    time : :class:`float` or :class:`numpy.ndarray`
         time-points to evaluate the function at
-    bound : int, optional
+    bound : :class:`int`, optional
         Here you can specify the number of interations within this
-        algorithm. Default: 12
-    kwargs : dict, optional
-        Keyword-arguments that are forwarded to the function given in "func".
-        Default: None
+        algorithm. Default: ``12``
+    arg_dict : :class:`dict` or :any:`None`, optional
+        Keyword-arguments given as a dictionary that are forwarded to the
+        function given in ``func``. Will be merged with ``**kwargs``
+        This is designed for overlapping keywords in ``stehfest`` and
+        ``func``.Default: ``None``
+    **kwargs
+        Keyword-arguments that are forwarded to the function given in ``func``.
+        Will be merged with ``arg_dict``
 
     Returns
     -------
-    stehfest : ndarray
+    :class:`numpy.ndarray`
         Array with all evaluations in Time-space.
+
+    Raises
+    ------
+    ValueError
+        If `func` is not callable.
+    ValueError
+        If `time` is not positive.
+    ValueError
+        If `bound` is not positive.
+    ValueError
+        If `bound` is not even.
+
+    References
+    ----------
+    .. [R1] Stehfest, H., ''Algorithm 368:
+       Numerical inversion of laplace transforms [d5].''
+       Communications of the ACM, 13(1):47–49, 1970
 
     Notes
     -----
-    The parameter "time" needs to be strictly positiv.
-    The algorithm gets unstable for "bound" values above 20.
+    The parameter ``time`` needs to be strictly positiv.
+
+    The algorithm gets unstable for ``bound`` values above 20.
 
     Example
     -------
@@ -136,28 +176,32 @@ def stehfest(func, time, bound=12, kwargs=None):
     array([ 1.,  1.,  1.])
     '''
 
-    if kwargs is None:
-        kwargs = {}
+    if arg_dict is None:
+        arg_dict = {}
+    kwargs.update(arg_dict)
 
     # check and save if 't' is scalar
     is_scal = np.isscalar(time)
 
     # ensure that t is handled as an 1d-array
-    time = np.array(time).reshape(-1)
+    time = np.array(time, dtype=float).reshape(-1)
 
     # check the input
-    if not (np.all(time > 0.0)):
+    if not callable(func):
+        raise ValueError(
+            "The given function needs to be callable")
+    if not np.all(time > 0.0):
         raise ValueError(
             "The time-values need to be positiv for the stehfest-algorithm")
-    if not (bound > 1):
+    if bound <= 1:
         raise ValueError(
             "The boundary needs to be >1 for the stehfest-algorithm")
-    if not (bound % 2 == 0):
+    if bound % 2 != 0:
         raise ValueError(
             "The boundary needs to be even for the stehfest-algorithm")
 
     # get all coefficient factors at once
-    c_fac = _c_array(bound)
+    c_fac = c_array(bound)
     t_fac = np.log(2.0)/time
 
     # store every function-argument needed in one array
@@ -165,7 +209,7 @@ def stehfest(func, time, bound=12, kwargs=None):
 
     # get every function-value needed with one call of 'func'
     lap_val = func(fargs.reshape(-1), **kwargs)
-    lap_val = lap_val.reshape(*(fargs.shape + lap_val.shape[1:]))
+    lap_val = lap_val.reshape(fargs.shape + lap_val.shape[1:])
 
     # do all the sumation with fancy indexing in numpy
     res = np.tensordot(lap_val, c_fac, axes=(1, 0))
@@ -179,18 +223,18 @@ def stehfest(func, time, bound=12, kwargs=None):
     return res
 
 
-def _c_array(bound):
+def c_array(bound=12):
     '''
     Array of coefficients for the stehfest-algorithm.
 
     Parameters
     ----------
-    bound : int, optional
-        The number of interations. Default: 12
+    bound : :class:`int`, optional
+        The number of interations. Default: ``12``
 
     Returns
     -------
-    c_array : ndarray
+    :class:`numpy.ndarray`
         Array with all coefficinets needed.
     '''
 
@@ -202,22 +246,22 @@ def _c_array(bound):
 
 def _carr(bound):
     res = np.zeros(bound)
-    for l in range(1, bound+1):
-        res[l-1] = _c(l, bound)
+    for i in range(1, bound+1):
+        res[i-1] = _c(i, bound)
     return res
 
 
-def _c(l, bound):
+def _c(i, bound):
     res = 0.0
-    for k in range(int(floor((l+1)/2.0)), min(l, bound//2)+1):
-        res += _d(k, l, bound)
-    res *= (-1)**(l+bound/2)
+    for k in range(int(floor((i+1)/2.0)), min(i, bound//2)+1):
+        res += _d(k, i, bound)
+    res *= (-1)**(i+bound/2)
     return res
 
 
-def _d(k, l, bound):
+def _d(k, i, bound):
     res = ((float(k))**(bound/2+1))*(factorial(2*k))
-    res /= (factorial(bound/2-k))*(factorial(l-k))*(factorial(2*k-l))
+    res /= (factorial(bound/2-k))*(factorial(i-k))*(factorial(2*k-i))
     res /= (factorial(k)**2)
     return res
 

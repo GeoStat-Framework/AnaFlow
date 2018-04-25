@@ -37,6 +37,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.coverage',
     'sphinx.ext.imgmath',
+#    'sphinx.ext.pngmath',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
@@ -56,7 +57,7 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 
 # The master toctree document.
-master_doc = 'modules'
+master_doc = 'index'
 
 # General information about the project.
 project = 'AnaFlow'
@@ -96,13 +97,9 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "classic"
-html_theme_options = {
-    "rightsidebar": "true",
-    "stickysidebar": "true",
-    "relbarbgcolor": "black"
-}
+html_theme = "sphinx_rtd_theme"
 
+#html_theme = "classic"
 #html_theme = 'sphinxdoc'
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -110,6 +107,11 @@ html_theme_options = {
 # documentation.
 #
 # html_theme_options = {}
+#html_theme_options = {
+#    "rightsidebar": "true",
+#    "stickysidebar": "true",
+#    "relbarbgcolor": "black"
+#}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

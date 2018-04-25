@@ -1,48 +1,134 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>anaflow.helper &#8212; AnaFlow 0.1 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-  </head>
-  <body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../modules.html">AnaFlow 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>anaflow.helper &mdash; AnaFlow 0.1 documentation</title>
+  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="AnaFlow 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> AnaFlow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../main.html">AnaFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../main.html#submodules">Submodules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">AnaFlow</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>anaflow.helper</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for anaflow.helper</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python2</span>
@@ -57,54 +143,462 @@
 <span class="sd">The following functions are provided</span>
 
 <span class="sd">.. autosummary::</span>
-<span class="sd">   :toctree: generated/</span>
 
-<span class="sd">   radii - Distribution of diskseparations</span>
-<span class="sd">   specialrange - several special range functions</span>
-<span class="sd">   T_CG - coarse graining transmissivity</span>
-<span class="sd">   T_CG_inverse - inverse coarse graining transmissivity</span>
-<span class="sd">   T_CG_error - error calculation for the coarse graining transmissivity</span>
-<span class="sd">   K_CG - coarse graining conductivity</span>
-<span class="sd">   K_CG_inverse - inverse coarse graining conductivity</span>
-<span class="sd">   K_CG_error - error calculation for the coarse graining conductivity</span>
-<span class="sd">   aniso - the anisotropy function by dagan</span>
-<span class="sd">   well_solution - The classic Theis well function</span>
-
+<span class="sd">   rad_amean_func</span>
+<span class="sd">   rad_gmean_func</span>
+<span class="sd">   rad_hmean_func</span>
+<span class="sd">   rad_pmean_func</span>
+<span class="sd">   radii</span>
+<span class="sd">   specialrange</span>
+<span class="sd">   specialrange_cut</span>
+<span class="sd">   T_CG</span>
+<span class="sd">   T_CG_inverse</span>
+<span class="sd">   T_CG_error</span>
+<span class="sd">   K_CG</span>
+<span class="sd">   K_CG_inverse</span>
+<span class="sd">   K_CG_error</span>
+<span class="sd">   aniso</span>
+<span class="sd">   well_solution</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">exp1</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="k">import</span> <span class="n">quad</span> <span class="k">as</span> <span class="n">integ</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;radii&quot;</span><span class="p">,</span> <span class="s2">&quot;specialrange&quot;</span><span class="p">,</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rad_amean_func&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;rad_gmean_func&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;rad_hmean_func&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;rad_pmean_func&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;radii&quot;</span><span class="p">,</span> <span class="s2">&quot;specialrange&quot;</span><span class="p">,</span> <span class="s2">&quot;specialrange_cut&quot;</span><span class="p">,</span>
            <span class="s2">&quot;T_CG&quot;</span><span class="p">,</span> <span class="s2">&quot;T_CG_inverse&quot;</span><span class="p">,</span> <span class="s2">&quot;T_CG_error&quot;</span><span class="p">,</span>
            <span class="s2">&quot;K_CG&quot;</span><span class="p">,</span> <span class="s2">&quot;K_CG_inverse&quot;</span><span class="p">,</span> <span class="s2">&quot;K_CG_error&quot;</span><span class="p">,</span>
            <span class="s2">&quot;aniso&quot;</span><span class="p">,</span> <span class="s2">&quot;well_solution&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="radii"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.radii">[docs]</a><span class="k">def</span> <span class="nf">radii</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">rwell</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rinf</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">rlast</span><span class="o">=</span><span class="mf">500.0</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="rad_amean_func"><a class="viewcode-back" href="../../helper.html#anaflow.helper.rad_amean_func">[docs]</a><span class="k">def</span> <span class="nf">rad_amean_func</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">val_arr</span><span class="p">,</span> <span class="n">arg_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculating the arithmetic mean of a radial symmetric function</span>
+<span class="sd">    for given consecutive radii defining 2D disks by the following formula</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       f_i=\\frac{2}{r_{i+1}^2-r_i^2}</span>
+<span class="sd">       \\intop^{r_{i+1}}_{r_i} r\\cdot f(r)\\, dr</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : :any:`callable`</span>
+<span class="sd">        function that should be used</span>
+<span class="sd">        The first argument needs to be the radial variable:</span>
+<span class="sd">        ``func(r, **kwargs)``</span>
+<span class="sd">    val_arr : :class:`numpy.ndarray`</span>
+<span class="sd">        given radii defining the disks</span>
+<span class="sd">    arg_dict : :class:`dict` or :any:`None`, optional</span>
+<span class="sd">        Keyword-arguments given as a dictionary that are forwarded to the</span>
+<span class="sd">        function given in ``func``. Will be merged with ``**kwargs``.</span>
+<span class="sd">        This is designed for overlapping keywords in ``rad_amean_func`` and</span>
+<span class="sd">        ``func``.</span>
+<span class="sd">        Default: ``None``</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Keyword-arguments that are forwarded to the function given in ``func``.</span>
+<span class="sd">        Will be merged with ``arg_dict``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        Array with all calculated arithmetic means</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `func` is not callable.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``val_arr`` has less than 2 values.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``val_arr`` is not sorted in incresing order.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If the last value in val_arr is &quot;inf&quot;, the given function should provide</span>
+<span class="sd">    a value for &quot;inf&quot; as input: ``func(float(&quot;inf&quot;))``</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; f = lambda x: x**2</span>
+<span class="sd">    &gt;&gt;&gt; rad_amean_func(f, [1,2,3])</span>
+<span class="sd">    array([ 2.33588885,  6.33423311])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">arg_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">arg_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
+
+    <span class="n">val_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">val_arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The given function needs to be callable&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;To few input values in val_arr. Need at least 2.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The input values need to be sorted&quot;</span><span class="p">)</span>
+
+    <span class="c1"># dummy function defining the needed integrand</span>
+    <span class="k">def</span> <span class="nf">_step</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        dummy function providing the integrand</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">integrand</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Integrand for the geometric mean ``r*log(f(r))``</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">val</span><span class="o">*</span><span class="n">func</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">integrand</span>
+
+    <span class="c1"># creating the output array</span>
+    <span class="n">func_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># iterating over the input values</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parts</span><span class="p">):</span>
+        <span class="c1"># if one side is infinity, the function is evaluated at infinity</span>
+        <span class="k">if</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">integ</span><span class="p">(</span><span class="n">_step</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">),</span>
+                                <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">func_arr</span></div>
+
+
+<div class="viewcode-block" id="rad_gmean_func"><a class="viewcode-back" href="../../helper.html#anaflow.helper.rad_gmean_func">[docs]</a><span class="k">def</span> <span class="nf">rad_gmean_func</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">val_arr</span><span class="p">,</span> <span class="n">arg_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculating the geometric mean of a radial symmetric function</span>
+<span class="sd">    for given consecutive radii defining 2D disks by the following formula</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       f_i=\\exp\\left(\\frac{2}{r_{i+1}^2-r_i^2}</span>
+<span class="sd">       \\intop^{r_{i+1}}_{r_i} r\\cdot\\ln(f(r))\\, dr\\right)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : :any:`callable`</span>
+<span class="sd">        function that should be used</span>
+<span class="sd">        The first argument needs to be the radial variable:</span>
+<span class="sd">        ``func(r, **kwargs)``</span>
+<span class="sd">    val_arr : :class:`numpy.ndarray`</span>
+<span class="sd">        given radii defining the disks</span>
+<span class="sd">    arg_dict : :class:`dict` or :any:`None`, optional</span>
+<span class="sd">        Keyword-arguments given as a dictionary that are forwarded to the</span>
+<span class="sd">        function given in ``func``. Will be merged with ``**kwargs``.</span>
+<span class="sd">        This is designed for overlapping keywords in ``rad_gmean_func`` and</span>
+<span class="sd">        ``func``.</span>
+<span class="sd">        Default: ``None``</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Keyword-arguments that are forwarded to the function given in ``func``.</span>
+<span class="sd">        Will be merged with ``arg_dict``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        Array with all calculated geometric means</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `func` is not callable.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``val_arr`` has less than 2 values.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``val_arr`` is not sorted in incresing order.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If the last value in val_arr is &quot;inf&quot;, the given function should provide</span>
+<span class="sd">    a value for &quot;inf&quot; as input: ``func(float(&quot;inf&quot;))``</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; f = lambda x: x**2</span>
+<span class="sd">    &gt;&gt;&gt; rad_gmean_func(f, [1,2,3])</span>
+<span class="sd">    array([ 2.33588885,  6.33423311])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">arg_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">arg_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
+
+    <span class="n">val_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">val_arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The given function needs to be callable&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;To few input values in val_arr. Need at least 2.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The input values need to be sorted&quot;</span><span class="p">)</span>
+
+    <span class="c1"># dummy function defining the needed integrand</span>
+    <span class="k">def</span> <span class="nf">_step</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        dummy function providing the integrand</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">integrand</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Integrand for the geometric mean ``r*log(f(r))``</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">val</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">integrand</span>
+
+    <span class="c1"># creating the output array</span>
+    <span class="n">func_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># iterating over the input values</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parts</span><span class="p">):</span>
+        <span class="c1"># if one side is infinity, the function is evaluated at infinity</span>
+        <span class="k">if</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">integ</span><span class="p">(</span><span class="n">_step</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">),</span>
+                                <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">func_arr</span></div>
+
+
+<div class="viewcode-block" id="rad_hmean_func"><a class="viewcode-back" href="../../helper.html#anaflow.helper.rad_hmean_func">[docs]</a><span class="k">def</span> <span class="nf">rad_hmean_func</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">val_arr</span><span class="p">,</span> <span class="n">arg_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculating the harmonic mean of a radial symmetric function</span>
+<span class="sd">    for given consecutive radii defining 2D disks by the following formula</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       f_i=\\left(\\frac{2}{r_{i+1}^2-r_i^2}</span>
+<span class="sd">       \\intop^{r_{i+1}}_{r_i} r\\cdot(f(r))^{-1}\\, dr\\right)^{-1}</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : :any:`callable`</span>
+<span class="sd">        function that should be used</span>
+<span class="sd">        The first argument needs to be the radial variable:</span>
+<span class="sd">        ``func(r, **kwargs)``</span>
+<span class="sd">    val_arr : :class:`numpy.ndarray`</span>
+<span class="sd">        given radii defining the disks</span>
+<span class="sd">    arg_dict : :class:`dict` or :any:`None`, optional</span>
+<span class="sd">        Keyword-arguments given as a dictionary that are forwarded to the</span>
+<span class="sd">        function given in ``func``. Will be merged with ``**kwargs``.</span>
+<span class="sd">        This is designed for overlapping keywords in ``rad_gmean_func`` and</span>
+<span class="sd">        ``func``.</span>
+<span class="sd">        Default: ``None``</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Keyword-arguments that are forwarded to the function given in ``func``.</span>
+<span class="sd">        Will be merged with ``arg_dict``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        Array with all calculated geometric means</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `func` is not callable.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``val_arr`` has less than 2 values.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``val_arr`` is not sorted in incresing order.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If the last value in val_arr is &quot;inf&quot;, the given function should provide</span>
+<span class="sd">    a value for &quot;inf&quot; as input: ``func(float(&quot;inf&quot;))``</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; f = lambda x: x**2</span>
+<span class="sd">    &gt;&gt;&gt; rad_hmean_func(f, [1,2,3])</span>
+<span class="sd">    array([ 2.33588885,  6.33423311])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">arg_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">arg_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
+
+    <span class="n">val_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">val_arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The given function needs to be callable&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;To few input values in val_arr. Need at least 2.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The input values need to be sorted&quot;</span><span class="p">)</span>
+
+    <span class="c1"># dummy function defining the needed integrand</span>
+    <span class="k">def</span> <span class="nf">_step</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        dummy function providing the integrand</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">integrand</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Integrand for the geometric mean ``r*log(f(r))``</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">val</span><span class="o">/</span><span class="n">func</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">integrand</span>
+
+    <span class="c1"># creating the output array</span>
+    <span class="n">func_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># iterating over the input values</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parts</span><span class="p">):</span>
+        <span class="c1"># if one side is infinity, the function is evaluated at infinity</span>
+        <span class="k">if</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">integ</span><span class="p">(</span><span class="n">_step</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">),</span>
+                                <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">func_arr</span></div>
+
+
+<div class="viewcode-block" id="rad_pmean_func"><a class="viewcode-back" href="../../helper.html#anaflow.helper.rad_pmean_func">[docs]</a><span class="k">def</span> <span class="nf">rad_pmean_func</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">val_arr</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">arg_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculating the p-mean of a radial symmetric function</span>
+<span class="sd">    for given consecutive radii defining 2D disks by the following formula</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       f_i=\\left(\\frac{2}{r_{i+1}^2-r_i^2}</span>
+<span class="sd">       \\intop^{r_{i+1}}_{r_i} r\\cdot(f(r))^p\\, dr\\right)^{\\frac{1}{p}}</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : :any:`callable`</span>
+<span class="sd">        function that should be used</span>
+<span class="sd">        The first argument needs to be the radial variable:</span>
+<span class="sd">        ``func(r, **kwargs)``</span>
+<span class="sd">    val_arr : :class:`numpy.ndarray`</span>
+<span class="sd">        given radii defining the disks</span>
+<span class="sd">    p : :class:`float`, optional</span>
+<span class="sd">        The potency defining the p-mean.</span>
+<span class="sd">        Default: ``1.0``</span>
+<span class="sd">    arg_dict : :class:`dict` or :any:`None`, optional</span>
+<span class="sd">        Keyword-arguments given as a dictionary that are forwarded to the</span>
+<span class="sd">        function given in ``func``. Will be merged with ``**kwargs``.</span>
+<span class="sd">        This is designed for overlapping keywords in ``rad_pmean_func`` and</span>
+<span class="sd">        ``func``.</span>
+<span class="sd">        Default: ``None``</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Keyword-arguments that are forwarded to the function given in ``func``.</span>
+<span class="sd">        Will be merged with ``arg_dict``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        Array with all calculated p-means</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `func` is not callable.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``val_arr`` has less than 2 values.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``val_arr`` is not sorted in incresing order.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If the last value in val_arr is &quot;inf&quot;, the given function should provide</span>
+<span class="sd">    a value for &quot;inf&quot; as input: ``func(float(&quot;inf&quot;))``</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; f = lambda x: x**2</span>
+<span class="sd">    &gt;&gt;&gt; rad_pmean_func(f, [1,2,3])</span>
+<span class="sd">    array([ 2.33588885,  6.33423311])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># if p is 0, the limit-case of the geometric mean is returned</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rad_gmean_func</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">val_arr</span><span class="p">,</span> <span class="n">arg_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">arg_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">arg_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
+
+    <span class="n">val_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">val_arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The given function needs to be callable&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;To few input values in val_arr. Need at least 2.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">val_arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The input values need to be sorted&quot;</span><span class="p">)</span>
+
+    <span class="c1"># dummy function defining the needed integrand</span>
+    <span class="k">def</span> <span class="nf">_step</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        dummy function providing the integrand</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">integrand</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Integrand for the geometric mean ``r*log(f(r))``</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">val</span><span class="o">*</span><span class="n">func</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">**</span><span class="n">p</span>
+        <span class="k">return</span> <span class="n">integrand</span>
+
+    <span class="c1"># creating the output array</span>
+    <span class="n">func_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">val_arr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># iterating over the input values</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parts</span><span class="p">):</span>
+        <span class="c1"># if one side is infinity, the function is evaluated at infinity</span>
+        <span class="k">if</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">integ</span><span class="p">(</span><span class="n">_step</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">),</span>
+                                <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">func_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span>
+                           <span class="p">(</span><span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">val_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">func_arr</span></div>
+
+
+<div class="viewcode-block" id="radii"><a class="viewcode-back" href="../../helper.html#anaflow.helper.radii">[docs]</a><span class="k">def</span> <span class="nf">radii</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">rwell</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rinf</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">rlast</span><span class="o">=</span><span class="mf">500.0</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculation of specific point distributions for the diskmodel.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    parts : int</span>
+<span class="sd">    parts : :class:`int`</span>
 <span class="sd">        Number of partitions.</span>
-<span class="sd">    rwell : float, optional</span>
-<span class="sd">        Radius at the well. Default: 0.0</span>
-<span class="sd">    rinf : float, optional</span>
-<span class="sd">        Radius at the outer boundary. Default: inf</span>
-<span class="sd">    rlast : float, optional</span>
-<span class="sd">        Setting the last radius befor the outer boundary. Default: 500.0</span>
-<span class="sd">    typ : string, optional</span>
-<span class="sd">        Setting the distribution type of the radii. Default: &quot;log&quot;</span>
+<span class="sd">    rwell : :class:`float`, optional</span>
+<span class="sd">        Radius at the well. Default: ``0.0``</span>
+<span class="sd">    rinf : :class:`float`, optional</span>
+<span class="sd">        Radius at the outer boundary. Default: :any:``np.inf``</span>
+<span class="sd">    rlast : :class:`float`, optional</span>
+<span class="sd">        Setting the last radius befor the outer boundary. Default: ``500.0``</span>
+<span class="sd">    typ : :class:`str`, optional</span>
+<span class="sd">        Setting the distribution type of the radii. Default: ``&quot;log&quot;``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    p_rad : ndarray</span>
+<span class="sd">    p_rad : :class:`numpy.ndarray`</span>
 <span class="sd">        Array containing the separating radii</span>
-<span class="sd">    f_rad : ndarray</span>
+<span class="sd">    f_rad : :class:`numpy.ndarray`</span>
 <span class="sd">        Array containing the function-evaluation points within each disk</span>
 
 <span class="sd">    Example</span>
@@ -146,29 +640,33 @@
     <span class="k">return</span> <span class="n">p_rad</span><span class="p">,</span> <span class="n">f_rad</span></div>
 
 
-<div class="viewcode-block" id="specialrange"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.specialrange">[docs]</a><span class="k">def</span> <span class="nf">specialrange</span><span class="p">(</span><span class="n">val_min</span><span class="p">,</span> <span class="n">val_max</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="specialrange"><a class="viewcode-back" href="../../helper.html#anaflow.helper.specialrange">[docs]</a><span class="k">def</span> <span class="nf">specialrange</span><span class="p">(</span><span class="n">val_min</span><span class="p">,</span> <span class="n">val_max</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculation of special point ranges.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    val_min : float</span>
+<span class="sd">    val_min : :class:`float`</span>
 <span class="sd">        Starting value.</span>
-<span class="sd">    val_max : float</span>
+<span class="sd">    val_max : :class:`float`</span>
 <span class="sd">        Ending value</span>
-<span class="sd">    steps : int</span>
+<span class="sd">    steps : :class:`int`</span>
 <span class="sd">        Number of steps.</span>
-<span class="sd">    typ : string, optional</span>
+<span class="sd">    typ : :class:`str` or :class:`float`, optional</span>
 <span class="sd">        Setting the kind of range-distribution. One can choose between</span>
-<span class="sd">        &quot;log&quot; for logarithmic behavior,</span>
-<span class="sd">        &quot;lin&quot; for linear behavior,</span>
-<span class="sd">        &quot;quad&quot; for quadratic behavior,</span>
-<span class="sd">        &quot;cub&quot; for cubic behavior,</span>
-<span class="sd">        Default: &quot;log&quot;</span>
+
+<span class="sd">        * ``&quot;log&quot;``: for logarithmic behavior</span>
+<span class="sd">        * ``&quot;lin&quot;``: for linear behavior</span>
+<span class="sd">        * ``&quot;quad&quot;``: for quadratic behavior</span>
+<span class="sd">        * ``&quot;cub&quot;``: for cubic behavior</span>
+<span class="sd">        * :class:`float`: here you can specifi any exponent (&quot;quad&quot; would be</span>
+<span class="sd">          equivalent to 2)</span>
+
+<span class="sd">        Default: ``&quot;log&quot;``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    rng : ndarray</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
 <span class="sd">        Array containing the special range</span>
 
 <span class="sd">    Example</span>
@@ -187,39 +685,98 @@
     <span class="k">elif</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cubic&quot;</span><span class="p">,</span> <span class="s2">&quot;cub&quot;</span><span class="p">]:</span>
         <span class="n">rng</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">val_min</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">),</span>
                            <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">val_max</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">),</span> <span class="n">steps</span><span class="p">))</span><span class="o">**</span><span class="mi">3</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+        <span class="n">rng</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">val_min</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="n">typ</span><span class="p">),</span>
+                           <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">val_max</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="n">typ</span><span class="p">),</span> <span class="n">steps</span><span class="p">))</span><span class="o">**</span><span class="n">typ</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">val_min</span><span class="p">,</span> <span class="n">val_max</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">rng</span></div>
 
 
-<div class="viewcode-block" id="T_CG"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.T_CG">[docs]</a><span class="k">def</span> <span class="nf">T_CG</span><span class="p">(</span><span class="n">rad</span><span class="p">,</span> <span class="n">TG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">Twell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="specialrange_cut"><a class="viewcode-back" href="../../helper.html#anaflow.helper.specialrange_cut">[docs]</a><span class="k">def</span> <span class="nf">specialrange_cut</span><span class="p">(</span><span class="n">val_min</span><span class="p">,</span> <span class="n">val_max</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">val_cut</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    The coarse-graining Transmissivity. This functions gives an effective</span>
+<span class="sd">    Calculation of special point ranges.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    val_min : :class:`float`</span>
+<span class="sd">        Starting value.</span>
+<span class="sd">    val_max : :class:`float`</span>
+<span class="sd">        Ending value</span>
+<span class="sd">    steps : :class:`int`</span>
+<span class="sd">        Number of steps.</span>
+<span class="sd">    val_cut : :class:`float`</span>
+<span class="sd">        Cutting value, if val_max is bigger than this value, the last interval</span>
+<span class="sd">        will be between val_cut and val_max</span>
+<span class="sd">    typ : :class:`str` or :class:`float`, optional</span>
+<span class="sd">        Setting the kind of range-distribution. One can choose between</span>
+
+<span class="sd">        * ``&quot;log&quot;``: for logarithmic behavior</span>
+<span class="sd">        * ``&quot;lin&quot;``: for linear behavior</span>
+<span class="sd">        * ``&quot;quad&quot;``: for quadratic behavior</span>
+<span class="sd">        * ``&quot;cub&quot;``: for cubic behavior</span>
+<span class="sd">        * :class:`float`: here you can specifi any exponent (&quot;quad&quot; would be</span>
+<span class="sd">          equivalent to 2)</span>
+
+<span class="sd">        Default: ``&quot;log&quot;``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        Array containing the special range</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; specialrange_cut(1,10,4)</span>
+<span class="sd">    array([  1.        ,   2.53034834,   5.23167968,  10.        ])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">val_max</span> <span class="o">&gt;</span> <span class="n">val_cut</span><span class="p">:</span>
+        <span class="n">rng</span> <span class="o">=</span> <span class="n">specialrange</span><span class="p">(</span><span class="n">val_min</span><span class="p">,</span> <span class="n">val_cut</span><span class="p">,</span> <span class="n">steps</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rng</span><span class="p">,</span> <span class="n">val_max</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">specialrange</span><span class="p">(</span><span class="n">val_min</span><span class="p">,</span> <span class="n">val_max</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="T_CG"><a class="viewcode-back" href="../../helper.html#anaflow.helper.T_CG">[docs]</a><span class="k">def</span> <span class="nf">T_CG</span><span class="p">(</span><span class="n">rad</span><span class="p">,</span> <span class="n">TG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">Twell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The coarse-graining Transmissivity.</span>
+
+<span class="sd">    This solution was presented in &#39;&#39;Schneider &amp; Attinger 2008&#39;&#39;[R3]_.</span>
+
+<span class="sd">    This functions gives an effective</span>
 <span class="sd">    transmissivity for 2D pumpingtests in heterogenous aquifers, where the</span>
 <span class="sd">    transmissivity is following a log-normal distribution and a gaussian</span>
 <span class="sd">    correlation function.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    rad : ndarray</span>
+<span class="sd">    rad : :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all radii where the function should be evaluated</span>
-<span class="sd">    TG : float</span>
+<span class="sd">    TG : :class:`float`</span>
 <span class="sd">        Geometric-mean of the transmissivity-distribution</span>
-<span class="sd">    sig2 : float</span>
+<span class="sd">    sig2 : :class:`float`</span>
 <span class="sd">        log-normal-variance of the transmissivity-distribution</span>
-<span class="sd">    corr : float</span>
+<span class="sd">    corr : :class:`float`</span>
 <span class="sd">        corralation-length of transmissivity-distribution</span>
-<span class="sd">    prop: float, optional</span>
+<span class="sd">    prop: :class:`float`, optional</span>
 <span class="sd">        Proportionality factor used within the upscaling procedure.</span>
-<span class="sd">        Default: 1.6</span>
-<span class="sd">    Twell : float, optional</span>
-<span class="sd">        Explicit transmissivity value at the well. Default: None</span>
+<span class="sd">        Default: ``1.6``</span>
+<span class="sd">    Twell : :class:`float`, optional</span>
+<span class="sd">        Explicit transmissivity value at the well. Default: ``None``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    T_CG : ndarray</span>
+<span class="sd">    T_CG : :class:`numpy.ndarray`</span>
 <span class="sd">        Array containing the effective transmissivity values.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [R3] Schneider, C. and Attinger, S.,</span>
+<span class="sd">       &#39;&#39;Beyond thiem: A new method for interpreting large scale</span>
+<span class="sd">       pumping tests in heterogeneous aquifers.&#39;&#39;</span>
+<span class="sd">       Water resources research, 44(4), 2008</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -237,30 +794,31 @@
     <span class="k">return</span> <span class="n">TG</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">chi</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="p">(</span><span class="n">prop</span><span class="o">*</span><span class="n">rad</span><span class="o">/</span><span class="n">corr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="T_CG_inverse"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.T_CG_inverse">[docs]</a><span class="k">def</span> <span class="nf">T_CG_inverse</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">TG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">Twell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="T_CG_inverse"><a class="viewcode-back" href="../../helper.html#anaflow.helper.T_CG_inverse">[docs]</a><span class="k">def</span> <span class="nf">T_CG_inverse</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">TG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">Twell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    The inverse function of the coarse-graining Transmissivity. See: &quot;T_CG&quot;</span>
+<span class="sd">    The inverse function of the coarse-graining Transmissivity.</span>
+<span class="sd">    See: :func:`T_CG`</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    T : ndarray</span>
+<span class="sd">    T : :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all transmissivity values</span>
 <span class="sd">        where the function should be evaluated</span>
-<span class="sd">    TG : float</span>
+<span class="sd">    TG : :class:`float`</span>
 <span class="sd">        Geometric-mean of the transmissivity-distribution</span>
-<span class="sd">    sig2 : float</span>
+<span class="sd">    sig2 : :class:`float`</span>
 <span class="sd">        log-normal-variance of the transmissivity-distribution</span>
-<span class="sd">    corr : float</span>
+<span class="sd">    corr : :class:`float`</span>
 <span class="sd">        corralation-length of transmissivity-distribution</span>
-<span class="sd">    prop: float, optional</span>
+<span class="sd">    prop: :class:`float`, optional</span>
 <span class="sd">        Proportionality factor used within the upscaling procedure.</span>
-<span class="sd">        Default: 1.6</span>
-<span class="sd">    Twell : float, optional</span>
-<span class="sd">        Explicit transmissivity value at the well. Default: None</span>
+<span class="sd">        Default: ``1.6``</span>
+<span class="sd">    Twell : :class:`float`, optional</span>
+<span class="sd">        Explicit transmissivity value at the well. Default: ``None``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    rad : ndarray</span>
+<span class="sd">    rad : :class:`numpy.ndarray`</span>
 <span class="sd">        Array containing the radii belonging to the given transmissivity values</span>
 
 <span class="sd">    Example</span>
@@ -279,30 +837,31 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">corr</span><span class="o">/</span><span class="n">prop</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">chi</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">T</span><span class="o">/</span><span class="n">TG</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="T_CG_error"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.T_CG_error">[docs]</a><span class="k">def</span> <span class="nf">T_CG_error</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">TG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">Twell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="T_CG_error"><a class="viewcode-back" href="../../helper.html#anaflow.helper.T_CG_error">[docs]</a><span class="k">def</span> <span class="nf">T_CG_error</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">TG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">Twell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculating the radial-point where the relative error of the farfield</span>
-<span class="sd">    value is less than the given tollerance. See: &quot;T_CG&quot;</span>
+<span class="sd">    value is less than the given tollerance.</span>
+<span class="sd">    See: :func:`T_CG`</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    err : float</span>
+<span class="sd">    err : :class:`float`</span>
 <span class="sd">        Given relative error for the farfield transmissivity</span>
-<span class="sd">    TG : float</span>
+<span class="sd">    TG : :class:`float`</span>
 <span class="sd">        Geometric-mean of the transmissivity-distribution</span>
-<span class="sd">    sig2 : float</span>
+<span class="sd">    sig2 : :class:`float`</span>
 <span class="sd">        log-normal-variance of the transmissivity-distribution</span>
-<span class="sd">    corr : float</span>
+<span class="sd">    corr : :class:`float`</span>
 <span class="sd">        corralation-length of transmissivity-distribution</span>
-<span class="sd">    prop: float, optional</span>
+<span class="sd">    prop: :class:`float`, optional</span>
 <span class="sd">        Proportionality factor used within the upscaling procedure.</span>
-<span class="sd">        Default: 1.6</span>
-<span class="sd">    Twell : float, optional</span>
-<span class="sd">        Explicit transmissivity value at the well. Default: None</span>
+<span class="sd">        Default: ``1.6``</span>
+<span class="sd">    Twell : :class:`float`, optional</span>
+<span class="sd">        Explicit transmissivity value at the well. Default: ``None``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    rad : float</span>
+<span class="sd">    rad : :class:`float`</span>
 <span class="sd">        Radial point, where the relative error is less than the given one.</span>
 
 <span class="sd">    Example</span>
@@ -328,37 +887,51 @@
         <span class="k">return</span> <span class="mf">1.</span></div>
 
 
-<div class="viewcode-block" id="K_CG"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.K_CG">[docs]</a><span class="k">def</span> <span class="nf">K_CG</span><span class="p">(</span><span class="n">rad</span><span class="p">,</span> <span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="s2">&quot;KH&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="K_CG"><a class="viewcode-back" href="../../helper.html#anaflow.helper.K_CG">[docs]</a><span class="k">def</span> <span class="nf">K_CG</span><span class="p">(</span><span class="n">rad</span><span class="p">,</span> <span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="s2">&quot;KH&quot;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    The coarse-graining conductivity. This functions gives an effective</span>
+<span class="sd">    The coarse-graining conductivity.</span>
+
+<span class="sd">    This solution was presented in &#39;&#39;Zech 2013&#39;&#39;[R8]_.</span>
+
+<span class="sd">    This functions gives an effective</span>
 <span class="sd">    conductivity for 3D pumpingtests in heterogenous aquifers, where the</span>
 <span class="sd">    conductivity is following a log-normal distribution and a gaussian</span>
 <span class="sd">    correlation function and taking vertical anisotropy into account.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    rad : ndarray</span>
+<span class="sd">    rad : :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all radii where the function should be evaluated</span>
-<span class="sd">    KG : float</span>
+<span class="sd">    KG : :class:`float`</span>
 <span class="sd">        Geometric-mean conductivity-distribution</span>
-<span class="sd">    sig2 : float</span>
+<span class="sd">    sig2 : :class:`float`</span>
 <span class="sd">        log-normal-variance of the conductivity-distribution</span>
-<span class="sd">    corr : float</span>
+<span class="sd">    corr : :class:`float`</span>
 <span class="sd">        corralation-length of conductivity-distribution</span>
-<span class="sd">    e : float</span>
+<span class="sd">    e : :class:`float`</span>
 <span class="sd">        Anisotropy-ratio of the vertical and horizontal corralation-lengths</span>
-<span class="sd">    prop: float, optional</span>
+<span class="sd">    prop: :class:`float`, optional</span>
 <span class="sd">        Proportionality factor used within the upscaling procedure.</span>
-<span class="sd">        Default: 1.6</span>
-<span class="sd">    Kwell : string/float, optional</span>
+<span class="sd">        Default: ``1.6``</span>
+<span class="sd">    Kwell :  :class:`str` or  :class:`float`, optional</span>
 <span class="sd">        Explicit conductivity value at the well. One can choose between the</span>
-<span class="sd">        harmonic mean (&quot;KH&quot;), the arithmetic mean (&quot;KA&quot;) or an arbitrary float</span>
-<span class="sd">        value. Default: &quot;KH&quot;</span>
+<span class="sd">        harmonic mean (``&quot;KH&quot;``),</span>
+<span class="sd">        the arithmetic mean (``&quot;KA&quot;``) or an arbitrary float</span>
+<span class="sd">        value. Default: ``&quot;KH&quot;``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    K_CG : ndarray</span>
+<span class="sd">    K_CG : :class:`numpy.ndarray`</span>
 <span class="sd">        Array containing the effective conductivity values.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [R8] Zech, A.</span>
+<span class="sd">       &#39;&#39;Impact of Aqifer Heterogeneity on Subsurface Flow and Salt</span>
+<span class="sd">       Transport at Different Scales: from a method determine parameters</span>
+<span class="sd">       of heterogeneous permeability at local scale to a large-scale model</span>
+<span class="sd">       for the sedimentary basin of Thuringia.&#39;&#39;</span>
+<span class="sd">       PhD thesis, Friedrich-Schiller-Universität Jena, 2013</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -379,34 +952,35 @@
     <span class="k">return</span> <span class="n">Kefu</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">chi</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="p">(</span><span class="n">prop</span><span class="o">*</span><span class="n">rad</span><span class="o">/</span><span class="p">(</span><span class="n">corr</span><span class="o">*</span><span class="n">e</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="K_CG_inverse"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.K_CG_inverse">[docs]</a><span class="k">def</span> <span class="nf">K_CG_inverse</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="s2">&quot;KH&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="K_CG_inverse"><a class="viewcode-back" href="../../helper.html#anaflow.helper.K_CG_inverse">[docs]</a><span class="k">def</span> <span class="nf">K_CG_inverse</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="s2">&quot;KH&quot;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    The inverse function of the coarse-graining conductivity. See: &quot;K_CG&quot;</span>
+<span class="sd">    The inverse function of the coarse-graining conductivity.</span>
+<span class="sd">    See: :func:`K_CG`</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    K : ndarray</span>
+<span class="sd">    K : :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all conductivity values</span>
 <span class="sd">        where the function should be evaluated</span>
-<span class="sd">    KG : float</span>
+<span class="sd">    KG : :class:`float`</span>
 <span class="sd">        Geometric-mean conductivity-distribution</span>
-<span class="sd">    sig2 : float</span>
+<span class="sd">    sig2 : :class:`float`</span>
 <span class="sd">        log-normal-variance of the conductivity-distribution</span>
-<span class="sd">    corr : float</span>
+<span class="sd">    corr : :class:`float`</span>
 <span class="sd">        corralation-length of conductivity-distribution</span>
-<span class="sd">    e : float</span>
+<span class="sd">    e : :class:`float`</span>
 <span class="sd">        Anisotropy-ratio of the vertical and horizontal corralation-lengths</span>
-<span class="sd">    prop: float, optional</span>
+<span class="sd">    prop: :class:`float`, optional</span>
 <span class="sd">        Proportionality factor used within the upscaling procedure.</span>
-<span class="sd">        Default: 1.6</span>
-<span class="sd">    Kwell : string/float, optional</span>
+<span class="sd">        Default: ``1.6``</span>
+<span class="sd">    Kwell :  :class:`str` or  :class:`float`, optional</span>
 <span class="sd">        Explicit conductivity value at the well. One can choose between the</span>
 <span class="sd">        harmonic mean (&quot;KH&quot;), the arithmetic mean (&quot;KA&quot;) or an arbitrary float</span>
-<span class="sd">        value. Default: &quot;KH&quot;</span>
+<span class="sd">        value. Default: ``&quot;KH&quot;``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    rad : ndarray</span>
+<span class="sd">    rad : :class:`numpy.ndarray`</span>
 <span class="sd">        Array containing the radii belonging to the given conductivity values</span>
 
 <span class="sd">    Example</span>
@@ -428,34 +1002,35 @@
     <span class="k">return</span> <span class="n">corr</span><span class="o">*</span><span class="n">e</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">/</span><span class="n">prop</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">chi</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">Kefu</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mf">2.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="K_CG_error"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.K_CG_error">[docs]</a><span class="k">def</span> <span class="nf">K_CG_error</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="s2">&quot;KH&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="K_CG_error"><a class="viewcode-back" href="../../helper.html#anaflow.helper.K_CG_error">[docs]</a><span class="k">def</span> <span class="nf">K_CG_error</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">KG</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">Kwell</span><span class="o">=</span><span class="s2">&quot;KH&quot;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculating the radial-point where the relative error of the farfield</span>
-<span class="sd">    value is less than the given tollerance. See: &quot;K_CG&quot;</span>
+<span class="sd">    value is less than the given tollerance.</span>
+<span class="sd">    See: :func:`K_CG`</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    err : float</span>
+<span class="sd">    err : :class:`float`</span>
 <span class="sd">        Given relative error for the farfield conductivity</span>
-<span class="sd">    KG : float</span>
+<span class="sd">    KG : :class:`float`</span>
 <span class="sd">        Geometric-mean conductivity-distribution</span>
-<span class="sd">    sig2 : float</span>
+<span class="sd">    sig2 : :class:`float`</span>
 <span class="sd">        log-normal-variance of the conductivity-distribution</span>
-<span class="sd">    corr : float</span>
+<span class="sd">    corr : :class:`float`</span>
 <span class="sd">        corralation-length of conductivity-distribution</span>
-<span class="sd">    e : float</span>
+<span class="sd">    e : :class:`float`</span>
 <span class="sd">        Anisotropy-ratio of the vertical and horizontal corralation-lengths</span>
-<span class="sd">    prop: float, optional</span>
+<span class="sd">    prop: :class:`float`, optional</span>
 <span class="sd">        Proportionality factor used within the upscaling procedure.</span>
-<span class="sd">        Default: 1.6</span>
-<span class="sd">    Kwell : string/float, optional</span>
+<span class="sd">        Default: ``1.6``</span>
+<span class="sd">    Kwell :  :class:`str` or  :class:`float`, optional</span>
 <span class="sd">        Explicit conductivity value at the well. One can choose between the</span>
 <span class="sd">        harmonic mean (&quot;KH&quot;), the arithmetic mean (&quot;KA&quot;) or an arbitrary float</span>
-<span class="sd">        value. Default: &quot;KH&quot;</span>
+<span class="sd">        value. Default: ``&quot;KH&quot;``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    rad : float</span>
+<span class="sd">    rad : :class:`float`</span>
 <span class="sd">        Radial point, where the relative error is less than the given one.</span>
 
 <span class="sd">    Example</span>
@@ -486,19 +1061,32 @@
         <span class="k">return</span> <span class="mf">1.</span></div>
 
 
-<div class="viewcode-block" id="aniso"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.aniso">[docs]</a><span class="k">def</span> <span class="nf">aniso</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+<div class="viewcode-block" id="aniso"><a class="viewcode-back" href="../../helper.html#anaflow.helper.aniso">[docs]</a><span class="k">def</span> <span class="nf">aniso</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    The anisotropy function, known from &#39;Dagan [1989]&#39;.</span>
+<span class="sd">    The anisotropy function.</span>
+
+<span class="sd">    Known from &#39;&#39;Dagan (1989)&#39;&#39;[R2]_.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    e : float</span>
+<span class="sd">    e : :class:`float`</span>
 <span class="sd">        Anisotropy-ratio of the vertical and horizontal corralation-lengths</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    aniso : float</span>
+<span class="sd">    aniso : :class:`float`</span>
 <span class="sd">        Value of the anisotropy function for the given value.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the Anisotropy-ratio ``e`` is not within 0 and 1.</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [R2] Dagan, G., &#39;&#39;Flow and Transport on Porous Formations&#39;&#39;,</span>
+<span class="sd">           Springer Verlag, New York, 1989.</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -506,7 +1094,7 @@
 <span class="sd">    0.23639985871871511</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">e</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">e</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Anisotropieratio &#39;e&#39; must be within 0 and 1&quot;</span><span class="p">)</span>
 
@@ -521,42 +1109,65 @@
     <span class="k">return</span> <span class="n">res</span></div>
 
 
-<div class="viewcode-block" id="well_solution"><a class="viewcode-back" href="../../anaflow.html#anaflow.helper.well_solution">[docs]</a><span class="k">def</span> <span class="nf">well_solution</span><span class="p">(</span><span class="n">rad</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">Qw</span><span class="p">,</span>
+<div class="viewcode-block" id="well_solution"><a class="viewcode-back" href="../../helper.html#anaflow.helper.well_solution">[docs]</a><span class="k">def</span> <span class="nf">well_solution</span><span class="p">(</span><span class="n">rad</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">Qw</span><span class="p">,</span>
                   <span class="n">struc_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    The classical Theis solution for transient flow under a pumping condition</span>
 <span class="sd">    in a confined and homogeneous aquifer.</span>
 
+<span class="sd">    This solution was presented in &#39;&#39;Theis 1935&#39;&#39;[R9]_.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    rad : ndarray</span>
+<span class="sd">    rad : :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all radii where the function should be evaluated</span>
-<span class="sd">    time : ndarray</span>
+<span class="sd">    time : :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all time-points where the function should be evaluated</span>
-<span class="sd">    T : float</span>
+<span class="sd">    T : :class:`float`</span>
 <span class="sd">        Given transmissivity of the aquifer</span>
-<span class="sd">    S : float</span>
+<span class="sd">    S : :class:`float`</span>
 <span class="sd">        Given storativity of the aquifer</span>
-<span class="sd">    Qw : float</span>
+<span class="sd">    Qw : :class:`float`</span>
 <span class="sd">        Pumpingrate at the well</span>
-<span class="sd">    struc_grid : bool, optional</span>
+<span class="sd">    struc_grid : :class:`bool`, optional</span>
 <span class="sd">        If this is set to &quot;False&quot;, the &quot;rad&quot; and &quot;time&quot; array will be merged</span>
 <span class="sd">        and interpreted as single, r-t points. In this case they need to have</span>
 <span class="sd">        the same shapes. Otherwise a structured r-t grid is created.</span>
-<span class="sd">        Default: True</span>
-<span class="sd">    hinf : float, optional</span>
-<span class="sd">        Reference head at the outer boundary &quot;rinf&quot;. Default: 0.0</span>
+<span class="sd">        Default: ``True``</span>
+<span class="sd">    hinf : :class:`float`, optional</span>
+<span class="sd">        Reference head at the outer boundary &quot;rinf&quot;. Default: ``0.0``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    well_solution : ndarray</span>
+<span class="sd">    well_solution : :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all heads at the given radii and time-points.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``rad`` is not positiv.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``time`` is not positiv.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If shape of ``rad`` and ``time`` differ in case of</span>
+<span class="sd">        ``struc_grid`` is ``True``.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``T`` is not positiv.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If ``S`` is not positiv.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [R9] Theis, C.,</span>
+<span class="sd">       &#39;&#39;The relation between the lowering of the piezometric surface and the</span>
+<span class="sd">       rate and duration of discharge of a well using groundwater storage&#39;&#39;,</span>
+<span class="sd">       Trans. Am. Geophys. Union, 16, 519–524, 1935</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    The parameters &quot;rad&quot;, &quot;T&quot; and &quot;S&quot; will be checked for positivity.</span>
+<span class="sd">    The parameters ``rad``, ``T`` and ``S`` will be checked for positivity.</span>
 <span class="sd">    If you want to use cartesian coordiantes, just use the formula</span>
-<span class="sd">    r = sqrt(x**2 + y**2)</span>
+<span class="sd">    ``r = sqrt(x**2 + y**2)``</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -572,19 +1183,19 @@
         <span class="n">grid_shape</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">rad</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rad</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rad</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The given radii need to be greater than the wellradius&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">time</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">time</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The given times need to be &gt; 0&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">struc_grid</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">rad</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">struc_grid</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">rad</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;For unstructured grid the number of time- &amp; radii-pts must equal&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">T</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">T</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The Transmissivity needs to be positiv&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">S</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">S</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The Storage needs to be positiv&quot;</span><span class="p">)</span>
 
@@ -594,7 +1205,7 @@
         <span class="k">for</span> <span class="n">ri</span><span class="p">,</span> <span class="n">re</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span><span class="n">rad</span><span class="p">):</span>
             <span class="n">res</span><span class="p">[</span><span class="n">ti</span><span class="o">+</span><span class="n">ri</span><span class="p">]</span> <span class="o">=</span> <span class="n">Qw</span><span class="o">/</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="n">exp1</span><span class="p">(</span><span class="n">re</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">S</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">T</span><span class="o">*</span><span class="n">te</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">struc_grid</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">struc_grid</span> <span class="ow">and</span> <span class="n">grid_shape</span><span class="p">:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">))</span>
 
     <span class="c1"># add the reference head</span>
@@ -608,41 +1219,62 @@
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
+           </div>
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sebastian Mueller.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../modules.html">AnaFlow 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Sebastian Mueller.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

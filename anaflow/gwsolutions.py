@@ -1,28 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-=======================================================
-Groundwater flow solutions (:mod:`anaflow.gwsolutions`)
-=======================================================
+Anaflow subpackage providing solutions for the groundwater flow equation.
 
 .. currentmodule:: anaflow.gwsolutions
-
-Anaflow subpackage providing solutions for the groundwater flow equation.
 
 Functions
 ---------
 The following functions are provided
 
 .. autosummary::
-   :toctree: generated/
 
-   thiem - Thiem solution for steady state pumping
-   theis - Theis solution for transient pumping
-   ext_thiem2D - extended Thiem solution in 2D
-   ext_theis2D - extended Theis solution in 2D
-   ext_thiem3D - extended Thiem solution in 3D
-   ext_theis3D - extended Theis solution in 3D
-   diskmodel - Solution for a diskmodel
-   lap_transgwflow_cyl - Solution for a diskmodel in laplace inversion
+   thiem
+   ext_thiem2D
+   ext_thiem3D
+   theis
+   ext_theis2D
+   ext_theis3D
+   diskmodel
+   lap_transgwflow_cyl
 
 """
 
@@ -36,12 +31,22 @@ from scipy.special import (i0, i1, k0, k1, exp1, expi)
 
 from anaflow.laplace import stehfest as sf
 from anaflow.helper import (well_solution, aniso, radii,
+                            rad_hmean_func,
+                            specialrange_cut,
                             T_CG, T_CG_error,
                             K_CG, K_CG_error)
 
-__all__ = ["thiem", "theis",
-           "ext_thiem2D", "ext_theis2D",
-           "ext_thiem3D", "ext_theis3D",
+# ignore Umpfack warnings for almost singular matrices
+try:
+    # first look if the umfpack is available
+    from scikits.umfpack import UmfpackWarning
+    SLV_WARN = UmfpackWarning
+except ImportError:
+    # if umfpack is not present, use standard-warning to catch
+    SLV_WARN = UserWarning
+
+__all__ = ["thiem", "ext_thiem2D", "ext_thiem3D",
+           "theis", "ext_theis2D", "ext_theis3D",
            "diskmodel", "lap_transgwflow_cyl"]
 
 
@@ -56,29 +61,37 @@ def thiem(rad, Rref,
     The Thiem solution for steady-state flow under a pumping condition
     in a confined and homogeneous aquifer.
 
+    This solution was presented in ''Thiem 1906''[R6]_.
+
     Parameters
     ----------
-    rad : ndarray
+    rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    Rref : float
-        Reference radius with known head (see href)
-    T : float
+    Rref : :class:`float`
+        Reference radius with known head (see `href`)
+    T : :class:`float`
         Given transmissivity of the aquifer
-    Qw : float
+    Qw : :class:`float`
         Pumpingrate at the well
-    href : float, optional
-        Reference head at the reference-radius "Rref". Default: 0.0
+    href : :class:`float`, optional
+        Reference head at the reference-radius `Rref`. Default: ``0.0``
 
     Returns
     -------
-    thiem : ndarray
+    thiem : :class:`numpy.ndarray`
         Array with all heads at the given radii.
+
+    References
+    ----------
+    .. [R6] Thiem, G.,
+       ''Hydrologische Methoden, J.M. Gebhardt'', Leipzig, 1906.
 
     Notes
     -----
-    The parameters "rad", "Rref" and "T" will be checked for positivity.
+    The parameters ``rad``, ``Rref`` and ``T`` will be checked for positivity.
+
     If you want to use cartesian coordiantes, just use the formula
-    r = sqrt(x**2 + y**2)
+    ``r = sqrt(x**2 + y**2)``
 
     Example
     -------
@@ -103,7 +116,7 @@ def thiem(rad, Rref,
 
 
 ###############################################################################
-# 2D version of extended Theis
+# 2D version of extended Thiem
 ###############################################################################
 
 def ext_thiem2D(rad, Rref,
@@ -112,43 +125,56 @@ def ext_thiem2D(rad, Rref,
     '''
     The extended Thiem solution for steady-state flow under
     a pumping condition in a confined aquifer.
+
+    This solution was presented in ''Zech 2013''[R4]_.
+
     The type curve is describing the effective drawdown
     in a 2D statistical framework, where the transmissivity distribution is
     following a log-normal distribution with a gaussian correlation function.
 
     Parameters
     ----------
-    rad : ndarray
+    rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    Rref : float
-        Reference radius with known head (see href)
-    TG : float
+    Rref : :class:`float`
+        Reference radius with known head (see `href`)
+    TG : :class:`float`
         Geometric-mean transmissivity-distribution
-    sig2 : float
+    sig2 : :class:`float`
         log-normal-variance of the transmissivity-distribution
-    corr : float
+    corr : :class:`float`
         corralation-length of transmissivity-distribution
-    Qw : float
+    Qw : :class:`float`
         Pumpingrate at the well
-    href : float, optional
-        Reference head at the reference-radius "Rref". Default: 0.0
-    Twell : float, optional
-        Explicit transmissivity value at the well. Default: None
-    prop: float, optional
+    href : :class:`float`, optional
+        Reference head at the reference-radius `Rref`. Default: ``0.0``
+    Twell : :class:`float`, optional
+        Explicit transmissivity value at the well. Default: ``None``
+    prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
-        Default: 1.6
+        Default: ``1.6``
 
     Returns
     -------
-    ext_thiem2D : ndarray
+    ext_thiem2D : :class:`numpy.ndarray`
         Array with all heads at the given radii.
+
+    References
+    ----------
+    .. [R4] Zech, A.
+       ''Impact of Aqifer Heterogeneity on Subsurface Flow and Salt
+       Transport at Different Scales: from a method determine parameters
+       of heterogeneous permeability at local scale to a large-scale model
+       for the sedimentary basin of Thuringia.''
+       PhD thesis, Friedrich-Schiller-Universität Jena, 2013
 
     Notes
     -----
-    The parameters "rad", "Rref", "TG", "sig2", "corr", "Twell" and "prop"
-    will be checked for positivity.
+    The parameters ``rad``, ``Rref``, ``TG``, ``sig2``, ``corr``, ``Twell``
+    and ``prop`` will be checked for positivity.
+
     If you want to use cartesian coordiantes, just use the formula
-    r = sqrt(x**2 + y**2)
+    ``r = sqrt(x**2 + y**2)``
 
     Example
     -------
@@ -202,7 +228,7 @@ def ext_thiem2D(rad, Rref,
 
 
 ###############################################################################
-# 3D version of extended Theis
+# 3D version of extended Thiem
 ###############################################################################
 
 def ext_thiem3D(rad, Rref,
@@ -211,6 +237,9 @@ def ext_thiem3D(rad, Rref,
     '''
     The extended Thiem solution for steady-state flow under
     a pumping condition in a confined aquifer.
+
+    This solution was presented in ''Zech 2013''[R5]_.
+
     The type curve is describing the effective drawdown
     in a 3D statistical framework, where the conductivity distribution is
     following a log-normal distribution with a gaussian correlation function
@@ -218,44 +247,55 @@ def ext_thiem3D(rad, Rref,
 
     Parameters
     ----------
-    rad : ndarray
+    rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    Rref : float
-        Reference radius with known head (see href)
-    KG : float
+    Rref : :class:`float`
+        Reference radius with known head (see `href`)
+    KG : :class:`float`
         Geometric-mean conductivity-distribution
-    sig2 : float
+    sig2 : :class:`float`
         log-normal-variance of the conductivity-distribution
-    corr : float
+    corr : :class:`float`
         corralation-length of conductivity-distribution
-    e : float
+    e : :class:`float`
         Anisotropy-ratio of the vertical and horizontal corralation-lengths
-    Qw : float
+    Qw : :class:`float`
         Pumpingrate at the well
-    L : float
+    L : :class:`float`
         Thickness of the aquifer
-    href : float, optional
-        Reference head at the reference-radius "Rref". Default: 0.0
+    href : :class:`float`, optional
+        Reference head at the reference-radius `Rref`. Default: ``0.0``
     Kwell : string/float, optional
         Explicit conductivity value at the well. One can choose between the
-        harmonic mean ("KH"), the arithmetic mean ("KA") or an arbitrary float
-        value. Default: "KH"
-    prop: float, optional
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
-        Default: 1.6
+        Default: ``1.6``
 
     Returns
     -------
-    ext_thiem3D : ndarray
+    ext_thiem3D : :class:`numpy.ndarray`
         Array with all heads at the given radii.
+
+    References
+    ----------
+    .. [R5] Zech, A.
+       ''Impact of Aqifer Heterogeneity on Subsurface Flow and Salt
+       Transport at Different Scales: from a method determine parameters
+       of heterogeneous permeability at local scale to a large-scale model
+       for the sedimentary basin of Thuringia.''
+       PhD thesis, Friedrich-Schiller-Universität Jena, 2013
 
     Notes
     -----
-    The parameters "rad", "Rref", "KG", "sig2", "corr", "Kwell" and "prop"
-    will be checked for positivity. The anisotropy factor must be greater 0
-    and less or equal 1.
+    The parameters ``rad``, ``Rref``, ``KG``, ``sig2``, ``corr``, ``Kwell``
+    and ``prop`` will be checked for positivity.
+
+    The anisotropy ``e`` factor must be greater 0 and less or equal 1.
+
     If you want to use cartesian coordiantes, just use the formula
-    r = sqrt(x**2 + y**2)
+    ``r = sqrt(x**2 + y**2)``
 
     Example
     -------
@@ -340,45 +380,55 @@ def theis(rad, time,
     The Theis solution for transient flow under a pumping condition
     in a confined and homogeneous aquifer.
 
+    This solution was presented in ''Theis 1935''[R7]_.
+
     Parameters
     ----------
-    rad : ndarray
+    rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    time : ndarray
+    time : :class:`numpy.ndarray`
         Array with all time-points where the function should be evaluated
-    T : float
+    T : :class:`float`
         Given transmissivity of the aquifer
-    S : float
+    S : :class:`float`
         Given storativity of the aquifer
-    Qw : float
+    Qw : :class:`float`
         Pumpingrate at the well
-    struc_grid : bool, optional
-        If this is set to "False", the "rad" and "time" array will be merged
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
-        Default: True
-    rwell : float, optional
-        Inner radius of the pumping-well. Default: 0.0
-    rinf : float, optional
-        Radius of the outer boundary of the aquifer. Default: inf
-    hinf : float, optional
-        Reference head at the outer boundary "rinf". Default: 0.0
-    stehfestn : int, optional
-        If "rwell" or "rinf" are not default, the solution is calculated in
+        Default: ``True``
+    rwell : :class:`float`, optional
+        Inner radius of the pumping-well. Default: ``0.0``
+    rinf : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    hinf : :class:`float`, optional
+        Reference head at the outer boundary `rinf`. Default: ``0.0``
+    stehfestn : :class:`int`, optional
+        If `rwell` or `rinf` are not default, the solution is calculated in
         Laplace-space. The back-transformation is performed with the stehfest-
         algorithm. Here you can specify the number of interations within this
-        algorithm. Default: 12
+        algorithm. Default: ``12``
 
     Returns
     -------
-    theis : ndarray
+    theis : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
+
+    References
+    ----------
+    .. [R7] Theis, C.,
+       ''The relation between the lowering of the piezometric surface and the
+       rate and duration of discharge of a well using groundwater storage'',
+       Trans. Am. Geophys. Union, 16, 519–524, 1935
 
     Notes
     -----
-    The parameters "rad", "Rref" and "T" will be checked for positivity.
+    The parameters ``rad``, ``Rref`` and ``T`` will be checked for positivity.
+
     If you want to use cartesian coordiantes, just use the formula
-    r = sqrt(x**2 + y**2)
+    ``r = sqrt(x**2 + y**2)``
 
     Example
     -------
@@ -443,7 +493,7 @@ def theis(rad, time,
                   "Tpart": Tpart}
 
         # call the stehfest-algorithm
-        res = sf(lap_transgwflow_cyl, time, bound=stehfestn, kwargs=kwargs)
+        res = sf(lap_transgwflow_cyl, time, bound=stehfestn, **kwargs)
 
     # if the input are unstructured space-time points, return an array
     if not struc_grid and len(grid_shape) > 0:
@@ -458,6 +508,7 @@ def theis(rad, time,
 ###############################################################################
 # 2D version of extended Theis
 ###############################################################################
+
 
 def ext_theis2D(rad, time,
                 TG, sig2, corr, S, Qw,
@@ -474,61 +525,63 @@ def ext_theis2D(rad, time,
 
     Parameters
     ----------
-    rad : ndarray
+    rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    time : ndarray
+    time : :class:`numpy.ndarray`
         Array with all time-points where the function should be evaluated
-    TG : float
+    TG : :class:`float`
         Geometric-mean transmissivity-distribution
-    sig2 : float
+    sig2 : :class:`float`
         log-normal-variance of the transmissivity-distribution
-    corr : float
+    corr : :class:`float`
         corralation-length of transmissivity-distribution
-    S : float
+    S : :class:`float`
         Given storativity of the aquifer
-    Qw : float
+    Qw : :class:`float`
         Pumpingrate at the well
-    struc_grid : bool, optional
-        If this is set to "False", the "rad" and "time" array will be merged
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
-        Default: True
-    rwell : float, optional
-        Inner radius of the pumping-well. Default: 0.0
-    rinf : float, optional
-        Radius of the outer boundary of the aquifer. Default: inf
-    hinf : float, optional
-        Reference head at the outer boundary "rinf". Default: 0.0
-    Twell : float, optional
-        Explicit transmissivity value at the well. Default: None
-    T_err : float, optional
+        Default: ``True``
+    rwell : :class:`float`, optional
+        Inner radius of the pumping-well. Default: ``0.0``
+    rinf : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    hinf : :class:`float`, optional
+        Reference head at the outer boundary ``rinf``. Default: ``0.0``
+    Twell : :class:`float`, optional
+        Explicit transmissivity value at the well. Default: ``None``
+    T_err : :class:`float`, optional
         Absolute error for the farfield transmissivity for calculating the
-        cutoff-point of the solution. Default: 0.01
-    prop: float, optional
+        cutoff-point of the solution. Default: ``0.01``
+    prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
-        Default: 1.6
-    stehfestn : int, optional
+        Default: ``1.6``
+    stehfestn : :class:`int`, optional
         Since the solution is calculated in Laplace-space, the
         back-transformation is performed with the stehfest-algorithm.
         Here you can specify the number of interations within this
-        algorithm. Default: 12
-    parts : int, optional
+        algorithm. Default: ``12``
+    parts : :class:`int`, optional
         Since the solution is calculated by setting the transmissity to local
         constant values, one needs to specify the number of partitions of the
-        transmissivity. Default: 30
+        transmissivity. Default: ``30``
 
     Returns
     -------
-    ext_theis2D : ndarray
+    ext_theis2D : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
 
     Notes
     -----
-    The parameters "rad", "Rref", "TG", "sig2", "corr", "S", "Twell" and "prop"
-    will be checked for positivity.
-    "T_err" must be greater 0 and less or equal 1.
+    The parameters ``rad``, ``Rref``, ``TG``, ``sig2``, ``corr``, ``S``,
+    ``Twell`` and ``prop`` will be checked for positivity.
+
+    ``T_err`` must be greater 0 and less or equal 1.
+
     If you want to use cartesian coordiantes, just use the formula
-    r = sqrt(x**2 + y**2)
+    ``r = sqrt(x**2 + y**2)``
 
     Example
     -------
@@ -599,23 +652,25 @@ def ext_theis2D(rad, time,
             "The relative error of Transmissivity needs to be within (0,1)")
 
     # genearte rlast from a given relativ-error to farfield-transmissivity
-    rlast = T_CG_error(T_err, TG, sig2, corr, prop, Twell=Twell)
+    rlast = T_CG_error(T_err, TG, sig2, corr, prop, Twell)
 
-    # generate the partition points and the evaluation-points of transmissivity
-    rpart, fpart = radii(parts, rwell=rwell, rinf=rinf, rlast=rlast)
+    # generate the partition points
+    rpart = specialrange_cut(rwell, rinf, parts+1, rlast)
 
-    # calculate the transmissivity values within each partition
-    Tpart = T_CG(fpart, TG, sig2, corr, prop, Twell=Twell)
+    # calculate the harmonic mean transmissivity values within each partition
+    Tpart = rad_hmean_func(T_CG, rpart,
+                           TG=TG, sig2=sig2, corr=corr, prop=prop, Twell=Twell)
 
     # write the paramters in kwargs to use the stehfest-algorithm
     kwargs = {"rad": rad,
               "Qw": Qw,
               "rpart": rpart,
               "Spart": S*np.ones(parts),
-              "Tpart": Tpart}
+              "Tpart": Tpart,
+              "Twell": T_CG(rwell, TG, sig2, corr, prop, Twell)}
 
     # call the stehfest-algorithm
-    res = sf(lap_transgwflow_cyl, time, bound=stehfestn, kwargs=kwargs)
+    res = sf(lap_transgwflow_cyl, time, bound=stehfestn, **kwargs)
 
     # if the input are unstructured space-time points, return an array
     if not struc_grid and len(grid_shape) > 0:
@@ -647,68 +702,71 @@ def ext_theis3D(rad, time,
 
     Parameters
     ----------
-    rad : ndarray
+    rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    time : ndarray
+    time : :class:`numpy.ndarray`
         Array with all time-points where the function should be evaluated
-    KG : float
+    KG : :class:`float`
         Geometric-mean conductivity-distribution
-    sig2 : float
+    sig2 : :class:`float`
         log-normal-variance of the conductivity-distribution
-    corr : float
+    corr : :class:`float`
         corralation-length of conductivity-distribution
-    e : float
+    e : :class:`float`
         Anisotropy-ratio of the vertical and horizontal corralation-lengths
-    S : float
+    S : :class:`float`
         Given storativity of the aquifer
-    Qw : float
+    Qw : :class:`float`
         Pumpingrate at the well
-    L : float
+    L : :class:`float`
         Thickness of the aquifer
-    struc_grid : bool, optional
-        If this is set to "False", the "rad" and "time" array will be merged
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
-        Default: True
-    rwell : float, optional
-        Inner radius of the pumping-well. Default: 0.0
-    rinf : float, optional
-        Radius of the outer boundary of the aquifer. Default: inf
-    hinf : float, optional
-        Reference head at the outer boundary "rinf". Default: 0.0
+        Default: ``True``
+    rwell : :class:`float`, optional
+        Inner radius of the pumping-well. Default: ``0.0``
+    rinf : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    hinf : :class:`float`, optional
+        Reference head at the outer boundary `rinf`. Default: ``0.0``
     Kwell : string/float, optional
         Explicit conductivity value at the well. One can choose between the
-        harmonic mean ("KH"), the arithmetic mean ("KA") or an arbitrary float
-        value. Default: "KH"
-    K_err : float, optional
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    K_err : :class:`float`, optional
         Absolute error for the farfield conductivity for calculating the
-        cutoff-point of the solution. Default: 0.01
-    prop: float, optional
+        cutoff-point of the solution, if ``rinf=inf``. Default: ``0.01``
+    prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
-        Default: 1.6
-    stehfestn : int, optional
+        Default: ``1.6``
+    stehfestn : :class:`int`, optional
         Since the solution is calculated in Laplace-space, the
         back-transformation is performed with the stehfest-algorithm.
         Here you can specify the number of interations within this
-        algorithm. Default: 12
-    parts : int, optional
+        algorithm. Default: ``12``
+    parts : :class:`int`, optional
         Since the solution is calculated by setting the transmissity to local
         constant values, one needs to specify the number of partitions of the
-        transmissivity. Default: 30
+        transmissivity. Default: ``30``
 
     Returns
     -------
-    ext_theis3D : ndarray
+    ext_theis3D : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
 
     Notes
     -----
-    The parameters "rad", "Rref", "KG", "sig2", "corr", "S", "Twell" and "prop"
-    will be checked for positivity.
-    The Anisotropy-ratio "e" must be greater 0 and less or equal 1.
-    "T_err" must be greater 0 and less or equal 1.
+    The parameters ``rad``, ``Rref``, ``KG``, ``sig2``, ``corr``, ``S``,
+    ``Twell`` and ``prop`` will be checked for positivity.
+
+    The Anisotropy-ratio ``e`` must be greater 0 and less or equal 1.
+
+    ``T_err`` must be greater 0 and less or equal 1.
+
     If you want to use cartesian coordiantes, just use the formula
-    r = sqrt(x**2 + y**2)
+    ``r = sqrt(x**2 + y**2)``
 
     Example
     -------
@@ -784,14 +842,16 @@ def ext_theis3D(rad, time,
         raise ValueError(
             "The relative error of Transmissivity needs to be within (0,1)")
 
-    # genearte rlast from a given relativ-error to farfield-transmissivity
+    # genearte rlast from a given relativ-error to farfield-conductivity
     rlast = K_CG_error(K_err, KG, sig2, corr, e, prop, Kwell=Kwell)
 
-    # generate the partition points and the evaluation-points of transmissivity
-    rpart, fpart = radii(parts, rwell=rwell, rinf=rinf, rlast=rlast)
+    # generate the partition points
+    rpart = specialrange_cut(rwell, rinf, parts+1, rlast)
 
-    # calculate the transmissivity values within each partition
-    Tpart = K_CG(fpart, KG, sig2, corr, e, prop, Kwell=Kwell)
+    # calculate the harmonic mean conductivity values within each partition
+    Tpart = rad_hmean_func(K_CG, rpart,
+                           KG=KG, sig2=sig2, corr=corr,
+                           e=e, prop=prop, Kwell=Kwell)
 
     # write the paramters in kwargs to use the stehfest-algorithm
     kwargs = {"rad": rad,
@@ -801,7 +861,7 @@ def ext_theis3D(rad, time,
               "Tpart": Tpart}
 
     # call the stehfest-algorithm
-    res = sf(lap_transgwflow_cyl, time, bound=stehfestn, kwargs=kwargs)
+    res = sf(lap_transgwflow_cyl, time, bound=stehfestn, **kwargs)
 
     # if the input are unstructured space-time points, return an array
     if not struc_grid and len(grid_shape) > 0:
@@ -829,46 +889,47 @@ def diskmodel(rad, time,
 
     Parameters
     ----------
-    rad : ndarray
+    rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    time : ndarray
+    time : :class:`numpy.ndarray`
         Array with all time-points where the function should be evaluated
-    Tpart : ndarray
+    Tpart : :class:`numpy.ndarray`
         Given transmissivity values for each disk
-    Spart : ndarray
+    Spart : :class:`numpy.ndarray`
         Given storativity values for each disk
-    Rpart : ndarray
+    Rpart : :class:`numpy.ndarray`
         Given radii separating the disks
-    Qw : float
+    Qw : :class:`float`
         Pumpingrate at the well
-    struc_grid : bool, optional
-        If this is set to "False", the "rad" and "time" array will be merged
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
-        Default: True
-    rwell : float, optional
-        Inner radius of the pumping-well. Default: 0.0
-    rinf : float, optional
-        Radius of the outer boundary of the aquifer. Default: inf
-    hinf : float, optional
-        Reference head at the outer boundary "rinf". Default: 0.0
-    stehfestn : int, optional
+        Default: ``True``
+    rwell : :class:`float`, optional
+        Inner radius of the pumping-well. Default: ``0.0``
+    rinf : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    hinf : :class:`float`, optional
+        Reference head at the outer boundary `rinf`. Default: ``0.0``
+    stehfestn : :class:`int`, optional
         Since the solution is calculated in Laplace-space, the
         back-transformation is performed with the stehfest-algorithm.
         Here you can specify the number of interations within this
-        algorithm. Default: 12
+        algorithm. Default: ``12``
 
     Returns
     -------
-    diskmodel : ndarray
+    diskmodel : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
 
     Notes
     -----
-    The parameters "rad", "time", "Tpart" and "Spart" will be checked for
-    positivity.
+    The parameters ``rad``, ``time``, ``Tpart`` and ``Spart`` will be checked
+    for positivity.
+
     If you want to use cartesian coordiantes, just use the formula
-    r = sqrt(x**2 + y**2)
+    ``r = sqrt(x**2 + y**2)``
 
     Example
     -------
@@ -940,7 +1001,7 @@ def diskmodel(rad, time,
               "Tpart": Tpart}
 
     # call the stehfest-algorithm
-    res = sf(lap_transgwflow_cyl, time, bound=stehfestn, kwargs=kwargs)
+    res = sf(lap_transgwflow_cyl, time, bound=stehfestn, **kwargs)
 
     # if the input are unstructured space-time points, return an array
     if not struc_grid and len(grid_shape) > 0:
@@ -957,8 +1018,8 @@ def diskmodel(rad, time,
 # in Laplace-space with a pumping condition and a fix zero boundary-head
 ###############################################################################
 
-def lap_transgwflow_cyl(s,
-                        rad=None, rpart=None, Spart=None, Tpart=None, Qw=None):
+def lap_transgwflow_cyl(s, rad=None, rpart=None,
+                        Spart=None, Tpart=None, Qw=None, Twell=None):
     '''
     The solution of the diskmodel for transient flow under a pumping condition
     in a confined aquifer in Laplace-space.
@@ -967,23 +1028,25 @@ def lap_transgwflow_cyl(s,
 
     Parameters
     ----------
-    s : ndarray
+    s : :class:`numpy.ndarray`
         Array with all Laplace-space-points
         where the function should be evaluated
-    rad : ndarray
+    rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    Tpart : ndarray
-        Given transmissivity values for each disk
-    Spart : ndarray
-        Given storativity values for each disk
-    rpart : ndarray
+    rpart : :class:`numpy.ndarray`
         Given radii separating the disks as well as starting- and endpoints
-    Qw : float
+    Tpart : :class:`numpy.ndarray`
+        Given transmissivity values for each disk
+    Spart : :class:`numpy.ndarray`
+        Given storativity values for each disk
+    Qw : :class:`float`
         Pumpingrate at the well
+    Twell : :class:`float`, optional
+        Transmissivity at the well. Default: ``Tpart[0]``
 
     Returns
     -------
-    lap_transgwflow_cyl : ndarray
+    lap_transgwflow_cyl : :class:`numpy.ndarray`
         Array with all values in laplace-space
 
     Example
@@ -994,11 +1057,11 @@ def lap_transgwflow_cyl(s,
     '''
 
     # ensure that input is treated as arrays
-    s = np.squeeze(s)
-    rad = np.squeeze(rad)
-    rpart = np.squeeze(rpart)
-    Spart = np.squeeze(Spart)
-    Tpart = np.squeeze(Tpart)
+    s = np.squeeze(s).reshape(-1)
+    rad = np.squeeze(rad).reshape(-1)
+    rpart = np.squeeze(rpart).reshape(-1)
+    Spart = np.squeeze(Spart).reshape(-1)
+    Tpart = np.squeeze(Tpart).reshape(-1)
 
     # get the number of partitions
     parts = len(Tpart)
@@ -1007,7 +1070,9 @@ def lap_transgwflow_cyl(s,
     res = np.zeros(s.shape + rad.shape)
 
     # set the general pumping-condtion
-    Q = Qw/(2.0*np.pi*Tpart[0])
+    if Twell is None:
+        Twell = Tpart[0]
+    Q = Qw/(2.0*np.pi*Twell)
 
     # if there is a homgeneouse aquifer, compute the result by hand
     if parts == 1:
@@ -1061,10 +1126,14 @@ def lap_transgwflow_cyl(s,
         # calculate the square-root of the diffusivities
         difsr = np.sqrt(Spart/Tpart)
 
+        # calculate a temporal substitution
         tmp = Tfrac*difsr[:-1]/difsr[1:]
 
+        # match the radii to the different disks
+        pos = np.searchsorted(rpart, rad) - 1
+
         # iterate over the laplace-variable
-        for si, se in np.ndenumerate(s):
+        for si, se in enumerate(s):
             Cs = np.sqrt(se)*difsr
 
             # set the pumping-condition at the well
@@ -1096,21 +1165,18 @@ def lap_transgwflow_cyl(s,
             # solve the Eq-Sys and ignore errors from the umf-pack
             with warnings.catch_warnings():
                 # warnings.simplefilter("ignore")
-                warnings.simplefilter("ignore", UserWarning)
+                warnings.simplefilter("ignore", SLV_WARN)
                 X = sps.linalg.spsolve(M, V, use_umfpack=True)
 
             # to suppress numerical errors, set NAN values to 0
             X[np.logical_not(np.isfinite(X))] = 0.0
 
             # calculate the head
-            # look at: np.searchsorted
-            #          np.unravel_index
-            for ri, re in np.ndenumerate(rad):
-                for i in range(parts):
-                    if rpart[i] <= re < rpart[i+1]:
-                        res[si+ri] = X[2*i]*i0(Cs[i]*re) \
-                                   + X[2*i+1]*k0(Cs[i]*re)
+            res[si, :] = X[2*pos]*i0(Cs[pos]*rad) + X[2*pos+1]*k0(Cs[pos]*rad)
 
+        # set problematic values to 0
+        # --> the algorithm tends to violate small values,
+        #     therefore this approachu is suitable
         res[np.logical_not(np.isfinite(res))] = 0.0
 
     return res

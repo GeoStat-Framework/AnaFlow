@@ -1,48 +1,134 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>anaflow.laplace &#8212; AnaFlow 0.1 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-  </head>
-  <body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../modules.html">AnaFlow 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>anaflow.laplace &mdash; AnaFlow 0.1 documentation</title>
+  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="AnaFlow 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> AnaFlow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../main.html">AnaFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../main.html#submodules">Submodules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">AnaFlow</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>anaflow.laplace</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for anaflow.laplace</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
@@ -56,7 +142,6 @@
 <span class="sd">The following functions are provided</span>
 
 <span class="sd">.. autosummary::</span>
-<span class="sd">   :toctree: generated/</span>
 
 <span class="sd">   stehfest</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -143,33 +228,79 @@
                           <span class="mf">4.284181942857142538e+07</span><span class="p">])}</span>
 
 
-<div class="viewcode-block" id="stehfest"><a class="viewcode-back" href="../../anaflow.html#anaflow.stehfest">[docs]</a><span class="k">def</span> <span class="nf">stehfest</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="stehfest"><a class="viewcode-back" href="../../main.html#anaflow.laplace.stehfest">[docs]</a><span class="k">def</span> <span class="nf">stehfest</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">arg_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    The stehfest-algorithm for numerical laplace inversion.</span>
 
+<span class="sd">    The Inversion was derivide in &#39;&#39;Stehfest 1970&#39;&#39;[R1]_</span>
+<span class="sd">    and is given by the formula</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       f\\left(t\\right) &amp;=\\frac{\\ln2}{t}\\sum_{n=1}^{N}c_{n}\\cdot\\tilde{f}</span>
+<span class="sd">       \\left(n\\cdot\\frac{\\ln2}{t}\\right)\\\\</span>
+<span class="sd">       c_{n} &amp;=\\left(-1\\right)^{n+\\frac{N}{2}}\\cdot</span>
+<span class="sd">       \\sum_{k=\\left\\lfloor \\frac{n+1}{2}\\right\\rfloor }</span>
+<span class="sd">       ^{\\min\\left\\{ n,\\frac{N}{2}\\right\\} }</span>
+<span class="sd">       \\frac{k^{\\frac{N}{2}+1}\\cdot\\binom{2k}{k}}</span>
+<span class="sd">       {\\left(\\frac{N}{2}-k\\right)!\\cdot\\left(n-k\\right)!</span>
+<span class="sd">       \\cdot\\left(2k-n\\right)!}</span>
+
+<span class="sd">    In the algorithm</span>
+<span class="sd">    :math:`N` corresponds to ``bound``,</span>
+<span class="sd">    :math:`\\tilde{f}` to ``func`` and</span>
+<span class="sd">    :math:`t` to ``time``.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    func : function</span>
+<span class="sd">    func : :any:`callable`</span>
 <span class="sd">        function in laplace-space that shall be inverted.</span>
-<span class="sd">        The first argument needs to be the laplace-variable: func(s, **kwargs)</span>
-<span class="sd">    time : float</span>
+<span class="sd">        The first argument needs to be the laplace-variable:</span>
+<span class="sd">        ``func(s, **kwargs)``</span>
+
+<span class="sd">        `func` should be capable of taking numpy arrays as input for `s` and</span>
+<span class="sd">        the first shape component of the output of `func` should match the</span>
+<span class="sd">        shape of `s`.</span>
+<span class="sd">    time : :class:`float` or :class:`numpy.ndarray`</span>
 <span class="sd">        time-points to evaluate the function at</span>
-<span class="sd">    bound : int, optional</span>
+<span class="sd">    bound : :class:`int`, optional</span>
 <span class="sd">        Here you can specify the number of interations within this</span>
-<span class="sd">        algorithm. Default: 12</span>
-<span class="sd">    kwargs : dict, optional</span>
-<span class="sd">        Keyword-arguments that are forwarded to the function given in &quot;func&quot;.</span>
-<span class="sd">        Default: None</span>
+<span class="sd">        algorithm. Default: ``12``</span>
+<span class="sd">    arg_dict : :class:`dict` or :any:`None`, optional</span>
+<span class="sd">        Keyword-arguments given as a dictionary that are forwarded to the</span>
+<span class="sd">        function given in ``func``. Will be merged with ``**kwargs``</span>
+<span class="sd">        This is designed for overlapping keywords in ``stehfest`` and</span>
+<span class="sd">        ``func``.Default: ``None``</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Keyword-arguments that are forwarded to the function given in ``func``.</span>
+<span class="sd">        Will be merged with ``arg_dict``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    stehfest : ndarray</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all evaluations in Time-space.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `func` is not callable.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `time` is not positive.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `bound` is not positive.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `bound` is not even.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [R1] Stehfest, H., &#39;&#39;Algorithm 368:</span>
+<span class="sd">       Numerical inversion of laplace transforms [d5].&#39;&#39;</span>
+<span class="sd">       Communications of the ACM, 13(1):47–49, 1970</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    The parameter &quot;time&quot; needs to be strictly positiv.</span>
-<span class="sd">    The algorithm gets unstable for &quot;bound&quot; values above 20.</span>
+<span class="sd">    The parameter ``time`` needs to be strictly positiv.</span>
+
+<span class="sd">    The algorithm gets unstable for ``bound`` values above 20.</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -178,28 +309,32 @@
 <span class="sd">    array([ 1.,  1.,  1.])</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">arg_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">arg_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg_dict</span><span class="p">)</span>
 
     <span class="c1"># check and save if &#39;t&#39; is scalar</span>
     <span class="n">is_scal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
 
     <span class="c1"># ensure that t is handled as an 1d-array</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># check the input</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">time</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The given function needs to be callable&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">time</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The time-values need to be positiv for the stehfest-algorithm&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">bound</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">bound</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The boundary needs to be &gt;1 for the stehfest-algorithm&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">bound</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">bound</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The boundary needs to be even for the stehfest-algorithm&quot;</span><span class="p">)</span>
 
     <span class="c1"># get all coefficient factors at once</span>
-    <span class="n">c_fac</span> <span class="o">=</span> <span class="n">_c_array</span><span class="p">(</span><span class="n">bound</span><span class="p">)</span>
+    <span class="n">c_fac</span> <span class="o">=</span> <span class="n">c_array</span><span class="p">(</span><span class="n">bound</span><span class="p">)</span>
     <span class="n">t_fac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span><span class="o">/</span><span class="n">time</span>
 
     <span class="c1"># store every function-argument needed in one array</span>
@@ -207,7 +342,7 @@
 
     <span class="c1"># get every function-value needed with one call of &#39;func&#39;</span>
     <span class="n">lap_val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">fargs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">lap_val</span> <span class="o">=</span> <span class="n">lap_val</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">fargs</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="n">lap_val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+    <span class="n">lap_val</span> <span class="o">=</span> <span class="n">lap_val</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">fargs</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="n">lap_val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
     <span class="c1"># do all the sumation with fancy indexing in numpy</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">lap_val</span><span class="p">,</span> <span class="n">c_fac</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
@@ -221,18 +356,18 @@
     <span class="k">return</span> <span class="n">res</span></div>
 
 
-<span class="k">def</span> <span class="nf">_c_array</span><span class="p">(</span><span class="n">bound</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">c_array</span><span class="p">(</span><span class="n">bound</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Array of coefficients for the stehfest-algorithm.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    bound : int, optional</span>
-<span class="sd">        The number of interations. Default: 12</span>
+<span class="sd">    bound : :class:`int`, optional</span>
+<span class="sd">        The number of interations. Default: ``12``</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    c_array : ndarray</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
 <span class="sd">        Array with all coefficinets needed.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
@@ -244,22 +379,22 @@
 
 <span class="k">def</span> <span class="nf">_carr</span><span class="p">(</span><span class="n">bound</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">bound</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bound</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">res</span><span class="p">[</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">_c</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bound</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">_c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">bound</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>
 
 
-<span class="k">def</span> <span class="nf">_c</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">bound</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">((</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)),</span> <span class="nb">min</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">res</span> <span class="o">+=</span> <span class="n">_d</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="p">)</span>
-    <span class="n">res</span> <span class="o">*=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="n">bound</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)),</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">bound</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">_d</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">bound</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">*=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">bound</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>
 
 
-<span class="k">def</span> <span class="nf">_d</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">bound</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_d</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">bound</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="n">bound</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">))</span>
-    <span class="n">res</span> <span class="o">/=</span> <span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">bound</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="n">l</span><span class="p">))</span>
+    <span class="n">res</span> <span class="o">/=</span> <span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">bound</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">-</span><span class="n">i</span><span class="p">))</span>
     <span class="n">res</span> <span class="o">/=</span> <span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>
 
@@ -269,41 +404,62 @@
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
+           </div>
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sebastian Mueller.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../modules.html">AnaFlow 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Sebastian Mueller.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

@@ -1,0 +1,955 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Helper functions &mdash; AnaFlow 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="AnaFlow 0.1 documentation" href="index.html"/>
+        <link rel="up" title="AnaFlow" href="main.html"/>
+        <link rel="prev" title="Laplace Transformation" href="laplace.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> AnaFlow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="main.html">AnaFlow</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="main.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gwsol.html">Groundwater equation solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laplace.html">Laplace Transformation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Helper functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">AnaFlow</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="main.html">AnaFlow</a> &raquo;</li>
+      
+    <li>Helper functions</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/helper.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-anaflow.helper">
+<span id="helper-functions"></span><h1>Helper functions<a class="headerlink" href="#module-anaflow.helper" title="Permalink to this headline">¶</a></h1>
+<p>Anaflow subpackage providing several helper functions.</p>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>The following functions are provided</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.helper.rad_amean_func" title="anaflow.helper.rad_amean_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rad_amean_func</span></code></a>(func,&nbsp;val_arr[,&nbsp;arg_dict])</td>
+<td>Calculating the arithmetic mean of a radial symmetric function for given consecutive radii defining 2D disks by the following formula</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.helper.rad_gmean_func" title="anaflow.helper.rad_gmean_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rad_gmean_func</span></code></a>(func,&nbsp;val_arr[,&nbsp;arg_dict])</td>
+<td>Calculating the geometric mean of a radial symmetric function for given consecutive radii defining 2D disks by the following formula</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.helper.rad_hmean_func" title="anaflow.helper.rad_hmean_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rad_hmean_func</span></code></a>(func,&nbsp;val_arr[,&nbsp;arg_dict])</td>
+<td>Calculating the harmonic mean of a radial symmetric function for given consecutive radii defining 2D disks by the following formula</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.helper.rad_pmean_func" title="anaflow.helper.rad_pmean_func"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rad_pmean_func</span></code></a>(func,&nbsp;val_arr[,&nbsp;p,&nbsp;arg_dict])</td>
+<td>Calculating the p-mean of a radial symmetric function for given consecutive radii defining 2D disks by the following formula</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.helper.radii" title="anaflow.helper.radii"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radii</span></code></a>(parts[,&nbsp;rwell,&nbsp;rinf,&nbsp;rlast,&nbsp;typ])</td>
+<td>Calculation of specific point distributions for the diskmodel.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.helper.specialrange" title="anaflow.helper.specialrange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">specialrange</span></code></a>(val_min,&nbsp;val_max,&nbsp;steps[,&nbsp;typ])</td>
+<td>Calculation of special point ranges.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.helper.specialrange_cut" title="anaflow.helper.specialrange_cut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">specialrange_cut</span></code></a>(val_min,&nbsp;val_max,&nbsp;steps[,&nbsp;…])</td>
+<td>Calculation of special point ranges.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.helper.T_CG" title="anaflow.helper.T_CG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T_CG</span></code></a>(rad,&nbsp;TG,&nbsp;sig2,&nbsp;corr[,&nbsp;prop,&nbsp;Twell])</td>
+<td>The coarse-graining Transmissivity.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.helper.T_CG_inverse" title="anaflow.helper.T_CG_inverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T_CG_inverse</span></code></a>(T,&nbsp;TG,&nbsp;sig2,&nbsp;corr[,&nbsp;prop,&nbsp;Twell])</td>
+<td>The inverse function of the coarse-graining Transmissivity.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.helper.T_CG_error" title="anaflow.helper.T_CG_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T_CG_error</span></code></a>(err,&nbsp;TG,&nbsp;sig2,&nbsp;corr[,&nbsp;prop,&nbsp;Twell])</td>
+<td>Calculating the radial-point where the relative error of the farfield value is less than the given tollerance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.helper.K_CG" title="anaflow.helper.K_CG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">K_CG</span></code></a>(rad,&nbsp;KG,&nbsp;sig2,&nbsp;corr,&nbsp;e[,&nbsp;prop,&nbsp;Kwell])</td>
+<td>The coarse-graining conductivity.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.helper.K_CG_inverse" title="anaflow.helper.K_CG_inverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">K_CG_inverse</span></code></a>(K,&nbsp;KG,&nbsp;sig2,&nbsp;corr,&nbsp;e[,&nbsp;prop,&nbsp;Kwell])</td>
+<td>The inverse function of the coarse-graining conductivity.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.helper.K_CG_error" title="anaflow.helper.K_CG_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">K_CG_error</span></code></a>(err,&nbsp;KG,&nbsp;sig2,&nbsp;corr,&nbsp;e[,&nbsp;prop,&nbsp;Kwell])</td>
+<td>Calculating the radial-point where the relative error of the farfield value is less than the given tollerance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#anaflow.helper.aniso" title="anaflow.helper.aniso"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aniso</span></code></a>(e)</td>
+<td>The anisotropy function.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#anaflow.helper.well_solution" title="anaflow.helper.well_solution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">well_solution</span></code></a>(rad,&nbsp;time,&nbsp;T,&nbsp;S,&nbsp;Qw[,&nbsp;…])</td>
+<td>The classical Theis solution for transient flow under a pumping condition in a confined and homogeneous aquifer.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="anaflow.helper.rad_amean_func">
+<code class="descclassname">anaflow.helper.</code><code class="descname">rad_amean_func</code><span class="sig-paren">(</span><em>func</em>, <em>val_arr</em>, <em>arg_dict=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#rad_amean_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.rad_amean_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculating the arithmetic mean of a radial symmetric function
+for given consecutive radii defining 2D disks by the following formula</p>
+<div class="math">
+<p><img src="_images/math/afc6b625be35cf944b6526eeeb68093eb6dbbeea.png" alt="f_i=\frac{2}{r_{i+1}^2-r_i^2}
+\intop^{r_{i+1}}_{r_i} r\cdot f(r)\, dr"/></p>
+</div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#callable" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">callable</span></code></a>) – function that should be used
+The first argument needs to be the radial variable:
+<code class="docutils literal notranslate"><span class="pre">func(r,</span> <span class="pre">**kwargs)</span></code></li>
+<li><strong>val_arr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – given radii defining the disks</li>
+<li><strong>arg_dict</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#dict" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> or <a class="reference external" href="https://docs.python.org/3.5/library/constants.html#None" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">None</span></code></a>, optional) – Keyword-arguments given as a dictionary that are forwarded to the
+function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>. Will be merged with <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>.
+This is designed for overlapping keywords in <code class="docutils literal notranslate"><span class="pre">rad_amean_func</span></code> and
+<code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>**kwargs</strong> – Keyword-arguments that are forwarded to the function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Will be merged with <code class="docutils literal notranslate"><span class="pre">arg_dict</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array with all calculated arithmetic means</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <cite>func</cite> is not callable.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">val_arr</span></code> has less than 2 values.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">val_arr</span></code> is not sorted in incresing order.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If the last value in val_arr is “inf”, the given function should provide
+a value for “inf” as input: <code class="docutils literal notranslate"><span class="pre">func(float(&quot;inf&quot;))</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rad_amean_func</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">array([ 2.33588885,  6.33423311])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.rad_gmean_func">
+<code class="descclassname">anaflow.helper.</code><code class="descname">rad_gmean_func</code><span class="sig-paren">(</span><em>func</em>, <em>val_arr</em>, <em>arg_dict=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#rad_gmean_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.rad_gmean_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculating the geometric mean of a radial symmetric function
+for given consecutive radii defining 2D disks by the following formula</p>
+<div class="math">
+<p><img src="_images/math/8f4a31734a558c67d70b86391b3c80a0c386fd47.png" alt="f_i=\exp\left(\frac{2}{r_{i+1}^2-r_i^2}
+\intop^{r_{i+1}}_{r_i} r\cdot\ln(f(r))\, dr\right)"/></p>
+</div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#callable" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">callable</span></code></a>) – function that should be used
+The first argument needs to be the radial variable:
+<code class="docutils literal notranslate"><span class="pre">func(r,</span> <span class="pre">**kwargs)</span></code></li>
+<li><strong>val_arr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – given radii defining the disks</li>
+<li><strong>arg_dict</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#dict" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> or <a class="reference external" href="https://docs.python.org/3.5/library/constants.html#None" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">None</span></code></a>, optional) – Keyword-arguments given as a dictionary that are forwarded to the
+function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>. Will be merged with <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>.
+This is designed for overlapping keywords in <code class="docutils literal notranslate"><span class="pre">rad_gmean_func</span></code> and
+<code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>**kwargs</strong> – Keyword-arguments that are forwarded to the function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Will be merged with <code class="docutils literal notranslate"><span class="pre">arg_dict</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array with all calculated geometric means</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <cite>func</cite> is not callable.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">val_arr</span></code> has less than 2 values.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">val_arr</span></code> is not sorted in incresing order.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If the last value in val_arr is “inf”, the given function should provide
+a value for “inf” as input: <code class="docutils literal notranslate"><span class="pre">func(float(&quot;inf&quot;))</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rad_gmean_func</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">array([ 2.33588885,  6.33423311])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.rad_hmean_func">
+<code class="descclassname">anaflow.helper.</code><code class="descname">rad_hmean_func</code><span class="sig-paren">(</span><em>func</em>, <em>val_arr</em>, <em>arg_dict=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#rad_hmean_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.rad_hmean_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculating the harmonic mean of a radial symmetric function
+for given consecutive radii defining 2D disks by the following formula</p>
+<div class="math">
+<p><img src="_images/math/778de4c2fbfd6e09494fcf1ec0908ba88298a690.png" alt="f_i=\left(\frac{2}{r_{i+1}^2-r_i^2}
+\intop^{r_{i+1}}_{r_i} r\cdot(f(r))^{-1}\, dr\right)^{-1}"/></p>
+</div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#callable" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">callable</span></code></a>) – function that should be used
+The first argument needs to be the radial variable:
+<code class="docutils literal notranslate"><span class="pre">func(r,</span> <span class="pre">**kwargs)</span></code></li>
+<li><strong>val_arr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – given radii defining the disks</li>
+<li><strong>arg_dict</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#dict" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> or <a class="reference external" href="https://docs.python.org/3.5/library/constants.html#None" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">None</span></code></a>, optional) – Keyword-arguments given as a dictionary that are forwarded to the
+function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>. Will be merged with <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>.
+This is designed for overlapping keywords in <code class="docutils literal notranslate"><span class="pre">rad_gmean_func</span></code> and
+<code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>**kwargs</strong> – Keyword-arguments that are forwarded to the function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Will be merged with <code class="docutils literal notranslate"><span class="pre">arg_dict</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array with all calculated geometric means</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <cite>func</cite> is not callable.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">val_arr</span></code> has less than 2 values.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">val_arr</span></code> is not sorted in incresing order.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If the last value in val_arr is “inf”, the given function should provide
+a value for “inf” as input: <code class="docutils literal notranslate"><span class="pre">func(float(&quot;inf&quot;))</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rad_hmean_func</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">array([ 2.33588885,  6.33423311])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.rad_pmean_func">
+<code class="descclassname">anaflow.helper.</code><code class="descname">rad_pmean_func</code><span class="sig-paren">(</span><em>func</em>, <em>val_arr</em>, <em>p=1.0</em>, <em>arg_dict=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#rad_pmean_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.rad_pmean_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculating the p-mean of a radial symmetric function
+for given consecutive radii defining 2D disks by the following formula</p>
+<div class="math">
+<p><img src="_images/math/029766f4f5870ee8841ae774f6dd218e8806e961.png" alt="f_i=\left(\frac{2}{r_{i+1}^2-r_i^2}
+\intop^{r_{i+1}}_{r_i} r\cdot(f(r))^p\, dr\right)^{\frac{1}{p}}"/></p>
+</div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#callable" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">callable</span></code></a>) – function that should be used
+The first argument needs to be the radial variable:
+<code class="docutils literal notranslate"><span class="pre">func(r,</span> <span class="pre">**kwargs)</span></code></li>
+<li><strong>val_arr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – given radii defining the disks</li>
+<li><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – The potency defining the p-mean.
+Default: <code class="docutils literal notranslate"><span class="pre">1.0</span></code></li>
+<li><strong>arg_dict</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#dict" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> or <a class="reference external" href="https://docs.python.org/3.5/library/constants.html#None" title="(in Python v3.5)"><code class="xref any docutils literal notranslate"><span class="pre">None</span></code></a>, optional) – Keyword-arguments given as a dictionary that are forwarded to the
+function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>. Will be merged with <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>.
+This is designed for overlapping keywords in <code class="docutils literal notranslate"><span class="pre">rad_pmean_func</span></code> and
+<code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>**kwargs</strong> – Keyword-arguments that are forwarded to the function given in <code class="docutils literal notranslate"><span class="pre">func</span></code>.
+Will be merged with <code class="docutils literal notranslate"><span class="pre">arg_dict</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array with all calculated p-means</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <cite>func</cite> is not callable.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">val_arr</span></code> has less than 2 values.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">val_arr</span></code> is not sorted in incresing order.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If the last value in val_arr is “inf”, the given function should provide
+a value for “inf” as input: <code class="docutils literal notranslate"><span class="pre">func(float(&quot;inf&quot;))</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rad_pmean_func</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">array([ 2.33588885,  6.33423311])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.radii">
+<code class="descclassname">anaflow.helper.</code><code class="descname">radii</code><span class="sig-paren">(</span><em>parts</em>, <em>rwell=0.0</em>, <em>rinf=inf</em>, <em>rlast=500.0</em>, <em>typ='log'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#radii"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.radii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of specific point distributions for the diskmodel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>parts</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of partitions.</li>
+<li><strong>rwell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Radius at the well. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+<li><strong>rinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Radius at the outer boundary. Default: :any:<code class="docutils literal notranslate"><span class="pre">np.inf</span></code></li>
+<li><strong>rlast</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Setting the last radius befor the outer boundary. Default: <code class="docutils literal notranslate"><span class="pre">500.0</span></code></li>
+<li><strong>typ</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#str" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Setting the distribution type of the radii. Default: <code class="docutils literal notranslate"><span class="pre">&quot;log&quot;</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>p_rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array containing the separating radii</li>
+<li><strong>f_rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array containing the function-evaluation points within each disk</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">radii</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">(array([   0.,  500.,   inf]), array([  0.,  inf]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.specialrange">
+<code class="descclassname">anaflow.helper.</code><code class="descname">specialrange</code><span class="sig-paren">(</span><em>val_min</em>, <em>val_max</em>, <em>steps</em>, <em>typ='log'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#specialrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.specialrange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of special point ranges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>val_min</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Starting value.</li>
+<li><strong>val_max</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Ending value</li>
+<li><strong>steps</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of steps.</li>
+<li><strong>typ</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#str" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – <p>Setting the kind of range-distribution. One can choose between</p>
+<ul>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;log&quot;</span></code>: for logarithmic behavior</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;lin&quot;</span></code>: for linear behavior</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;quad&quot;</span></code>: for quadratic behavior</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;cub&quot;</span></code>: for cubic behavior</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: here you can specifi any exponent (“quad” would be
+equivalent to 2)</li>
+</ul>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">&quot;log&quot;</span></code></p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array containing the special range</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">specialrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">array([  1.        ,   2.53034834,   5.23167968,  10.        ])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.specialrange_cut">
+<code class="descclassname">anaflow.helper.</code><code class="descname">specialrange_cut</code><span class="sig-paren">(</span><em>val_min</em>, <em>val_max</em>, <em>steps</em>, <em>val_cut=inf</em>, <em>typ='log'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#specialrange_cut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.specialrange_cut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculation of special point ranges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>val_min</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Starting value.</li>
+<li><strong>val_max</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Ending value</li>
+<li><strong>steps</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#int" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of steps.</li>
+<li><strong>val_cut</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Cutting value, if val_max is bigger than this value, the last interval
+will be between val_cut and val_max</li>
+<li><strong>typ</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#str" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – <p>Setting the kind of range-distribution. One can choose between</p>
+<ul>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;log&quot;</span></code>: for logarithmic behavior</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;lin&quot;</span></code>: for linear behavior</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;quad&quot;</span></code>: for quadratic behavior</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;cub&quot;</span></code>: for cubic behavior</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: here you can specifi any exponent (“quad” would be
+equivalent to 2)</li>
+</ul>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">&quot;log&quot;</span></code></p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array containing the special range</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">specialrange_cut</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">array([  1.        ,   2.53034834,   5.23167968,  10.        ])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.T_CG">
+<code class="descclassname">anaflow.helper.</code><code class="descname">T_CG</code><span class="sig-paren">(</span><em>rad</em>, <em>TG</em>, <em>sig2</em>, <em>corr</em>, <em>prop=1.6</em>, <em>Twell=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#T_CG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.T_CG" title="Permalink to this definition">¶</a></dt>
+<dd><p>The coarse-graining Transmissivity.</p>
+<p>This solution was presented in ‘’Schneider &amp; Attinger 2008’‘<a class="reference internal" href="#r3" id="id1">[R3]</a>.</p>
+<p>This functions gives an effective
+transmissivity for 2D pumpingtests in heterogenous aquifers, where the
+transmissivity is following a log-normal distribution and a gaussian
+correlation function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>TG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean of the transmissivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the transmissivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of transmissivity-distribution</li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+<li><strong>Twell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Explicit transmissivity value at the well. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>T_CG</strong> – Array containing the effective transmissivity values.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R3]</a></td><td>Schneider, C. and Attinger, S.,
+‘’Beyond thiem: A new method for interpreting large scale
+pumping tests in heterogeneous aquifers.’’
+Water resources research, 44(4), 2008</td></tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">T_CG</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([ 0.00061831,  0.00064984,  0.00069236])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.T_CG_inverse">
+<code class="descclassname">anaflow.helper.</code><code class="descname">T_CG_inverse</code><span class="sig-paren">(</span><em>T</em>, <em>TG</em>, <em>sig2</em>, <em>corr</em>, <em>prop=1.6</em>, <em>Twell=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#T_CG_inverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.T_CG_inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>The inverse function of the coarse-graining Transmissivity.
+See: <a class="reference internal" href="#anaflow.helper.T_CG" title="anaflow.helper.T_CG"><code class="xref py py-func docutils literal notranslate"><span class="pre">T_CG()</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>T</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all transmissivity values
+where the function should be evaluated</li>
+<li><strong>TG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean of the transmissivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the transmissivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of transmissivity-distribution</li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+<li><strong>Twell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Explicit transmissivity value at the well. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rad</strong> – Array containing the radii belonging to the given transmissivity values</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">T_CG_inverse</span><span class="p">([</span><span class="mf">7e-4</span><span class="p">,</span><span class="mf">8e-4</span><span class="p">,</span><span class="mf">9e-4</span><span class="p">],</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([ 3.16952925,  5.56935826,  9.67679026])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.T_CG_error">
+<code class="descclassname">anaflow.helper.</code><code class="descname">T_CG_error</code><span class="sig-paren">(</span><em>err</em>, <em>TG</em>, <em>sig2</em>, <em>corr</em>, <em>prop=1.6</em>, <em>Twell=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#T_CG_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.T_CG_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculating the radial-point where the relative error of the farfield
+value is less than the given tollerance.
+See: <a class="reference internal" href="#anaflow.helper.T_CG" title="anaflow.helper.T_CG"><code class="xref py py-func docutils literal notranslate"><span class="pre">T_CG()</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>err</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given relative error for the farfield transmissivity</li>
+<li><strong>TG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean of the transmissivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the transmissivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of transmissivity-distribution</li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+<li><strong>Twell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Explicit transmissivity value at the well. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rad</strong> – Radial point, where the relative error is less than the given one.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">T_CG_error</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">34.910450167790387</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.K_CG">
+<code class="descclassname">anaflow.helper.</code><code class="descname">K_CG</code><span class="sig-paren">(</span><em>rad</em>, <em>KG</em>, <em>sig2</em>, <em>corr</em>, <em>e</em>, <em>prop=1.6</em>, <em>Kwell='KH'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#K_CG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.K_CG" title="Permalink to this definition">¶</a></dt>
+<dd><p>The coarse-graining conductivity.</p>
+<p>This solution was presented in ‘’Zech 2013’‘<a class="reference internal" href="#r8" id="id2">[R8]</a>.</p>
+<p>This functions gives an effective
+conductivity for 3D pumpingtests in heterogenous aquifers, where the
+conductivity is following a log-normal distribution and a gaussian
+correlation function and taking vertical anisotropy into account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>KG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean conductivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the conductivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of conductivity-distribution</li>
+<li><strong>e</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Anisotropy-ratio of the vertical and horizontal corralation-lengths</li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+<li><strong>Kwell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#str" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or  <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Explicit conductivity value at the well. One can choose between the
+harmonic mean (<code class="docutils literal notranslate"><span class="pre">&quot;KH&quot;</span></code>),
+the arithmetic mean (<code class="docutils literal notranslate"><span class="pre">&quot;KA&quot;</span></code>) or an arbitrary float
+value. Default: <code class="docutils literal notranslate"><span class="pre">&quot;KH&quot;</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>K_CG</strong> – Array containing the effective conductivity values.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R8]</a></td><td>Zech, A.
+‘’Impact of Aqifer Heterogeneity on Subsurface Flow and Salt
+Transport at Different Scales: from a method determine parameters
+of heterogeneous permeability at local scale to a large-scale model
+for the sedimentary basin of Thuringia.’’
+PhD thesis, Friedrich-Schiller-Universität Jena, 2013</td></tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">K_CG</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([ 0.00063008,  0.00069285,  0.00077595])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.K_CG_inverse">
+<code class="descclassname">anaflow.helper.</code><code class="descname">K_CG_inverse</code><span class="sig-paren">(</span><em>K</em>, <em>KG</em>, <em>sig2</em>, <em>corr</em>, <em>e</em>, <em>prop=1.6</em>, <em>Kwell='KH'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#K_CG_inverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.K_CG_inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>The inverse function of the coarse-graining conductivity.
+See: <a class="reference internal" href="#anaflow.helper.K_CG" title="anaflow.helper.K_CG"><code class="xref py py-func docutils literal notranslate"><span class="pre">K_CG()</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>K</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all conductivity values
+where the function should be evaluated</li>
+<li><strong>KG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean conductivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the conductivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of conductivity-distribution</li>
+<li><strong>e</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Anisotropy-ratio of the vertical and horizontal corralation-lengths</li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+<li><strong>Kwell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#str" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or  <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Explicit conductivity value at the well. One can choose between the
+harmonic mean (“KH”), the arithmetic mean (“KA”) or an arbitrary float
+value. Default: <code class="docutils literal notranslate"><span class="pre">&quot;KH&quot;</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rad</strong> – Array containing the radii belonging to the given conductivity values</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">K_CG_inverse</span><span class="p">([</span><span class="mf">7e-4</span><span class="p">,</span><span class="mf">8e-4</span><span class="p">,</span><span class="mf">9e-4</span><span class="p">],</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([ 2.09236867,  3.27914996,  4.52143956])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.K_CG_error">
+<code class="descclassname">anaflow.helper.</code><code class="descname">K_CG_error</code><span class="sig-paren">(</span><em>err</em>, <em>KG</em>, <em>sig2</em>, <em>corr</em>, <em>e</em>, <em>prop=1.6</em>, <em>Kwell='KH'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#K_CG_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.K_CG_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculating the radial-point where the relative error of the farfield
+value is less than the given tollerance.
+See: <a class="reference internal" href="#anaflow.helper.K_CG" title="anaflow.helper.K_CG"><code class="xref py py-func docutils literal notranslate"><span class="pre">K_CG()</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>err</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given relative error for the farfield conductivity</li>
+<li><strong>KG</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Geometric-mean conductivity-distribution</li>
+<li><strong>sig2</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – log-normal-variance of the conductivity-distribution</li>
+<li><strong>corr</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – corralation-length of conductivity-distribution</li>
+<li><strong>e</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Anisotropy-ratio of the vertical and horizontal corralation-lengths</li>
+<li><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Proportionality factor used within the upscaling procedure.
+Default: <code class="docutils literal notranslate"><span class="pre">1.6</span></code></li>
+<li><strong>Kwell</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/stdtypes.html#str" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or  <a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Explicit conductivity value at the well. One can choose between the
+harmonic mean (“KH”), the arithmetic mean (“KA”) or an arbitrary float
+value. Default: <code class="docutils literal notranslate"><span class="pre">&quot;KH&quot;</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rad</strong> – Radial point, where the relative error is less than the given one.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">K_CG_error</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">19.612796453639845</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.aniso">
+<code class="descclassname">anaflow.helper.</code><code class="descname">aniso</code><span class="sig-paren">(</span><em>e</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#aniso"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.aniso" title="Permalink to this definition">¶</a></dt>
+<dd><p>The anisotropy function.</p>
+<p>Known from ‘’Dagan (1989)’‘<a class="reference internal" href="#r2" id="id3">[R2]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>e</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Anisotropy-ratio of the vertical and horizontal corralation-lengths</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>aniso</strong> – Value of the anisotropy function for the given value.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If the Anisotropy-ratio <code class="docutils literal notranslate"><span class="pre">e</span></code> is not within 0 and 1.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[R2]</a></td><td>Dagan, G., ‘’Flow and Transport on Porous Formations’‘,
+Springer Verlag, New York, 1989.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">aniso</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">0.23639985871871511</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="anaflow.helper.well_solution">
+<code class="descclassname">anaflow.helper.</code><code class="descname">well_solution</code><span class="sig-paren">(</span><em>rad</em>, <em>time</em>, <em>T</em>, <em>S</em>, <em>Qw</em>, <em>struc_grid=True</em>, <em>hinf=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/anaflow/helper.html#well_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#anaflow.helper.well_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>The classical Theis solution for transient flow under a pumping condition
+in a confined and homogeneous aquifer.</p>
+<p>This solution was presented in ‘’Theis 1935’‘<a class="reference internal" href="#r9" id="id4">[R9]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rad</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all radii where the function should be evaluated</li>
+<li><strong>time</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Array with all time-points where the function should be evaluated</li>
+<li><strong>T</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given transmissivity of the aquifer</li>
+<li><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Given storativity of the aquifer</li>
+<li><strong>Qw</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Pumpingrate at the well</li>
+<li><strong>struc_grid</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#bool" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If this is set to “False”, the “rad” and “time” array will be merged
+and interpreted as single, r-t points. In this case they need to have
+the same shapes. Otherwise a structured r-t grid is created.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
+<li><strong>hinf</strong> (<a class="reference external" href="https://docs.python.org/3.5/library/functions.html#float" title="(in Python v3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Reference head at the outer boundary “rinf”. Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>well_solution</strong> – Array with all heads at the given radii and time-points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">rad</span></code> is not positiv.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">time</span></code> is not positiv.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If shape of <code class="docutils literal notranslate"><span class="pre">rad</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code> differ in case of
+<code class="docutils literal notranslate"><span class="pre">struc_grid</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">T</span></code> is not positiv.</li>
+<li><a class="reference external" href="https://docs.python.org/3.5/library/exceptions.html#ValueError" title="(in Python v3.5)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <code class="docutils literal notranslate"><span class="pre">S</span></code> is not positiv.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[R9]</a></td><td>Theis, C.,
+‘’The relation between the lowering of the piezometric surface and the
+rate and duration of discharge of a well using groundwater storage’‘,
+Trans. Am. Geophys. Union, 16, 519–524, 1935</td></tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">rad</span></code>, <code class="docutils literal notranslate"><span class="pre">T</span></code> and <code class="docutils literal notranslate"><span class="pre">S</span></code> will be checked for positivity.
+If you want to use cartesian coordiantes, just use the formula
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">sqrt(x**2</span> <span class="pre">+</span> <span class="pre">y**2)</span></code></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">well_solution</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="go">array([[-0.24959541, -0.14506368, -0.08971485],</span>
+<span class="go">       [-0.43105106, -0.32132823, -0.25778313]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="laplace.html" class="btn btn-neutral" title="Laplace Transformation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sebastian Mueller.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

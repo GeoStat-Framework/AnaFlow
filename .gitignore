@@ -1,0 +1,8 @@
+*.pyc
+*.orig
+*~
+.spyproject/
+#_build
+#_static
+#_templates
+#docs/

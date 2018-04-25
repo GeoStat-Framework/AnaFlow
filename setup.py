@@ -42,7 +42,7 @@ Topic :: Utilities
 """
 
 MAJOR = 0
-MINOR = 1
+MINOR = 2
 MICRO = 0
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
@@ -61,7 +61,8 @@ metadata = dict(
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
     platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
     include_package_data=True,
-    install_requires=['numpy', 'scipy'],
+    install_requires=['numpy >= 1.10.0',
+                      'scipy >= 0.19.0'],
     packages=find_packages(),
     )
 

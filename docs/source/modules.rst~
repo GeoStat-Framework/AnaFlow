@@ -1,7 +1,8 @@
 AnaFlow
 =======
 
-.. toctree::
-   :maxdepth: 4
 
-   anaflow
+.. toctree::
+   :maxdepth: 2
+
+   index
