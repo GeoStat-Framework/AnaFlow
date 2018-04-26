@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 
 DOCLINES = __doc__.split("\n")
 
-readme = open('LICENSE').read()
+readme = open('README.md').read()
 
 CLASSIFIERS = """\
 Development Status :: 3 - Alpha
@@ -43,7 +43,7 @@ Topic :: Utilities
 
 MAJOR = 0
 MINOR = 2
-MICRO = 2
+MICRO = 3
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -57,13 +57,14 @@ metadata = dict(
     long_description=readme,
     author="Sebastian Mueller",
     author_email="sebastian.mueller@ufz.de",
+    url='https://github.com/MuellerSeb/AnaFlow',
     license='LGPL -  see LICENSE',
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
     platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
     include_package_data=True,
     install_requires=['numpy >= 1.10.0',
                       'scipy >= 0.19.0'],
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests*', 'docs*']),
     )
 
 setup(**metadata)
