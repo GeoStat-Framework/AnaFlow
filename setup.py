@@ -43,8 +43,8 @@ Topic :: Utilities
 
 MAJOR = 0
 MINOR = 2
-MICRO = 3
-ISRELEASED = False
+MICRO = 4
+ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
