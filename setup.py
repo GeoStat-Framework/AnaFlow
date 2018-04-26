@@ -25,7 +25,7 @@ Development Status :: 5 - alpha
 Intended Audience :: Developers
 Intended Audience :: End Users/Desktop
 Intended Audience :: Science/Research
-License :: None
+License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)
 Natural Language :: English
 Operating System :: MacOS
 Operating System :: MacOS :: MacOS X
@@ -43,7 +43,7 @@ Topic :: Utilities
 
 MAJOR = 0
 MINOR = 2
-MICRO = 0
+MICRO = 1
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 

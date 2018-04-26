@@ -51,3 +51,5 @@ __all__ = ["thiem", "theis",
            "ext_theis3D",
            "diskmodel",
            "stehfest"]
+
+__version__ = '0.2.1'
