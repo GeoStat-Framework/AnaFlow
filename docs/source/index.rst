@@ -2,7 +2,9 @@
 AnaFlow: A python-package containing analytical solutions for groundwater flow
 ==============================================================================
 
-.. image:: anaflow.png
+.. image:: Anaflow.png
+   :width: 200px
+   :align: center
 
 Contents
 --------
@@ -11,17 +13,14 @@ groundwater-flow-equation.
 
 Dependencies
 ------------
-- [NumPy](http://www.numpy.org): 1.10.0 or higher
-- [SciPy](http://www.scipy.org): 0.19.0 or higher
+- `Numpy <http://www.numpy.org>`_: 1.10.0 or higher
+- `SciPy <http://www.scipy.org>`_: 0.19.0 or higher
 
 Installation
 ------------
-Just download the code from: https://github.com/MuellerSeb/AnaFlow/archive/master.zip
-and unzip the file. 
+The anaflow package is on PyPi. Just  run the following command:
 
-Then run the following command from the source code directory:
-
-    ``pip install -U .``
+    ``pip install -U anaflow``
 
 It is highly recomended to install the scipy-scikit `umfpack` to get a solver
 for sparse linear systems:
@@ -32,13 +31,12 @@ Under Ubuntu you can install the required SuiteSparse library with:
 
     ``sudo apt-get install libsuitesparse-dev``
 
-For further information have a look at:  
+For further information have a look at:
     * http://pypi.python.org/pypi/scikit-umfpack
     * http://faculty.cse.tamu.edu/davis/suitesparse.html
 
-Index
------
-
+Modules
+-------
 .. toctree::
    :maxdepth: 2
 

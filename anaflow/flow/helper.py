@@ -1,9 +1,7 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
 """
-Anaflow subpackage providing several helper functions.
+Anaflow subpackage providing several helper functions for flow.
 
-.. currentmodule:: anaflow.helper
+.. currentmodule:: anaflow.flow.helper
 
 Functions
 ---------
@@ -38,14 +36,22 @@ __all__ = ["rad_amean_func",
            "rad_gmean_func",
            "rad_hmean_func",
            "rad_pmean_func",
-           "radii", "specialrange", "specialrange_cut",
-           "T_CG", "T_CG_inverse", "T_CG_error",
-           "K_CG", "K_CG_inverse", "K_CG_error",
-           "aniso", "well_solution"]
+           "radii", "specialrange",
+           "specialrange_cut",
+           "T_CG",
+           "T_CG_inverse",
+           "T_CG_error",
+           "K_CG",
+           "K_CG_inverse",
+           "K_CG_error",
+           "aniso",
+           "well_solution"]
 
 
 def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
     '''
+    Calculating the arithmetic mean
+
     Calculating the arithmetic mean of a radial symmetric function
     for given consecutive radii defining 2D disks by the following formula
 
@@ -144,7 +150,9 @@ def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
 
 def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
     '''
-    Calculating the geometric mean of a radial symmetric function
+    Calculating the geometric mean
+
+    Calculating the geometric meanof a radial symmetric function
     for given consecutive radii defining 2D disks by the following formula
 
     .. math::
@@ -242,6 +250,8 @@ def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
 
 def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
     '''
+    Calculating the harmonic mean
+
     Calculating the harmonic mean of a radial symmetric function
     for given consecutive radii defining 2D disks by the following formula
 
@@ -340,6 +350,8 @@ def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
 
 def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
     '''
+    Calculating the p-mean
+
     Calculating the p-mean of a radial symmetric function
     for given consecutive radii defining 2D disks by the following formula
 
@@ -446,6 +458,8 @@ def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
 
 def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
     '''
+    Calculation of specific point distributions
+
     Calculation of specific point distributions for the diskmodel.
 
     Parameters
@@ -509,7 +523,7 @@ def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
 
 def specialrange(val_min, val_max, steps, typ="log"):
     '''
-    Calculation of special point ranges.
+    Calculation of special point ranges
 
     Parameters
     ----------
@@ -563,7 +577,9 @@ def specialrange(val_min, val_max, steps, typ="log"):
 
 def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
     '''
-    Calculation of special point ranges.
+    Calculation of special point ranges
+
+    Calculation of special point ranges with a cut-off value.
 
     Parameters
     ----------
@@ -608,7 +624,7 @@ def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
 
 def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
     '''
-    The coarse-graining Transmissivity.
+    The coarse-graining Transmissivity
 
     This solution was presented in ''Schneider & Attinger 2008''[R3]_.
 
@@ -663,7 +679,8 @@ def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
 
 def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
     '''
-    The inverse function of the coarse-graining Transmissivity.
+    The inverse coarse-graining Transmissivity
+
     See: :func:`T_CG`
 
     Parameters
@@ -706,6 +723,8 @@ def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
 
 def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
     '''
+    Calculating the radial-point for given error
+
     Calculating the radial-point where the relative error of the farfield
     value is less than the given tollerance.
     See: :func:`T_CG`
@@ -756,7 +775,7 @@ def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
 
 def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     '''
-    The coarse-graining conductivity.
+    The coarse-graining conductivity
 
     This solution was presented in ''Zech 2013''[R8]_.
 
@@ -821,7 +840,8 @@ def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
 
 def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     '''
-    The inverse function of the coarse-graining conductivity.
+    The inverse coarse-graining conductivity
+
     See: :func:`K_CG`
 
     Parameters
@@ -871,6 +891,8 @@ def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
 
 def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     '''
+    Calculating the radial-point for given error
+
     Calculating the radial-point where the relative error of the farfield
     value is less than the given tollerance.
     See: :func:`K_CG`
@@ -930,7 +952,7 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
 
 def aniso(e):
     '''
-    The anisotropy function.
+    The anisotropy function
 
     Known from ''Dagan (1989)''[R2]_.
 
@@ -979,6 +1001,8 @@ def aniso(e):
 def well_solution(rad, time, T, S, Qw,
                   struc_grid=True, hinf=0.0):
     '''
+    The classical Theis solution
+
     The classical Theis solution for transient flow under a pumping condition
     in a confined and homogeneous aquifer.
 

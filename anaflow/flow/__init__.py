@@ -1,43 +1,39 @@
 """
-=======
-AnaFlow
-=======
+Anaflow subpackage providing solutions for the groundwater flow equation.
 
-Contents
---------
-Anaflow provides several analytical and semi-analytical solutions for the
-groundwater-flow-equation.
+.. currentmodule:: anaflow.flow
 
 Functions
 ---------
-The following functions are provided directly
+The following functions are provided
 
 .. autosummary::
-
    thiem
-   theis
    ext_thiem2D
-   ext_theis2D
    ext_thiem3D
+   theis
+   ext_theis2D
    ext_theis3D
    diskmodel
-   get_lap_inv
-   stehfest
+   lap_transgwflow_cyl
 """
 from __future__ import absolute_import
 
-from anaflow.flow import (
+from anaflow.flow.homogeneous import (
     thiem,
     theis,
+)
+from anaflow.flow.heterogeneous import (
     ext_thiem2D,
     ext_theis2D,
     ext_thiem3D,
     ext_theis3D,
+)
+from anaflow.flow.special import (
     diskmodel,
 )
-from anaflow.laplace import (
-    get_lap_inv,
-    stehfest,
+from anaflow.flow.laplace import (
+    lap_trans_flow_cyl,
 )
 
 __all__ = [
@@ -48,8 +44,5 @@ __all__ = [
     "ext_thiem3D",
     "ext_theis3D",
     "diskmodel",
-    "get_lap_inv",
-    "stehfest",
+    "lap_trans_flow_cyl",
 ]
-
-__version__ = '0.2.5'

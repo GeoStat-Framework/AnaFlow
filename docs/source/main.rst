@@ -1,7 +1,4 @@
 .. automodule:: anaflow
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Submodules
 ----------
