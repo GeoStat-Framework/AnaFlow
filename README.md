@@ -2,8 +2,8 @@
 AnaFlow: A python-package containing analytical solutions for the groundwater flow equation
 ===========================================================================================
 [![DOI](https://zenodo.org/badge/116264578.svg)](https://zenodo.org/badge/latestdoi/116264578)
-
-You can find the documentation under: http://anaflow.readthedocs.io
+[![PyPI version](https://badge.fury.io/py/anaflow.svg)](https://badge.fury.io/py/anaflow)
+[![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=latest)](https://anaflow.readthedocs.io/en/latest/)
 
 Contents
 --------
@@ -45,5 +45,7 @@ for sparse linear systems:
     pip install -U scikit-umfpack
 
 Have a look at: https://pypi.python.org/pypi/scikit-umfpack
+
+[![ForTheBadge built-with-science](http://ForTheBadge.com/images/badges/built-with-science.svg)](https://GitHub.com/Naereen/)
 
 Created December 2017, Copyright Sebastian Mueller 2017
