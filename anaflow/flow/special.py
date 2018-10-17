@@ -23,7 +23,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 
 from anaflow.laplace import stehfest as sf
-from anaflow.flow.laplace import lap_trans_flow_cyl
+from anaflow.flow.laplace import lap_trans_flow_cyl, grf_laplace
 
 __all__ = [
     "diskmodel",
@@ -171,6 +171,58 @@ def diskmodel(rad, time,
     return res
 
 
+def grf_model(rad, time,
+              Kpart, Spart, Rpart, Qw, dim=2, lat_ext=1.,
+              struc_grid=True, rwell=0.0, rinf=np.inf, hinf=0.0,
+              stehfestn=12):
+
+    # ensure that input is treated as arrays
+    rad = np.squeeze(rad)
+    time = np.array(time).reshape(-1)
+    Kpart = np.array(Kpart)
+    Spart = np.array(Spart)
+    Rpart = np.array(Rpart)
+
+    if not struc_grid:
+        grid_shape = rad.shape
+        rad = rad.reshape(-1)
+
+    rpart = np.append(np.array([rwell]), Rpart)
+    rpart = np.append(rpart, np.array([rinf]))
+
+    # write the paramters in kwargs to use the stehfest-algorithm
+    kwargs = {"rad": rad,
+              "Qw": Qw,
+              "rpart": rpart,
+              "Spart": Spart,
+              "Kpart": Kpart,
+              "dim": dim,
+              "lat_ext": lat_ext}
+
+    # call the stehfest-algorithm
+    res = sf(grf_laplace, time, bound=stehfestn, **kwargs)
+
+    # if the input are unstructured space-time points, return an array
+    if not struc_grid and grid_shape:
+        res = np.copy(np.diag(res).reshape(grid_shape))
+
+    # add the reference head
+    res += hinf
+
+    return res
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+#
+#    print(diskmodel([1, 2, 3],
+#                    [10, 100],
+#                    [1e-3, 2e-3],
+#                    [1e-3, 1e-3],
+#                    [2], -1e-3))
+#    print(grf_model([1, 2, 3],
+#                    [10, 100],
+#                    [1e-3, 2e-3],
+#                    [1e-3, 1e-3],
+#                    [2], -1e-3, dim=2))

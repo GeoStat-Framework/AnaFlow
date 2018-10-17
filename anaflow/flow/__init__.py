@@ -15,7 +15,7 @@ The following functions are provided
    ext_theis2D
    ext_theis3D
    diskmodel
-   lap_transgwflow_cyl
+   lap_trans_flow_cyl
 """
 from __future__ import absolute_import
 

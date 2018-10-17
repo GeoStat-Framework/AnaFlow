@@ -29,7 +29,8 @@ The following functions are provided
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
-from scipy.special import exp1
+from scipy.special import gamma, gammaincc, exp1
+
 from scipy.integrate import quad as integ
 
 __all__ = ["rad_amean_func",
@@ -102,7 +103,6 @@ def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
     >>> rad_amean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
     '''
-
     if arg_dict is None:
         arg_dict = {}
     kwargs.update(arg_dict)
@@ -1103,6 +1103,15 @@ def well_solution(rad, time, T, S, Qw,
     res += hinf
 
     return res
+
+
+def inc_gamma(a, x):
+    '''The incomplete gamma function'''
+    if a == 0:
+        return exp1(x)
+    elif a < 0:
+        return (inc_gamma(a+1, x) - x**a*np.exp(-x))/a
+    return gamma(a)*gammaincc(a, x)
 
 
 if __name__ == "__main__":

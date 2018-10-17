@@ -17,8 +17,8 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 
 from anaflow.laplace import stehfest as sf
-from anaflow.flow.helper import well_solution
-from anaflow.flow.laplace import lap_trans_flow_cyl
+from anaflow.flow.helper import well_solution, inc_gamma
+from anaflow.flow.laplace import lap_trans_flow_cyl, grf_laplace
 
 __all__ = [
     "thiem",
@@ -104,7 +104,12 @@ def theis(rad, time,
 
     The Theis solution for transient flow under a pumping condition
     in a confined and homogeneous aquifer.
-    This solution was presented in ''Theis 1935''[R7]_.
+    This solution was presented in ''Theis 1935''[Theis35]_.
+
+    .. [Theis35] Theis, C.,
+       ''The relation between the lowering of the piezometric surface and the
+       rate and duration of discharge of a well using groundwater storage'',
+       Trans. Am. Geophys. Union, 16, 519–524, 1935
 
     Parameters
     ----------
@@ -139,13 +144,6 @@ def theis(rad, time,
     -------
     theis : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
-
-    References
-    ----------
-    .. [R7] Theis, C.,
-       ''The relation between the lowering of the piezometric surface and the
-       rate and duration of discharge of a well using groundwater storage'',
-       Trans. Am. Geophys. Union, 16, 519–524, 1935
 
     Notes
     -----
@@ -228,6 +226,53 @@ def theis(rad, time,
     return res
 
 
+def grf_model(rad, time,
+              K, S, Qw,
+              dim=3, lat_ext=1.):
+    # ensure that 'rad' and 'time' are arrays
+    rad = np.squeeze(rad)
+    time = np.array(time).reshape(-1)
+
+    res = np.zeros(time.shape + rad.shape)
+
+    nu = 1. - dim/2.
+
+    for ti, te in np.ndenumerate(time):
+        for ri, re in np.ndenumerate(rad):
+            u = S*re**2/(4*K*te)
+            res[ti+ri] = Qw/(4.0*np.pi**(1-nu)*K*lat_ext)*re**(2*nu)
+            res[ti+ri] *= inc_gamma(-nu, u)
+    return res
+
+
+def grf_lap(rad, time,
+            K, S, Qw, rpart=None,
+            dim=3, lat_ext=1.):
+    # ensure that 'rad' and 'time' are arrays
+    rad = np.squeeze(rad)
+    time = np.array(time).reshape(-1)
+    if rpart is None:
+        rpart = np.array([0, np.inf])
+    Kpart = np.array(K, ndmin=1)
+    Spart = np.array(S, ndmin=1)
+    kwargs = {"rad": rad,
+              "Qw": Qw,
+              "rpart": rpart,
+              "Spart": Spart,
+              "Kpart": Kpart,
+              "dim": dim,
+              "lat_ext": lat_ext}
+
+    # call the stehfest-algorithm
+    res = sf(grf_laplace, time, bound=12, **kwargs)
+    return res
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+    print(theis([1,2,3], [10,100], 1e-4, 1e-4, 1e-4))
+    print(grf_model([1,2,3], [10,100], 1e-4, 1e-4, 1e-4, dim=1.2))
+    print(grf_lap([1,2,3], [10,100], 1e-4, 1e-4, 1e-4, dim=1.2))
+

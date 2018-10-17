@@ -1,7 +1,7 @@
 Groundwater equation solutions
 ------------------------------
 
-.. automodule:: anaflow.gwsolutions
+.. automodule:: anaflow.flow
    :members:
    :undoc-members:
    :show-inheritance:
