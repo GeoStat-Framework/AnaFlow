@@ -35,10 +35,7 @@ from anaflow.flow import (
     ext_theis3D,
     diskmodel,
 )
-from anaflow.laplace import (
-    get_lap_inv,
-    stehfest,
-)
+from anaflow.laplace import get_lap_inv, stehfest
 
 __all__ = [
     "thiem",
@@ -52,4 +49,4 @@ __all__ = [
     "stehfest",
 ]
 
-__version__ = '0.2.5'
+__version__ = "0.2.5"

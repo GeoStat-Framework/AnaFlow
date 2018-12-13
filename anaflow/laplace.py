@@ -18,13 +18,13 @@ from __future__ import absolute_import, division, print_function
 from math import floor, factorial
 import numpy as np
 
-__all__ = ["get_lap_inv",
-           "stehfest"]
+__all__ = ["get_lap_inv", "stehfest"]
 
 
-def get_lap_inv(func, method="stehfest", method_dict=None, arg_dict=None,
-                **kwargs):
-    '''
+def get_lap_inv(
+    func, method="stehfest", method_dict=None, arg_dict=None, **kwargs
+):
+    """
     Callable Laplace inversion
 
     Get the Laplace inversion of a given function as a callable function.
@@ -67,16 +67,14 @@ def get_lap_inv(func, method="stehfest", method_dict=None, arg_dict=None,
         If `func` is not callable.
     ValueError
         If `method` is unknown.
-    '''
+    """
     # dict with all implemented methods
     method_avail = {"stehfest": stehfest}
     # check the input
     if not callable(func):
-        raise ValueError(
-            "The given function needs to be callable")
+        raise ValueError("The given function needs to be callable")
     if method not in method_avail:
-        raise ValueError(
-            "The given method is unknown: "+str(method))
+        raise ValueError("The given method is unknown: " + str(method))
     # assign the used method
     used_meth = method_avail[method]
     # update kwargs
@@ -87,14 +85,14 @@ def get_lap_inv(func, method="stehfest", method_dict=None, arg_dict=None,
 
     # define the returned function
     def ret_func(time):
-        '''Return function for the Laplace inversion.'''
+        """Return function for the Laplace inversion."""
         return used_meth(func, time, **kwargs)
 
     return ret_func
 
 
 def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
-    '''
+    """
     The stehfest-algorithm for numerical laplace inversion
 
     The Inversion was derivide in ''Stehfest 1970''[R1]_
@@ -172,7 +170,7 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
     >>> f = lambda x: x**-1
     >>> stehfest(f, [1,10,100])
     array([ 1.,  1.,  1.])
-    '''
+    """
 
     if arg_dict is None:
         arg_dict = {}
@@ -186,24 +184,26 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
 
     # check the input
     if not callable(func):
-        raise ValueError(
-            "The given function needs to be callable")
+        raise ValueError("The given function needs to be callable")
     if not np.all(time > 0.0):
         raise ValueError(
-            "The time-values need to be positiv for the stehfest-algorithm")
+            "The time-values need to be positiv for the stehfest-algorithm"
+        )
     if bound <= 1:
         raise ValueError(
-            "The boundary needs to be >1 for the stehfest-algorithm")
+            "The boundary needs to be >1 for the stehfest-algorithm"
+        )
     if bound % 2 != 0:
         raise ValueError(
-            "The boundary needs to be even for the stehfest-algorithm")
+            "The boundary needs to be even for the stehfest-algorithm"
+        )
 
     # get all coefficient factors at once
     c_fac = c_array(bound)
-    t_fac = np.log(2.0)/time
+    t_fac = np.log(2.0) / time
 
     # store every function-argument needed in one array
-    fargs = np.outer(t_fac, np.arange(1, bound+1))
+    fargs = np.outer(t_fac, np.arange(1, bound + 1))
 
     # get every function-value needed with one call of 'func'
     lap_val = func(fargs.reshape(-1), **kwargs)
@@ -222,7 +222,7 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
 
 
 def c_array(bound=12):
-    '''
+    """
     Array of coefficients for the stehfest-algorithm.
 
     Parameters
@@ -234,79 +234,108 @@ def c_array(bound=12):
     -------
     :class:`numpy.ndarray`
         Array with all coefficinets needed.
-    '''
-    c_lookup = {2: np.array([2.000000000000000000e+00,
-                             -2.000000000000000000e+00]),
-                4: np.array([-2.000000000000000000e+00,
-                             2.600000000000000000e+01,
-                             -4.800000000000000000e+01,
-                             2.400000000000000000e+01]),
-                6: np.array([1.000000000000000000e+00,
-                             -4.900000000000000000e+01,
-                             3.660000000000000000e+02,
-                             -8.580000000000000000e+02,
-                             8.100000000000000000e+02,
-                             -2.700000000000000000e+02]),
-                8: np.array([-3.333333333333333148e-01,
-                             4.833333333333333570e+01,
-                             -9.060000000000000000e+02,
-                             5.464666666666666060e+03,
-                             -1.437666666666666606e+04,
-                             1.873000000000000000e+04,
-                             -1.194666666666666606e+04,
-                             2.986666666666666515e+03]),
-                10: np.array([8.333333333333332871e-02,
-                              -3.208333333333333570e+01,
-                              1.279000000000000000e+03,
-                              -1.562366666666666606e+04,
-                              8.424416666666665697e+04,
-                              -2.369575000000000000e+05,
-                              3.759116666666666861e+05,
-                              -3.400716666666666861e+05,
-                              1.640625000000000000e+05,
-                              -3.281250000000000000e+04]),
-                12: np.array([-1.666666666666666644e-02,
-                              1.601666666666666572e+01,
-                              -1.247000000000000000e+03,
-                              2.755433333333333212e+04,
-                              -2.632808333333333139e+05,
-                              1.324138699999999953e+06,
-                              -3.891705533333333209e+06,
-                              7.053286333333333023e+06,
-                              -8.005336500000000000e+06,
-                              5.552830500000000000e+06,
-                              -2.155507200000000186e+06,
-                              3.592512000000000116e+05]),
-                14: np.array([2.777777777777777884e-03,
-                              -6.402777777777778567e+00,
-                              9.240499999999999545e+02,
-                              -3.459792777777777519e+04,
-                              5.403211111111111240e+05,
-                              -4.398346366666667163e+06,
-                              2.108759177777777612e+07,
-                              -6.394491304444444180e+07,
-                              1.275975795499999970e+08,
-                              -1.701371880833333433e+08,
-                              1.503274670333333313e+08,
-                              -8.459216150000000000e+07,
-                              2.747888476666666567e+07,
-                              -3.925554966666666791e+06]),
-                16: np.array([-3.968253968253968251e-04,
-                              2.133730158730158699e+00,
-                              -5.510166666666666515e+02,
-                              3.350016111111111240e+04,
-                              -8.126651111111111240e+05,
-                              1.007618376666666567e+07,
-                              -7.324138297777777910e+07,
-                              3.390596320730158687e+08,
-                              -1.052539536278571367e+09,
-                              2.259013328583333492e+09,
-                              -3.399701984433333397e+09,
-                              3.582450461699999809e+09,
-                              -2.591494081366666794e+09,
-                              1.227049828766666651e+09,
-                              -3.427345554285714030e+08,
-                              4.284181942857142538e+07])}
+    """
+    c_lookup = {
+        2: np.array([2.000000000000000000e00, -2.000000000000000000e00]),
+        4: np.array(
+            [
+                -2.000000000000000000e00,
+                2.600000000000000000e01,
+                -4.800000000000000000e01,
+                2.400000000000000000e01,
+            ]
+        ),
+        6: np.array(
+            [
+                1.000000000000000000e00,
+                -4.900000000000000000e01,
+                3.660000000000000000e02,
+                -8.580000000000000000e02,
+                8.100000000000000000e02,
+                -2.700000000000000000e02,
+            ]
+        ),
+        8: np.array(
+            [
+                -3.333333333333333148e-01,
+                4.833333333333333570e01,
+                -9.060000000000000000e02,
+                5.464666666666666060e03,
+                -1.437666666666666606e04,
+                1.873000000000000000e04,
+                -1.194666666666666606e04,
+                2.986666666666666515e03,
+            ]
+        ),
+        10: np.array(
+            [
+                8.333333333333332871e-02,
+                -3.208333333333333570e01,
+                1.279000000000000000e03,
+                -1.562366666666666606e04,
+                8.424416666666665697e04,
+                -2.369575000000000000e05,
+                3.759116666666666861e05,
+                -3.400716666666666861e05,
+                1.640625000000000000e05,
+                -3.281250000000000000e04,
+            ]
+        ),
+        12: np.array(
+            [
+                -1.666666666666666644e-02,
+                1.601666666666666572e01,
+                -1.247000000000000000e03,
+                2.755433333333333212e04,
+                -2.632808333333333139e05,
+                1.324138699999999953e06,
+                -3.891705533333333209e06,
+                7.053286333333333023e06,
+                -8.005336500000000000e06,
+                5.552830500000000000e06,
+                -2.155507200000000186e06,
+                3.592512000000000116e05,
+            ]
+        ),
+        14: np.array(
+            [
+                2.777777777777777884e-03,
+                -6.402777777777778567e00,
+                9.240499999999999545e02,
+                -3.459792777777777519e04,
+                5.403211111111111240e05,
+                -4.398346366666667163e06,
+                2.108759177777777612e07,
+                -6.394491304444444180e07,
+                1.275975795499999970e08,
+                -1.701371880833333433e08,
+                1.503274670333333313e08,
+                -8.459216150000000000e07,
+                2.747888476666666567e07,
+                -3.925554966666666791e06,
+            ]
+        ),
+        16: np.array(
+            [
+                -3.968253968253968251e-04,
+                2.133730158730158699e00,
+                -5.510166666666666515e02,
+                3.350016111111111240e04,
+                -8.126651111111111240e05,
+                1.007618376666666567e07,
+                -7.324138297777777910e07,
+                3.390596320730158687e08,
+                -1.052539536278571367e09,
+                2.259013328583333492e09,
+                -3.399701984433333397e09,
+                3.582450461699999809e09,
+                -2.591494081366666794e09,
+                1.227049828766666651e09,
+                -3.427345554285714030e08,
+                4.284181942857142538e07,
+            ]
+        ),
+    }
     if bound in c_lookup:
         return c_lookup[bound]
     return _carr(bound)
@@ -314,26 +343,31 @@ def c_array(bound=12):
 
 def _carr(bound):
     res = np.zeros(bound)
-    for i in range(1, bound+1):
-        res[i-1] = _c(i, bound)
+    for i in range(1, bound + 1):
+        res[i - 1] = _c(i, bound)
     return res
 
 
 def _c(i, bound):
     res = 0.0
-    for k in range(int(floor((i+1)/2.0)), min(i, bound//2)+1):
+    for k in range(int(floor((i + 1) / 2.0)), min(i, bound // 2) + 1):
         res += _d(k, i, bound)
-    res *= (-1)**(i+bound/2)
+    res *= (-1) ** (i + bound / 2)
     return res
 
 
 def _d(k, i, bound):
-    res = ((float(k))**(bound/2+1))*(factorial(2*k))
-    res /= (factorial(bound/2-k))*(factorial(i-k))*(factorial(2*k-i))
-    res /= (factorial(k)**2)
+    res = ((float(k)) ** (bound / 2 + 1)) * (factorial(2 * k))
+    res /= (
+        (factorial(bound / 2 - k))
+        * (factorial(i - k))
+        * (factorial(2 * k - i))
+    )
+    res /= factorial(k) ** 2
     return res
 
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

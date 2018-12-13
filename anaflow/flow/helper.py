@@ -33,24 +33,27 @@ from scipy.special import gamma, gammaincc, exp1
 
 from scipy.integrate import quad as integ
 
-__all__ = ["rad_amean_func",
-           "rad_gmean_func",
-           "rad_hmean_func",
-           "rad_pmean_func",
-           "radii", "specialrange",
-           "specialrange_cut",
-           "T_CG",
-           "T_CG_inverse",
-           "T_CG_error",
-           "K_CG",
-           "K_CG_inverse",
-           "K_CG_error",
-           "aniso",
-           "well_solution"]
+__all__ = [
+    "rad_amean_func",
+    "rad_gmean_func",
+    "rad_hmean_func",
+    "rad_pmean_func",
+    "radii",
+    "specialrange",
+    "specialrange_cut",
+    "T_CG",
+    "T_CG_inverse",
+    "T_CG_error",
+    "K_CG",
+    "K_CG_inverse",
+    "K_CG_error",
+    "aniso",
+    "well_solution",
+]
 
 
 def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
-    '''
+    """
     Calculating the arithmetic mean
 
     Calculating the arithmetic mean of a radial symmetric function
@@ -102,7 +105,7 @@ def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
     >>> f = lambda x: x**2
     >>> rad_amean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
-    '''
+    """
     if arg_dict is None:
         arg_dict = {}
     kwargs.update(arg_dict)
@@ -111,25 +114,24 @@ def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
     parts = len(val_arr) - 1
 
     if not callable(func):
-        raise ValueError(
-            "The given function needs to be callable")
+        raise ValueError("The given function needs to be callable")
     if len(val_arr) < 2:
-        raise ValueError(
-            "To few input values in val_arr. Need at least 2.")
-    if not all(val_arr[i] < val_arr[i+1] for i in range(len(val_arr)-1)):
-        raise ValueError(
-            "The input values need to be sorted")
+        raise ValueError("To few input values in val_arr. Need at least 2.")
+    if not all(val_arr[i] < val_arr[i + 1] for i in range(len(val_arr) - 1)):
+        raise ValueError("The input values need to be sorted")
 
     # dummy function defining the needed integrand
     def _step(func, kwargs):
         """
         dummy function providing the integrand
         """
+
         def integrand(val):
-            '''
+            """
             Integrand for the geometric mean ``r*log(f(r))``
-            '''
-            return 2*val*func(val, **kwargs)
+            """
+            return 2 * val * func(val, **kwargs)
+
         return integrand
 
     # creating the output array
@@ -138,18 +140,19 @@ def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
     # iterating over the input values
     for i in range(parts):
         # if one side is infinity, the function is evaluated at infinity
-        if val_arr[i+1] == np.inf:
+        if val_arr[i + 1] == np.inf:
             func_arr[i] = func(np.inf, **kwargs)
         else:
-            func_arr[i] = integ(_step(func, kwargs),
-                                val_arr[i], val_arr[i+1])[0]
-            func_arr[i] = func_arr[i]/(val_arr[i+1]**2 - val_arr[i]**2)
+            func_arr[i] = integ(
+                _step(func, kwargs), val_arr[i], val_arr[i + 1]
+            )[0]
+            func_arr[i] = func_arr[i] / (val_arr[i + 1] ** 2 - val_arr[i] ** 2)
 
     return func_arr
 
 
 def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
-    '''
+    """
     Calculating the geometric mean
 
     Calculating the geometric meanof a radial symmetric function
@@ -201,7 +204,7 @@ def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
     >>> f = lambda x: x**2
     >>> rad_gmean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
-    '''
+    """
 
     if arg_dict is None:
         arg_dict = {}
@@ -211,25 +214,24 @@ def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
     parts = len(val_arr) - 1
 
     if not callable(func):
-        raise ValueError(
-            "The given function needs to be callable")
+        raise ValueError("The given function needs to be callable")
     if len(val_arr) < 2:
-        raise ValueError(
-            "To few input values in val_arr. Need at least 2.")
-    if not all(val_arr[i] < val_arr[i+1] for i in range(len(val_arr)-1)):
-        raise ValueError(
-            "The input values need to be sorted")
+        raise ValueError("To few input values in val_arr. Need at least 2.")
+    if not all(val_arr[i] < val_arr[i + 1] for i in range(len(val_arr) - 1)):
+        raise ValueError("The input values need to be sorted")
 
     # dummy function defining the needed integrand
     def _step(func, kwargs):
         """
         dummy function providing the integrand
         """
+
         def integrand(val):
-            '''
+            """
             Integrand for the geometric mean ``r*log(f(r))``
-            '''
-            return 2*val*np.log(func(val, **kwargs))
+            """
+            return 2 * val * np.log(func(val, **kwargs))
+
         return integrand
 
     # creating the output array
@@ -238,18 +240,21 @@ def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
     # iterating over the input values
     for i in range(parts):
         # if one side is infinity, the function is evaluated at infinity
-        if val_arr[i+1] == np.inf:
+        if val_arr[i + 1] == np.inf:
             func_arr[i] = func(np.inf, **kwargs)
         else:
-            func_arr[i] = integ(_step(func, kwargs),
-                                val_arr[i], val_arr[i+1])[0]
-            func_arr[i] = np.exp(func_arr[i]/(val_arr[i+1]**2 - val_arr[i]**2))
+            func_arr[i] = integ(
+                _step(func, kwargs), val_arr[i], val_arr[i + 1]
+            )[0]
+            func_arr[i] = np.exp(
+                func_arr[i] / (val_arr[i + 1] ** 2 - val_arr[i] ** 2)
+            )
 
     return func_arr
 
 
 def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
-    '''
+    """
     Calculating the harmonic mean
 
     Calculating the harmonic mean of a radial symmetric function
@@ -301,7 +306,7 @@ def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
     >>> f = lambda x: x**2
     >>> rad_hmean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
-    '''
+    """
 
     if arg_dict is None:
         arg_dict = {}
@@ -311,25 +316,24 @@ def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
     parts = len(val_arr) - 1
 
     if not callable(func):
-        raise ValueError(
-            "The given function needs to be callable")
+        raise ValueError("The given function needs to be callable")
     if len(val_arr) < 2:
-        raise ValueError(
-            "To few input values in val_arr. Need at least 2.")
-    if not all(val_arr[i] < val_arr[i+1] for i in range(len(val_arr)-1)):
-        raise ValueError(
-            "The input values need to be sorted")
+        raise ValueError("To few input values in val_arr. Need at least 2.")
+    if not all(val_arr[i] < val_arr[i + 1] for i in range(len(val_arr) - 1)):
+        raise ValueError("The input values need to be sorted")
 
     # dummy function defining the needed integrand
     def _step(func, kwargs):
         """
         dummy function providing the integrand
         """
+
         def integrand(val):
-            '''
+            """
             Integrand for the geometric mean ``r*log(f(r))``
-            '''
-            return 2*val/func(val, **kwargs)
+            """
+            return 2 * val / func(val, **kwargs)
+
         return integrand
 
     # creating the output array
@@ -338,18 +342,21 @@ def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
     # iterating over the input values
     for i in range(parts):
         # if one side is infinity, the function is evaluated at infinity
-        if val_arr[i+1] == np.inf:
+        if val_arr[i + 1] == np.inf:
             func_arr[i] = func(np.inf, **kwargs)
         else:
-            func_arr[i] = integ(_step(func, kwargs),
-                                val_arr[i], val_arr[i+1])[0]
-            func_arr[i] = 1.0/(func_arr[i]/(val_arr[i+1]**2 - val_arr[i]**2))
+            func_arr[i] = integ(
+                _step(func, kwargs), val_arr[i], val_arr[i + 1]
+            )[0]
+            func_arr[i] = 1.0 / (
+                func_arr[i] / (val_arr[i + 1] ** 2 - val_arr[i] ** 2)
+            )
 
     return func_arr
 
 
 def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
-    '''
+    """
     Calculating the p-mean
 
     Calculating the p-mean of a radial symmetric function
@@ -404,7 +411,7 @@ def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
     >>> f = lambda x: x**2
     >>> rad_pmean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
-    '''
+    """
 
     # if p is 0, the limit-case of the geometric mean is returned
     if p == 0:
@@ -418,25 +425,24 @@ def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
     parts = len(val_arr) - 1
 
     if not callable(func):
-        raise ValueError(
-            "The given function needs to be callable")
+        raise ValueError("The given function needs to be callable")
     if len(val_arr) < 2:
-        raise ValueError(
-            "To few input values in val_arr. Need at least 2.")
-    if not all(val_arr[i] < val_arr[i+1] for i in range(len(val_arr)-1)):
-        raise ValueError(
-            "The input values need to be sorted")
+        raise ValueError("To few input values in val_arr. Need at least 2.")
+    if not all(val_arr[i] < val_arr[i + 1] for i in range(len(val_arr) - 1)):
+        raise ValueError("The input values need to be sorted")
 
     # dummy function defining the needed integrand
     def _step(func, kwargs):
         """
         dummy function providing the integrand
         """
+
         def integrand(val):
-            '''
+            """
             Integrand for the geometric mean ``r*log(f(r))``
-            '''
-            return 2*val*func(val, **kwargs)**p
+            """
+            return 2 * val * func(val, **kwargs) ** p
+
         return integrand
 
     # creating the output array
@@ -445,19 +451,21 @@ def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
     # iterating over the input values
     for i in range(parts):
         # if one side is infinity, the function is evaluated at infinity
-        if val_arr[i+1] == np.inf:
+        if val_arr[i + 1] == np.inf:
             func_arr[i] = func(np.inf, **kwargs)
         else:
-            func_arr[i] = integ(_step(func, kwargs),
-                                val_arr[i], val_arr[i+1])[0]
-            func_arr[i] = (func_arr[i] /
-                           (val_arr[i+1]**2 - val_arr[i]**2))**(1.0/p)
+            func_arr[i] = integ(
+                _step(func, kwargs), val_arr[i], val_arr[i + 1]
+            )[0]
+            func_arr[i] = (
+                func_arr[i] / (val_arr[i + 1] ** 2 - val_arr[i] ** 2)
+            ) ** (1.0 / p)
 
     return func_arr
 
 
 def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
-    '''
+    """
     Calculation of specific point distributions
 
     Calculation of specific point distributions for the diskmodel.
@@ -486,24 +494,28 @@ def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
     -------
     >>> radii(2)
     (array([   0.,  500.,   inf]), array([  0.,  inf]))
-    '''
+    """
 
     if typ == "log":
         if rinf == np.inf:
             # define the partition radii
-            p_rad = np.expm1(np.linspace(np.log1p(rwell),
-                                         np.log1p(rlast), parts))
+            p_rad = np.expm1(
+                np.linspace(np.log1p(rwell), np.log1p(rlast), parts)
+            )
             p_rad = np.append(p_rad, [np.inf])
 
             # define the points within the partitions to evaluate the function
-            f_rad = np.expm1(np.linspace(np.log1p(rwell),
-                                         np.log1p(rlast), parts-1))
+            f_rad = np.expm1(
+                np.linspace(np.log1p(rwell), np.log1p(rlast), parts - 1)
+            )
             f_rad = np.append(f_rad, [np.inf])
         else:
-            p_rad = np.expm1(np.linspace(np.log1p(rwell),
-                                         np.log1p(rinf), parts+1))
-            f_rad = np.expm1(np.linspace(np.log1p(rwell),
-                                         np.log1p(rinf), parts))
+            p_rad = np.expm1(
+                np.linspace(np.log1p(rwell), np.log1p(rinf), parts + 1)
+            )
+            f_rad = np.expm1(
+                np.linspace(np.log1p(rwell), np.log1p(rinf), parts)
+            )
 
     else:
         if rinf == np.inf:
@@ -512,17 +524,17 @@ def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
             p_rad = np.append(p_rad, [np.inf])
 
             # define the points within the partitions to evaluate the function
-            f_rad = np.linspace(rwell, rlast, parts-1)
+            f_rad = np.linspace(rwell, rlast, parts - 1)
             f_rad = np.append(f_rad, [np.inf])
         else:
-            p_rad = np.linspace(rwell, rinf, parts+1)
+            p_rad = np.linspace(rwell, rinf, parts + 1)
             f_rad = np.linspace(rwell, rinf, parts)
 
     return p_rad, f_rad
 
 
 def specialrange(val_min, val_max, steps, typ="log"):
-    '''
+    """
     Calculation of special point ranges
 
     Parameters
@@ -554,21 +566,30 @@ def specialrange(val_min, val_max, steps, typ="log"):
     -------
     >>> specialrange(1,10,4)
     array([  1.        ,   2.53034834,   5.23167968,  10.        ])
-    '''
+    """
 
     if typ in ["logarithmic", "log"]:
-        rng = np.expm1(np.linspace(np.log1p(val_min),
-                                   np.log1p(val_max), steps))
+        rng = np.expm1(
+            np.linspace(np.log1p(val_min), np.log1p(val_max), steps)
+        )
     elif typ in ["linear", "lin"]:
         rng = np.linspace(val_min, val_max, steps)
     elif typ in ["quadratic", "quad"]:
-        rng = (np.linspace(np.sqrt(val_min), np.sqrt(val_max), steps))**2
+        rng = (np.linspace(np.sqrt(val_min), np.sqrt(val_max), steps)) ** 2
     elif typ in ["cubic", "cub"]:
-        rng = (np.linspace(np.power(val_min, 1/3.),
-                           np.power(val_max, 1/3.), steps))**3
+        rng = (
+            np.linspace(
+                np.power(val_min, 1 / 3.0), np.power(val_max, 1 / 3.0), steps
+            )
+        ) ** 3
     elif isinstance(typ, (float, int)):
-        rng = (np.linspace(np.power(val_min, 1./typ),
-                           np.power(val_max, 1./typ), steps))**typ
+        rng = (
+            np.linspace(
+                np.power(val_min, 1.0 / typ),
+                np.power(val_max, 1.0 / typ),
+                steps,
+            )
+        ) ** typ
     else:
         rng = np.linspace(val_min, val_max, steps)
 
@@ -576,7 +597,7 @@ def specialrange(val_min, val_max, steps, typ="log"):
 
 
 def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
-    '''
+    """
     Calculation of special point ranges
 
     Calculation of special point ranges with a cut-off value.
@@ -613,17 +634,17 @@ def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
     -------
     >>> specialrange_cut(1,10,4)
     array([  1.        ,   2.53034834,   5.23167968,  10.        ])
-    '''
+    """
 
     if val_max > val_cut:
-        rng = specialrange(val_min, val_cut, steps-1, typ)
+        rng = specialrange(val_min, val_cut, steps - 1, typ)
         return np.hstack((rng, val_max))
 
     return specialrange(val_min, val_max, steps, typ)
 
 
 def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
-    '''
+    """
     The coarse-graining Transmissivity
 
     This solution was presented in ''Schneider & Attinger 2008''[R3]_.
@@ -665,20 +686,20 @@ def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
     -------
     >>> T_CG([1,2,3], 0.001, 1, 10, 2)
     array([ 0.00061831,  0.00064984,  0.00069236])
-    '''
+    """
 
     rad = np.squeeze(rad)
 
     if Twell is not None:
         chi = np.log(Twell) - np.log(TG)
     else:
-        chi = -sig2/2.0
+        chi = -sig2 / 2.0
 
-    return TG*np.exp(chi/(1.0+(prop*rad/corr)**2))
+    return TG * np.exp(chi / (1.0 + (prop * rad / corr) ** 2))
 
 
 def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
-    '''
+    """
     The inverse coarse-graining Transmissivity
 
     See: :func:`T_CG`
@@ -709,20 +730,20 @@ def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
     -------
     >>> T_CG_inverse([7e-4,8e-4,9e-4], 0.001, 1, 10, 2)
     array([ 3.16952925,  5.56935826,  9.67679026])
-    '''
+    """
 
     T = np.squeeze(T)
 
     if Twell is not None:
         chi = np.log(Twell) - np.log(TG)
     else:
-        chi = -sig2/2.0
+        chi = -sig2 / 2.0
 
-    return (corr/prop)*np.sqrt(chi/np.log(T/TG) - 1.0)
+    return (corr / prop) * np.sqrt(chi / np.log(T / TG) - 1.0)
 
 
 def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
-    '''
+    """
     Calculating the radial-point for given error
 
     Calculating the radial-point where the relative error of the farfield
@@ -754,27 +775,27 @@ def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
     -------
     >>> T_CG_error(0.01, 0.001, 1, 10, 2)
     34.910450167790387
-    '''
+    """
 
     if Twell is not None:
         chi = np.log(Twell) - np.log(TG)
     else:
-        chi = -sig2/2.0
+        chi = -sig2 / 2.0
 
     if chi > 0.0:
-        if chi/np.log(1.+err) >= 1.0:
-            return (corr/prop)*np.sqrt(chi/np.log(1.+err) - 1.0)
+        if chi / np.log(1.0 + err) >= 1.0:
+            return (corr / prop) * np.sqrt(chi / np.log(1.0 + err) - 1.0)
         # standard value if the error is less then the variation
-        return 1.
+        return 1.0
     else:
-        if chi/np.log(1.-err) >= 1.0:
-            return (corr/prop)*np.sqrt(chi/np.log(1.-err) - 1.0)
+        if chi / np.log(1.0 - err) >= 1.0:
+            return (corr / prop) * np.sqrt(chi / np.log(1.0 - err) - 1.0)
         # standard value if the error is less then the variation
-        return 1.
+        return 1.0
 
 
 def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
-    '''
+    """
     The coarse-graining conductivity
 
     This solution was presented in ''Zech 2013''[R8]_.
@@ -823,23 +844,25 @@ def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     -------
     >>> K_CG([1,2,3], 0.001, 1, 10, 1, 2)
     array([ 0.00063008,  0.00069285,  0.00077595])
-    '''
+    """
 
     rad = np.squeeze(rad)
 
-    Kefu = KG*np.exp(sig2*(0.5 - aniso(e)))
+    Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
     if Kwell == "KH":
-        chi = sig2*(aniso(e)-1.)
+        chi = sig2 * (aniso(e) - 1.0)
     elif Kwell == "KA":
-        chi = sig2*aniso(e)
+        chi = sig2 * aniso(e)
     else:
         chi = np.log(Kwell) - np.log(Kefu)
 
-    return Kefu*np.exp(chi/np.sqrt(1.0+(prop*rad/(corr*e**(1./3.)))**2)**3)
+    return Kefu * np.exp(
+        chi / np.sqrt(1.0 + (prop * rad / (corr * e ** (1.0 / 3.0))) ** 2) ** 3
+    )
 
 
 def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
-    '''
+    """
     The inverse coarse-graining conductivity
 
     See: :func:`K_CG`
@@ -874,23 +897,28 @@ def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     -------
     >>> K_CG_inverse([7e-4,8e-4,9e-4], 0.001, 1, 10, 1, 2)
     array([ 2.09236867,  3.27914996,  4.52143956])
-    '''
+    """
 
     K = np.squeeze(K)
 
-    Kefu = KG*np.exp(sig2*(0.5 - aniso(e)))
+    Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
     if Kwell == "KH":
-        chi = sig2*(aniso(e)-1.)
+        chi = sig2 * (aniso(e) - 1.0)
     elif Kwell == "KA":
-        chi = sig2*aniso(e)
+        chi = sig2 * aniso(e)
     else:
         chi = np.log(Kwell) - np.log(Kefu)
 
-    return corr*e**(1./3.)/prop*np.sqrt((chi/np.log(K/Kefu))**(2./3.) - 1.0)
+    return (
+        corr
+        * e ** (1.0 / 3.0)
+        / prop
+        * np.sqrt((chi / np.log(K / Kefu)) ** (2.0 / 3.0) - 1.0)
+    )
 
 
 def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
-    '''
+    """
     Calculating the radial-point for given error
 
     Calculating the radial-point where the relative error of the farfield
@@ -926,32 +954,36 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     -------
     >>> K_CG_error(0.01, 0.001, 1, 10, 1, 2)
     19.612796453639845
-    '''
+    """
 
-    Kefu = KG*np.exp(sig2*(0.5 - aniso(e)))
+    Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
     if Kwell == "KH":
-        chi = sig2*(aniso(e)-1.)
+        chi = sig2 * (aniso(e) - 1.0)
     elif Kwell == "KA":
-        chi = sig2*aniso(e)
+        chi = sig2 * aniso(e)
     else:
         chi = np.log(Kwell) - np.log(Kefu)
 
-    coef = corr*e**(1./3.)/prop
+    coef = corr * e ** (1.0 / 3.0) / prop
 
     if chi > 0.0:
-        if chi/np.log(1.+err) >= 1.0:
-            return coef*np.sqrt((chi/np.log(1.+err))**(2./3.)-1.0)
+        if chi / np.log(1.0 + err) >= 1.0:
+            return coef * np.sqrt(
+                (chi / np.log(1.0 + err)) ** (2.0 / 3.0) - 1.0
+            )
         # standard value if the error is less then the variation
-        return 1.
+        return 1.0
     else:
-        if chi/np.log(1.-err) >= 1.0:
-            return coef*np.sqrt((chi/np.log(1.-err))**(2./3.)-1.0)
+        if chi / np.log(1.0 - err) >= 1.0:
+            return coef * np.sqrt(
+                (chi / np.log(1.0 - err)) ** (2.0 / 3.0) - 1.0
+            )
         # standard value if the error is less then the variation
-        return 1.
+        return 1.0
 
 
 def aniso(e):
-    '''
+    """
     The anisotropy function
 
     Known from ''Dagan (1989)''[R2]_.
@@ -981,26 +1013,29 @@ def aniso(e):
     -------
     >>> aniso(0.5)
     0.23639985871871511
-    '''
+    """
 
     if not 0.0 <= e <= 1.0:
-        raise ValueError(
-            "Anisotropieratio 'e' must be within 0 and 1")
+        raise ValueError("Anisotropieratio 'e' must be within 0 and 1")
 
     if e == 1.0:
-        res = 1./3.
+        res = 1.0 / 3.0
     elif e == 0.0:
         res = 0.0
     else:
-        res = e/(2*(1.-e**2))
-        res *= 1./np.sqrt(1.-e**2)*np.arctan(np.sqrt(1./e**2 - 1.)) - e
+        res = e / (2 * (1.0 - e ** 2))
+        res *= (
+            1.0
+            / np.sqrt(1.0 - e ** 2)
+            * np.arctan(np.sqrt(1.0 / e ** 2 - 1.0))
+            - e
+        )
 
     return res
 
 
-def well_solution(rad, time, T, S, Qw,
-                  struc_grid=True, hinf=0.0):
-    '''
+def well_solution(rad, time, T, S, Qw, struc_grid=True, hinf=0.0):
+    """
     The classical Theis solution
 
     The classical Theis solution for transient flow under a pumping condition
@@ -1065,7 +1100,7 @@ def well_solution(rad, time, T, S, Qw,
     >>> well_solution([1,2,3], [10,100], 0.001, 0.001, -0.001)
     array([[-0.24959541, -0.14506368, -0.08971485],
            [-0.43105106, -0.32132823, -0.25778313]])
-    '''
+    """
 
     rad = np.squeeze(rad)
     time = np.array(time).reshape(-1)
@@ -1076,25 +1111,26 @@ def well_solution(rad, time, T, S, Qw,
 
     if not np.all(rad > 0.0):
         raise ValueError(
-            "The given radii need to be greater than the wellradius")
+            "The given radii need to be greater than the wellradius"
+        )
     if not np.all(time > 0.0):
-        raise ValueError(
-            "The given times need to be > 0")
+        raise ValueError("The given times need to be > 0")
     if not struc_grid and not rad.shape == time.shape:
         raise ValueError(
-            "For unstructured grid the number of time- & radii-pts must equal")
+            "For unstructured grid the number of time- & radii-pts must equal"
+        )
     if not T > 0.0:
-        raise ValueError(
-            "The Transmissivity needs to be positiv")
+        raise ValueError("The Transmissivity needs to be positiv")
     if not S > 0.0:
-        raise ValueError(
-            "The Storage needs to be positiv")
+        raise ValueError("The Storage needs to be positiv")
 
     res = np.zeros(time.shape + rad.shape)
 
     for ti, te in np.ndenumerate(time):
         for ri, re in np.ndenumerate(rad):
-            res[ti+ri] = Qw/(4.0*np.pi*T)*exp1(re**2*S/(4*T*te))
+            res[ti + ri] = (
+                Qw / (4.0 * np.pi * T) * exp1(re ** 2 * S / (4 * T * te))
+            )
 
     if not struc_grid and grid_shape:
         res = np.copy(np.diag(res).reshape(grid_shape))
@@ -1106,14 +1142,17 @@ def well_solution(rad, time, T, S, Qw,
 
 
 def inc_gamma(a, x):
-    '''The incomplete gamma function'''
-    if a == 0:
+    """The incomplete gamma function"""
+    from math import isclose
+
+    if isclose(a, 0):
         return exp1(x)
-    elif a < 0:
-        return (inc_gamma(a+1, x) - x**a*np.exp(-x))/a
-    return gamma(a)*gammaincc(a, x)
+    if a < 0:
+        return (inc_gamma(a + 1, x) - x ** a * np.exp(-x)) / a
+    return gamma(a) * gammaincc(a, x)
 
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

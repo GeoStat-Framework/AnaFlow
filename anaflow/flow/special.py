@@ -25,20 +25,28 @@ import numpy as np
 from anaflow.laplace import stehfest as sf
 from anaflow.flow.laplace import lap_trans_flow_cyl, grf_laplace
 
-__all__ = [
-    "diskmodel",
-]
+__all__ = ["diskmodel"]
 
 
 ###############################################################################
 # solution for a disk-model
 ###############################################################################
 
-def diskmodel(rad, time,
-              Tpart, Spart, Rpart, Qw,
-              struc_grid=True, rwell=0.0, rinf=np.inf, hinf=0.0,
-              stehfestn=12):
-    '''
+
+def diskmodel(
+    rad,
+    time,
+    Tpart,
+    Spart,
+    Rpart,
+    Qw,
+    struc_grid=True,
+    rwell=0.0,
+    rinf=np.inf,
+    hinf=0.0,
+    stehfestn=12,
+):
+    """
     A diskmodel for transient flow
 
     A diskmodel for transient flow under a pumping condition
@@ -94,7 +102,7 @@ def diskmodel(rad, time,
     >>> diskmodel([1,2,3], [10, 100], [1e-3, 2e-3], [1e-3, 1e-3], [2], -1e-3)
     array([[-0.20312814, -0.09605675, -0.06636862],
            [-0.29785979, -0.18784251, -0.15582597]])
-    '''
+    """
 
     # ensure that input is treated as arrays
     rad = np.squeeze(rad)
@@ -109,54 +117,59 @@ def diskmodel(rad, time,
 
     # check the input
     if rwell < 0.0:
-        raise ValueError(
-            "The wellradius needs to be >= 0")
+        raise ValueError("The wellradius needs to be >= 0")
     if rinf <= rwell:
         raise ValueError(
-            "The upper boundary needs to be greater than the wellradius")
-    if not all(Rpart[i] < Rpart[i+1] for i in range(len(Rpart)-1)):
-        raise ValueError(
-            "The radii of the zones need to be sorted")
+            "The upper boundary needs to be greater than the wellradius"
+        )
+    if not all(Rpart[i] < Rpart[i + 1] for i in range(len(Rpart) - 1)):
+        raise ValueError("The radii of the zones need to be sorted")
     if np.any(Rpart <= rwell):
         raise ValueError(
-            "The radii of the zones need to be greater than the wellradius")
+            "The radii of the zones need to be greater than the wellradius"
+        )
     if np.any(Rpart >= rinf):
         raise ValueError(
-            "The radii of the zones need to be less than the outer radius")
+            "The radii of the zones need to be less than the outer radius"
+        )
     if np.any(rad < rwell) or np.any(rad <= 0.0):
         raise ValueError(
-            "The given radii need to be greater than the wellradius")
+            "The given radii need to be greater than the wellradius"
+        )
     if np.any(time <= 0.0):
-        raise ValueError(
-            "The given times need to be >= 0")
+        raise ValueError("The given times need to be >= 0")
     if not struc_grid and not rad.shape == time.shape:
         raise ValueError(
-            "For unstructured grid the number of time- & radii-pts must equal")
+            "For unstructured grid the number of time- & radii-pts must equal"
+        )
     if np.any(Tpart <= 0.0):
-        raise ValueError(
-            "The Transmissivities need to be positiv")
+        raise ValueError("The Transmissivities need to be positiv")
     if np.any(Spart <= 0.0):
-        raise ValueError(
-            "The Storages need to be positiv")
+        raise ValueError("The Storages need to be positiv")
     if not isinstance(stehfestn, int):
         raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be an integer")
+            "The boundary for the Stehfest-algorithm needs to be an integer"
+        )
     if stehfestn <= 1:
         raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be > 1")
+            "The boundary for the Stehfest-algorithm needs to be > 1"
+        )
     if stehfestn % 2 != 0:
         raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be even")
+            "The boundary for the Stehfest-algorithm needs to be even"
+        )
 
     rpart = np.append(np.array([rwell]), Rpart)
     rpart = np.append(rpart, np.array([rinf]))
 
     # write the paramters in kwargs to use the stehfest-algorithm
-    kwargs = {"rad": rad,
-              "Qw": Qw,
-              "rpart": rpart,
-              "Spart": Spart,
-              "Tpart": Tpart}
+    kwargs = {
+        "rad": rad,
+        "Qw": Qw,
+        "rpart": rpart,
+        "Spart": Spart,
+        "Tpart": Tpart,
+    }
 
     # call the stehfest-algorithm
     res = sf(lap_trans_flow_cyl, time, bound=stehfestn, **kwargs)
@@ -171,10 +184,21 @@ def diskmodel(rad, time,
     return res
 
 
-def grf_model(rad, time,
-              Kpart, Spart, Rpart, Qw, dim=2, lat_ext=1.,
-              struc_grid=True, rwell=0.0, rinf=np.inf, hinf=0.0,
-              stehfestn=12):
+def grf_model(
+    rad,
+    time,
+    Kpart,
+    Spart,
+    Rpart,
+    Qw,
+    dim=2,
+    lat_ext=1.0,
+    struc_grid=True,
+    rwell=0.0,
+    rinf=np.inf,
+    hinf=0.0,
+    stehfestn=12,
+):
 
     # ensure that input is treated as arrays
     rad = np.squeeze(rad)
@@ -191,13 +215,15 @@ def grf_model(rad, time,
     rpart = np.append(rpart, np.array([rinf]))
 
     # write the paramters in kwargs to use the stehfest-algorithm
-    kwargs = {"rad": rad,
-              "Qw": Qw,
-              "rpart": rpart,
-              "Spart": Spart,
-              "Kpart": Kpart,
-              "dim": dim,
-              "lat_ext": lat_ext}
+    kwargs = {
+        "rad": rad,
+        "Qw": Qw,
+        "rpart": rpart,
+        "Spart": Spart,
+        "Kpart": Kpart,
+        "dim": dim,
+        "lat_ext": lat_ext,
+    }
 
     # call the stehfest-algorithm
     res = sf(grf_laplace, time, bound=stehfestn, **kwargs)
@@ -214,6 +240,7 @@ def grf_model(rad, time,
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
 #
 #    print(diskmodel([1, 2, 3],

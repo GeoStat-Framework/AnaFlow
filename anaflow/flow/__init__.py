@@ -19,22 +19,15 @@ The following functions are provided
 """
 from __future__ import absolute_import
 
-from anaflow.flow.homogeneous import (
-    thiem,
-    theis,
-)
+from anaflow.flow.homogeneous import thiem, theis
 from anaflow.flow.heterogeneous import (
     ext_thiem2D,
     ext_theis2D,
     ext_thiem3D,
     ext_theis3D,
 )
-from anaflow.flow.special import (
-    diskmodel,
-)
-from anaflow.flow.laplace import (
-    lap_trans_flow_cyl,
-)
+from anaflow.flow.special import diskmodel
+from anaflow.flow.laplace import lap_trans_flow_cyl
 
 __all__ = [
     "thiem",
