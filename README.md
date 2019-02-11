@@ -2,6 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1135723.svg)](https://doi.org/10.5281/zenodo.1135723)
 [![PyPI version](https://badge.fury.io/py/anaflow.svg)](https://badge.fury.io/py/anaflow)
+[![Build Status](https://travis-ci.org/GeoStat-Framework/AnaFlow.svg?branch=master)](https://travis-ci.org/GeoStat-Framework/AnaFlow)
 [![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=latest)](https://anaflow.readthedocs.io/en/latest/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
