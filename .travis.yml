@@ -1,0 +1,54 @@
+language: python
+
+matrix:
+  include:
+    - name: "Linux py27"
+      sudo: required
+      language: python
+      python: 2.7
+      services: docker
+      env:
+        - PIP=pip
+        - CIBW_BUILD="cp27-*"
+        - COVER="off"
+
+    - name: "Linux py36"
+      sudo: required
+      language: python
+      python: 3.6
+      services: docker
+      env:
+        - PIP=pip
+        - CIBW_BUILD="cp36-*"
+        - COVER="on"
+
+env:
+  global:
+    - TWINE_USERNAME=geostatframework
+
+script:
+  # create wheels
+  - $PIP install cibuildwheel==0.10.1
+  - cibuildwheel --output-dir wheelhouse
+  # create source dist for pypi and create coverage (only once for linux py3.6)
+  - |
+    if [[ $COVER == "on" ]]; then
+      rm -rf dist
+      python setup.py sdist
+    fi
+
+after_success:
+  # pypi upload (test allways and official on TAG)
+  - python -m pip install twine
+  - python -m twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ wheelhouse/*.whl
+  - python -m twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz
+  - |
+    if [[ $TRAVIS_TAG ]]; then
+      python -m twine upload --skip-existing wheelhouse/*.whl
+      python -m twine upload --skip-existing dist/*.tar.gz
+    fi
+
+notifications:
+  email:
+    recipients:
+    - info@geostat-framework.org
