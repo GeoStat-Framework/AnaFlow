@@ -9,3 +9,4 @@ explore its whole beauty and power.
    :maxdepth: 1
 
    tutorial_01_call.rst
+   tutorial_02_extended_theis.rst
