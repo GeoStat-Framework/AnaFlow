@@ -1,5 +1,5 @@
-Tutorial 1: Call a function
-===========================
+Tutorial 1: The Theis solution
+==============================
 
 In the following the well known Theis function is called an plotted for three
 different time-steps.

@@ -1,4 +1,4 @@
-Tutorial 2: The extended theis solution
+Tutorial 2: The extended Theis solution
 =======================================
 
 We provide an extended theis solution, that incorporates the effectes of a
