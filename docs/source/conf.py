@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# ogs5py documentation build configuration file, created by
+# anaflow documentation build configuration file, created by
 # sphinx-quickstart on Fri Jan  5 14:20:43 2018.
 #
 # This file is execfile()d with the current directory set to its
@@ -24,7 +24,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../../"))
-from ogs5py import __version__ as ver
+from anaflow import __version__ as ver
 
 
 def skip(app, what, name, obj, skip, options):
