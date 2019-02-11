@@ -6,7 +6,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/GeoStat-Framework/AnaFlow/master/docs/source/pics/AnaFlow.png" alt="AnaFlow-LOGO" width="251px"/>
+<img src="https://raw.githubusercontent.com/GeoStat-Framework/AnaFlow/master/docs/source/pics/Anaflow.png" alt="AnaFlow-LOGO" width="251px"/>
 </p>
 
 ## Purpose
