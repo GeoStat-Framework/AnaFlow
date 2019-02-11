@@ -1,5 +1,5 @@
-Tutorial 2: compare the extended theis solution
-===============================================
+Tutorial 2: The extended theis solution
+=======================================
 
 We provide an extended theis solution, that incorporates the effectes of a
 heterogeneous transmissivity field on a pumping test.
