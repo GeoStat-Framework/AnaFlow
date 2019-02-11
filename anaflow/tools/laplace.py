@@ -1,15 +1,16 @@
+# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing functions concerning the laplace transformation.
 
-.. currentmodule:: anaflow.laplace
+.. currentmodule:: anaflow.tools.laplace
 
-Functions
----------
 The following functions are provided
 
 .. autosummary::
 
+   get_lap
    get_lap_inv
+   lap_trans
    stehfest
 """
 
@@ -17,8 +18,125 @@ from __future__ import absolute_import, division, print_function
 
 from math import floor, factorial
 import numpy as np
+from scipy.integrate import quad
 
-__all__ = ["get_lap_inv", "stehfest"]
+__all__ = ["get_lap", "lap_trans", "get_lap_inv", "stehfest"]
+
+
+def get_lap(func, arg_dict=None, **kwargs):
+    """
+    Callable Laplace transform
+
+    Get the Laplace transform of a given function as a callable function.
+
+    Parameters
+    ----------
+    func : :any:`callable`
+        function that shall be transformed.
+        The first argument needs to be the time-variable:
+        ``func(t, **kwargs)``
+
+        `func` should be capable of taking numpy arrays as input for `s` and
+        the first shape component of the output of `func` should match the
+        shape of `s`.
+    arg_dict : :class:`dict` or :any:`None`, optional
+        Keyword-arguments given as a dictionary that are forwarded to the
+        function given in ``func``. Will be merged with ``**kwargs``
+        This is designed for overlapping keywords. Default: ``None``
+    **kwargs
+        Keyword-arguments that are forwarded to the function given in ``func``.
+        Will be merged with ``arg_dict``.
+
+    Returns
+    -------
+    :any:`callable`
+        The Laplace transformed of the given function.
+
+    Raises
+    ------
+    ValueError
+        If `func` is not callable.
+    """
+    # check the input
+    if not callable(func):
+        raise ValueError("The given function needs to be callable")
+
+    # define the returned function
+    def ret_func(phase):
+        """Return function for the Laplace transformed."""
+        return lap_trans(func, phase, arg_dict=arg_dict, **kwargs)
+
+    return ret_func
+
+
+def lap_trans(func, phase, arg_dict=None, **kwargs):
+    """
+    The laplace transform
+
+    Parameters
+    ----------
+    func : :any:`callable`
+        function that shall be transformed.
+        The first argument needs to be the time-variable:
+        ``func(s, **kwargs)``
+
+        `func` should be capable of taking numpy arrays as input for `s` and
+        the first shape component of the output of `func` should match the
+        shape of `s`.
+    phase : :class:`float` or :class:`numpy.ndarray`
+        phase-points to evaluate the transformed function at
+    arg_dict : :class:`dict` or :any:`None`, optional
+        Keyword-arguments given as a dictionary that are forwarded to the
+        function given in ``func``. Will be merged with ``**kwargs``
+        This is designed for overlapping keywords in ``stehfest`` and
+        ``func``.Default: ``None``
+    **kwargs
+        Keyword-arguments that are forwarded to the function given in ``func``.
+        Will be merged with ``arg_dict``
+
+    Returns
+    -------
+    :class:`numpy.ndarray`
+        Array with all evaluations in phase-space.
+
+    Raises
+    ------
+    ValueError
+        If `func` is not callable.
+    """
+    # check the input
+    if not callable(func):
+        raise ValueError("The given function needs to be callable")
+
+    if arg_dict is None:
+        arg_dict = {}
+    kwargs.update(arg_dict)
+
+    # check and save if phase is scalar
+    is_scal = np.isscalar(phase)
+
+    # ensure that t is handled as an 1d-array
+    phase = np.array(phase, dtype=float)
+    result = np.zeros_like(phase)
+
+    def make_integrand(ph):
+        def integrand(val):
+            """
+            Integrand for the laplace transform
+            """
+            return np.exp(-ph * val) * func(val, **kwargs)
+
+        return integrand
+
+    for phase_i, phase_e in np.ndenumerate(phase):
+
+        integ = make_integrand(phase_e)
+        result[phase_i] = quad(integ, 0, np.inf)[0]
+
+    if is_scal:
+        result = np.asscalar(result)
+
+    return result
 
 
 def get_lap_inv(
@@ -157,7 +275,7 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
     ----------
     .. [R1] Stehfest, H., ''Algorithm 368:
        Numerical inversion of laplace transforms [d5].''
-       Communications of the ACM, 13(1):47–49, 1970
+       Communications of the ACM, 13(1):47-49, 1970
 
     Notes
     -----

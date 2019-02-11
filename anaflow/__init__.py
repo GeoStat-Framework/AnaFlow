@@ -1,30 +1,68 @@
 """
-=======
-AnaFlow
+Purpose
 =======
 
-Contents
---------
 Anaflow provides several analytical and semi-analytical solutions for the
 groundwater-flow-equation.
 
-Functions
----------
-The following functions are provided directly
+Subpackages
+===========
 
 .. autosummary::
+    flow
+    tools
 
+Solutions
+=========
+
+Homogeneous
+^^^^^^^^^^^
+
+.. currentmodule:: anaflow.flow.homogeneous
+
+Solutions for homogeneous aquifers
+
+.. autosummary::
    thiem
    theis
+
+Heterogeneous
+^^^^^^^^^^^^^
+
+.. currentmodule:: anaflow.flow.heterogeneous
+
+Solutions for heterogeneous aquifers
+
+.. autosummary::
    ext_thiem2D
    ext_theis2D
    ext_thiem3D
    ext_theis3D
-   diskmodel
+
+Special
+^^^^^^^
+
+.. currentmodule:: anaflow.flow.special
+
+Special solutions for special aquifers
+
+.. autosummary::
+   grf_model
+
+Laplace
+=======
+
+.. currentmodule:: anaflow.tools.laplace
+
+Helping functions related to the laplace-transformation
+
+.. autosummary::
+   get_lap
    get_lap_inv
-   stehfest
 """
 from __future__ import absolute_import
+
+from anaflow._version import __version__
 
 from anaflow.flow import (
     thiem,
@@ -33,20 +71,20 @@ from anaflow.flow import (
     ext_theis2D,
     ext_thiem3D,
     ext_theis3D,
-    diskmodel,
+    grf_model,
 )
-from anaflow.laplace import get_lap_inv, stehfest
+from anaflow.tools.laplace import get_lap_inv, get_lap
 
-__all__ = [
+__all__ = ["__version__"]
+
+__all__ += [
     "thiem",
     "theis",
     "ext_thiem2D",
     "ext_theis2D",
     "ext_thiem3D",
     "ext_theis3D",
-    "diskmodel",
+    "grf_model",
     "get_lap_inv",
-    "stehfest",
+    "get_lap",
 ]
-
-__version__ = "0.2.5"

@@ -3,29 +3,21 @@ Anaflow subpackage providing special flow solutions.
 
 .. currentmodule:: anaflow.flow.special
 
-Functions
----------
 The following functions are provided
 
 .. autosummary::
-   thiem
-   ext_thiem2D
-   ext_thiem3D
-   theis
-   ext_theis2D
-   ext_theis3D
    diskmodel
-   lap_transgwflow_cyl
+   grf_model
 """
 
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from anaflow.laplace import stehfest as sf
+from anaflow.tools.laplace import stehfest as sf
 from anaflow.flow.laplace import lap_trans_flow_cyl, grf_laplace
 
-__all__ = ["diskmodel"]
+__all__ = ["diskmodel", "grf_model"]
 
 
 ###############################################################################
@@ -187,53 +179,101 @@ def diskmodel(
 def grf_model(
     rad,
     time,
-    Kpart,
-    Spart,
-    Rpart,
+    K_part,
+    S_part,
+    R_part,
     Qw,
     dim=2,
     lat_ext=1.0,
     struc_grid=True,
-    rwell=0.0,
-    rinf=np.inf,
-    hinf=0.0,
-    stehfestn=12,
+    r_well=0.0,
+    r_bound=np.inf,
+    head_bound=0.0,
+    stehfest_n=12,
 ):
+    """
+    The extended "General radial flow" model for transient flow
+
+    The general radial flow (GRF) model by Barker introduces an arbitrary
+    dimension for radial groundwater flow. We introduced the possibility to
+    define radial dependet conductivity and storage values.
+
+    Parameters
+    ----------
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    time : :class:`numpy.ndarray`
+        Array with all time-points where the function should be evaluated
+    K_part : :class:`numpy.ndarray`
+        Given conductivity values for each disk
+    S_part : :class:`numpy.ndarray`
+        Given storativity values for each disk
+    R_part : :class:`numpy.ndarray`
+        Given radii separating the disks
+    Qw : :class:`float`
+        Pumpingrate at the well
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured r-t grid is created.
+        Default: ``True``
+    r_well : :class:`float`, optional
+        Inner radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    head_bound : :class:`float`, optional
+        Reference head at the outer boundary `rinf`. Default: ``0.0``
+    stehfest_n : :class:`int`, optional
+        Since the solution is calculated in Laplace-space, the
+        back-transformation is performed with the stehfest-algorithm.
+        Here you can specify the number of interations within this
+        algorithm. Default: ``12``
+
+    Returns
+    -------
+    :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Notes
+    -----
+    The parameters ``rad``, ``time``, ``K_part`` and ``S_part`` will be checked
+    for positivity.
+    """
 
     # ensure that input is treated as arrays
     rad = np.squeeze(rad)
     time = np.array(time).reshape(-1)
-    Kpart = np.array(Kpart)
-    Spart = np.array(Spart)
-    Rpart = np.array(Rpart)
+    K_part = np.array(K_part)
+    S_part = np.array(S_part)
+    R_part = np.array(R_part)
 
     if not struc_grid:
         grid_shape = rad.shape
         rad = rad.reshape(-1)
 
-    rpart = np.append(np.array([rwell]), Rpart)
-    rpart = np.append(rpart, np.array([rinf]))
+    rpart = np.append(np.array([r_well]), R_part)
+    rpart = np.append(rpart, np.array([r_bound]))
 
     # write the paramters in kwargs to use the stehfest-algorithm
     kwargs = {
         "rad": rad,
         "Qw": Qw,
         "rpart": rpart,
-        "Spart": Spart,
-        "Kpart": Kpart,
+        "Spart": S_part,
+        "Kpart": K_part,
         "dim": dim,
         "lat_ext": lat_ext,
     }
 
     # call the stehfest-algorithm
-    res = sf(grf_laplace, time, bound=stehfestn, **kwargs)
+    res = sf(grf_laplace, time, bound=stehfest_n, **kwargs)
 
     # if the input are unstructured space-time points, return an array
     if not struc_grid and grid_shape:
         res = np.copy(np.diag(res).reshape(grid_shape))
 
     # add the reference head
-    res += hinf
+    res += head_bound
 
     return res
 
@@ -242,14 +282,3 @@ if __name__ == "__main__":
     import doctest
 
     doctest.testmod()
-#
-#    print(diskmodel([1, 2, 3],
-#                    [10, 100],
-#                    [1e-3, 2e-3],
-#                    [1e-3, 1e-3],
-#                    [2], -1e-3))
-#    print(grf_model([1, 2, 3],
-#                    [10, 100],
-#                    [1e-3, 2e-3],
-#                    [1e-3, 1e-3],
-#                    [2], -1e-3, dim=2))

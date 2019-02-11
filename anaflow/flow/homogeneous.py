@@ -1,10 +1,9 @@
+# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing flow solutions in homogeneous aquifers.
 
 .. currentmodule:: anaflow.flow.homogeneous
 
-Functions
----------
 The following functions are provided
 
 .. autosummary::
@@ -16,8 +15,8 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from anaflow.laplace import stehfest as sf
-from anaflow.flow.helper import well_solution, inc_gamma
+from anaflow.tools.laplace import stehfest as sf
+from anaflow.tools.special import well_solution, inc_gamma
 from anaflow.flow.laplace import lap_trans_flow_cyl, grf_laplace
 
 __all__ = ["thiem", "theis"]
@@ -113,7 +112,7 @@ def theis(
     .. [Theis35] Theis, C.,
        ''The relation between the lowering of the piezometric surface and the
        rate and duration of discharge of a well using groundwater storage'',
-       Trans. Am. Geophys. Union, 16, 519–524, 1935
+       Trans. Am. Geophys. Union, 16, 519-524, 1935
 
     Parameters
     ----------

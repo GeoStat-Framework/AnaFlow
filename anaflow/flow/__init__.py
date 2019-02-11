@@ -1,21 +1,53 @@
 """
-Anaflow subpackage providing solutions for the groundwater flow equation.
+Anaflow subpackage providing flow-solutions for the groundwater flow equation.
+
+Subpackages
+^^^^^^^^^^^
 
 .. currentmodule:: anaflow.flow
 
-Functions
----------
-The following functions are provided
+.. autosummary::
+    homogeneous
+    heterogeneous
+    special
+    laplace
+
+Solutions
+^^^^^^^^^
+
+Homogeneous
+~~~~~~~~~~~
+
+.. currentmodule:: anaflow.flow.homogeneous
+
+Solutions for homogeneous aquifers
 
 .. autosummary::
    thiem
-   ext_thiem2D
-   ext_thiem3D
    theis
+
+Heterogeneous
+~~~~~~~~~~~~~
+
+.. currentmodule:: anaflow.flow.heterogeneous
+
+Solutions for heterogeneous aquifers
+
+.. autosummary::
+   ext_thiem2D
    ext_theis2D
+   ext_thiem3D
    ext_theis3D
-   diskmodel
-   lap_trans_flow_cyl
+
+Special
+~~~~~~~
+
+.. currentmodule:: anaflow.flow.special
+
+Special solutions for special aquifers
+
+.. autosummary::
+   grf_model
 """
 from __future__ import absolute_import
 
@@ -26,8 +58,7 @@ from anaflow.flow.heterogeneous import (
     ext_thiem3D,
     ext_theis3D,
 )
-from anaflow.flow.special import diskmodel
-from anaflow.flow.laplace import lap_trans_flow_cyl
+from anaflow.flow.special import grf_model
 
 __all__ = [
     "thiem",
@@ -36,6 +67,5 @@ __all__ = [
     "ext_theis2D",
     "ext_thiem3D",
     "ext_theis3D",
-    "diskmodel",
-    "lap_trans_flow_cyl",
+    "grf_model",
 ]
