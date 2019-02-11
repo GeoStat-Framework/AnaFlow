@@ -64,8 +64,8 @@ def thiem(rad, Rref, T, Qw, href=0.0):
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
-    Example
-    -------
+    Examples
+    --------
     >>> thiem([1,2,3], 10, 0.001, -0.001)
     array([-0.3664678 , -0.25615   , -0.19161822])
     """
@@ -154,8 +154,8 @@ def theis(
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
-    Example
-    -------
+    Examples
+    --------
     >>> theis([1,2,3], [10,100], 0.001, 0.001, -0.001)
     array([[-0.24959541, -0.14506368, -0.08971485],
            [-0.43105106, -0.32132823, -0.25778313]])

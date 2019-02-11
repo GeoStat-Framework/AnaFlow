@@ -89,8 +89,8 @@ def diskmodel(
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
-    Example
-    -------
+    Examples
+    --------
     >>> diskmodel([1,2,3], [10, 100], [1e-3, 2e-3], [1e-3, 1e-3], [2], -1e-3)
     array([[-0.20312814, -0.09605675, -0.06636862],
            [-0.29785979, -0.18784251, -0.15582597]])

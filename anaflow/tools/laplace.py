@@ -283,8 +283,8 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
 
     The algorithm gets unstable for ``bound`` values above 20.
 
-    Example
-    -------
+    Examples
+    --------
     >>> f = lambda x: x**-1
     >>> stehfest(f, [1,10,100])
     array([ 1.,  1.,  1.])

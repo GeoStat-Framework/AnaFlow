@@ -3,8 +3,8 @@
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = anaflow
+SPHINXBUILD   = python3 -msphinx
+SPHINXPROJ    = GeoStatTools
 SOURCEDIR     = source
 BUILDDIR      = build
 

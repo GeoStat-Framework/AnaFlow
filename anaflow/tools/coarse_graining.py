@@ -71,8 +71,8 @@ def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
        pumping tests in heterogeneous aquifers.''
        Water resources research, 44(4), 2008
 
-    Example
-    -------
+    Examples
+    --------
     >>> T_CG([1,2,3], 0.001, 1, 10, 2)
     array([ 0.00061831,  0.00064984,  0.00069236])
     """
@@ -115,8 +115,8 @@ def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
     rad : :class:`numpy.ndarray`
         Array containing the radii belonging to the given transmissivity values
 
-    Example
-    -------
+    Examples
+    --------
     >>> T_CG_inverse([7e-4,8e-4,9e-4], 0.001, 1, 10, 2)
     array([ 3.16952925,  5.56935826,  9.67679026])
     """
@@ -160,8 +160,8 @@ def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
     rad : :class:`float`
         Radial point, where the relative error is less than the given one.
 
-    Example
-    -------
+    Examples
+    --------
     >>> T_CG_error(0.01, 0.001, 1, 10, 2)
     34.910450167790387
     """
@@ -229,8 +229,8 @@ def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
        for the sedimentary basin of Thuringia.''
        PhD thesis, Friedrich-Schiller-Universität Jena, 2013
 
-    Example
-    -------
+    Examples
+    --------
     >>> K_CG([1,2,3], 0.001, 1, 10, 1, 2)
     array([ 0.00063008,  0.00069285,  0.00077595])
     """
@@ -282,8 +282,8 @@ def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     rad : :class:`numpy.ndarray`
         Array containing the radii belonging to the given conductivity values
 
-    Example
-    -------
+    Examples
+    --------
     >>> K_CG_inverse([7e-4,8e-4,9e-4], 0.001, 1, 10, 1, 2)
     array([ 2.09236867,  3.27914996,  4.52143956])
     """
@@ -339,8 +339,8 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     rad : :class:`float`
         Radial point, where the relative error is less than the given one.
 
-    Example
-    -------
+    Examples
+    --------
     >>> K_CG_error(0.01, 0.001, 1, 10, 1, 2)
     19.612796453639845
     """

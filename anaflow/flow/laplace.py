@@ -6,7 +6,7 @@ Anaflow subpackage providing flow solutions in laplace space.
 The following functions are provided
 
 .. autosummary::
-   lap_transgwflow_cyl
+   lap_trans_flow_cyl
    grf_laplace
 """
 
@@ -93,8 +93,8 @@ def lap_trans_flow_cyl(
     lap_transgwflow_cyl : :class:`numpy.ndarray`
         Array with all values in laplace-space
 
-    Example
-    -------
+    Examples
+    --------
     >>> lap_transgwflow_cyl([5,10],[1,2,3],[0,2,10],[1e-3,1e-3],[1e-3,2e-3],-1)
     array([[ -2.71359196e+00,  -1.66671965e-01,  -2.82986917e-02],
            [ -4.58447458e-01,  -1.12056319e-02,  -9.85673855e-04]])
@@ -279,7 +279,7 @@ def grf_laplace(
         Given radii separating the disks as well as starting- and endpoints
     Kpart : :class:`numpy.ndarray` of length N
         Given conductivity values for each disk
-    Spart : :class:`numpy.ndarray`of length N
+    Spart : :class:`numpy.ndarray` of length N
         Given storativity values for each disk
     Qw : :class:`float`
         Pumpingrate at the well
@@ -291,8 +291,8 @@ def grf_laplace(
     grf_laplace : :class:`numpy.ndarray`
         Array with all values in laplace-space
 
-    Example
-    -------
+    Examples
+    --------
     >>> grf_laplace([5,10],[1,2,3], 2, 1, [0,2,10],[1e-3,1e-3],[1e-3,2e-3],-1)
     array([[ -2.71359196e+00,  -1.66671965e-01,  -2.82986917e-02],
            [ -4.58447458e-01,  -1.12056319e-02,  -9.85673855e-04]])

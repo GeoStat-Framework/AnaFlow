@@ -64,8 +64,8 @@ def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
     f_rad : :class:`numpy.ndarray`
         Array containing the function-evaluation points within each disk
 
-    Example
-    -------
+    Examples
+    --------
     >>> radii(2)
     (array([   0.,  500.,   inf]), array([  0.,  inf]))
     """
@@ -136,8 +136,8 @@ def specialrange(val_min, val_max, steps, typ="log"):
     :class:`numpy.ndarray`
         Array containing the special range
 
-    Example
-    -------
+    Examples
+    --------
     >>> specialrange(1,10,4)
     array([  1.        ,   2.53034834,   5.23167968,  10.        ])
     """
@@ -204,8 +204,8 @@ def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
     :class:`numpy.ndarray`
         Array containing the special range
 
-    Example
-    -------
+    Examples
+    --------
     >>> specialrange_cut(1,10,4)
     array([  1.        ,   2.53034834,   5.23167968,  10.        ])
     """
@@ -244,8 +244,8 @@ def aniso(e):
     .. [R2] Dagan, G., ''Flow and Transport on Porous Formations'',
            Springer Verlag, New York, 1989.
 
-    Example
-    -------
+    Examples
+    --------
     >>> aniso(0.5)
     0.23639985871871511
     """
@@ -330,8 +330,8 @@ def well_solution(rad, time, T, S, Qw, struc_grid=True, hinf=0.0):
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
-    Example
-    -------
+    Examples
+    --------
     >>> well_solution([1,2,3], [10,100], 0.001, 0.001, -0.001)
     array([[-0.24959541, -0.14506368, -0.08971485],
            [-0.43105106, -0.32132823, -0.25778313]])

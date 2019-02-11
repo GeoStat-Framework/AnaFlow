@@ -76,8 +76,8 @@ def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
     If the last value in val_arr is "inf", the given function should provide
     a value for "inf" as input: ``func(float("inf"))``
 
-    Example
-    -------
+    Examples
+    --------
     >>> f = lambda x: x**2
     >>> rad_amean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
@@ -175,8 +175,8 @@ def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
     If the last value in val_arr is "inf", the given function should provide
     a value for "inf" as input: ``func(float("inf"))``
 
-    Example
-    -------
+    Examples
+    --------
     >>> f = lambda x: x**2
     >>> rad_gmean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
@@ -382,8 +382,8 @@ def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
     If the last value in val_arr is "inf", the given function should provide
     a value for "inf" as input: ``func(float("inf"))``
 
-    Example
-    -------
+    Examples
+    --------
     >>> f = lambda x: x**2
     >>> rad_pmean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])

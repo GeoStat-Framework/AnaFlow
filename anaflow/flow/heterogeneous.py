@@ -84,8 +84,8 @@ def ext_thiem2D(rad, Rref, TG, sig2, corr, Qw, href=0.0, Twell=None, prop=1.6):
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
-    Example
-    -------
+    Examples
+    --------
     >>> ext_thiem2D([1,2,3], 10, 0.001, 1, 10, -0.001)
     array([-0.53084596, -0.35363029, -0.25419375])
     """
@@ -201,8 +201,8 @@ def ext_thiem3D(
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
-    Example
-    -------
+    Examples
+    --------
     >>> ext_thiem3D([1,2,3], 10, 0.001, 1, 10, 1, -0.001, 1)
     array([-0.48828026, -0.31472059, -0.22043022])
     """
@@ -358,8 +358,8 @@ def ext_theis2D(
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
-    Example
-    -------
+    Examples
+    --------
     >>> ext_theis2D([1,2,3], [10,100], 0.001, 1, 10, 0.001, -0.001)
     array([[-0.3381231 , -0.17430066, -0.09492601],
            [-0.58557452, -0.40907021, -0.31112835]])
@@ -559,8 +559,8 @@ def ext_theis3D(
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
-    Example
-    -------
+    Examples
+    --------
     >>> ext_theis3D([1,2,3], [10,100], 0.001, 1, 10, 1, 0.001, -0.001, 1)
     array([[-0.32845576, -0.16741654, -0.09134294],
            [-0.54238241, -0.36982686, -0.27754856]])
