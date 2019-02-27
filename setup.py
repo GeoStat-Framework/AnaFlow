@@ -72,7 +72,7 @@ setup(
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
     platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
     include_package_data=True,
-    install_requires=['numpy >= 1.10.0',
-                      'scipy >= 0.19.0'],
+    install_requires=['numpy >= 1.13.0',
+                      'scipy >= 0.19.1'],
     packages=find_packages(exclude=['tests*', 'docs*']),
 )

@@ -90,8 +90,8 @@ anaflow.get_lap_inv  # Get the inverse laplace transformation of a function
 
 ## Requirements
 
-- [NumPy >= 1.10.0](https://www.numpy.org)
-- [SciPy >= 0.19.0](https://www.scipy.org)
+- [NumPy >= 1.13.0](https://www.numpy.org)
+- [SciPy >= 0.19.1](https://www.scipy.org)
 
 
 ## Contact
