@@ -35,6 +35,8 @@ The following functions are provided directly
     anaflow.ext_theis2D  # extended Theis solution in 2D
     anaflow.ext_thiem3D  # extended Thiem solution in 3D
     anaflow.ext_theis3D  # extended Theis solution in 3D
+    anaflow.grf_model    # "General Radial Flow" Model
+    anaflow.grf_dist     # extended "General Radial Flow" Model on disks
 
 
 Laplace Transformation
@@ -54,9 +56,10 @@ Requirements
 
 - `NumPy >= 1.13.0 <https://www.numpy.org>`_
 - `SciPy >= 0.19.1 <https://www.scipy.org/>`_
+- `pentapy <https://github.com/GeoStat-Framework/pentapy>`_
 
 
 License
 =======
 
-`GPL <https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE>`_ © 2018
+`GPL <https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE>`_ © 2019
