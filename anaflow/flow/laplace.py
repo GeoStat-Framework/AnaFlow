@@ -132,7 +132,7 @@ def grf_laplace(
     diff_sr0 = np.sqrt(Spart[0] / Kpart[0])
     # set the general pumping-condtion depending on the well-radius
     if rpart[0] > 0.0:
-        Qs = -s ** (-1.5) / diff_sr0 * rpart[0] ** (1 - nu)
+        Qs = -s ** (-1.5) / diff_sr0 * rpart[0] ** (nu - 1)
     else:
         Qs = (2 / diff_sr0) ** nu / gamma(1 - nu) * s ** (-nu / 2 - 1)
 
