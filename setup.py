@@ -70,9 +70,12 @@ setup(
     url='https://github.com/GeoStat-Framework/AnaFlow',
     license='GPL - see LICENSE',
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
-    platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
+    platforms=["Windows", "Linux", "Mac OS-X"],
     include_package_data=True,
-    install_requires=['numpy >= 1.13.0',
-                      'scipy >= 0.19.1'],
+    install_requires=[
+        'numpy >= 1.13.0',
+        'scipy >= 0.19.1',
+        'pentapy',
+    ],
     packages=find_packages(exclude=['tests*', 'docs*']),
 )

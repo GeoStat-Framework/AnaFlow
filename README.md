@@ -87,6 +87,7 @@ anaflow.get_lap_inv  # Get the inverse laplace transformation of a function
 
 - [NumPy >= 1.13.0](https://www.numpy.org)
 - [SciPy >= 0.19.1](https://www.scipy.org)
+- [pentapy](https://github.com/GeoStat-Framework/pentapy)
 
 
 ## Contact
