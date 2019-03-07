@@ -294,9 +294,6 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
         arg_dict = {}
     kwargs.update(arg_dict)
 
-    # check and save if 't' is scalar
-    is_scal = np.isscalar(time)
-
     # ensure that t is handled as an 1d-array
     time = np.array(time, dtype=float).reshape(-1)
 
@@ -319,22 +316,16 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
     # get all coefficient factors at once
     c_fac = c_array(bound)
     t_fac = np.log(2.0) / time
-
     # store every function-argument needed in one array
-    fargs = np.outer(t_fac, np.arange(1, bound + 1))
-
+    fargs = np.einsum("i,j->ij", t_fac, np.arange(1, bound + 1))
     # get every function-value needed with one call of 'func'
     lap_val = func(fargs.reshape(-1), **kwargs)
+    # reshape again for further summation
     lap_val = lap_val.reshape(fargs.shape + lap_val.shape[1:])
-
-    # do all the sumation with fancy indexing in numpy
-    res = np.tensordot(lap_val, c_fac, axes=(1, 0))
-    res = np.rollaxis(np.multiply(np.rollaxis(res, 0, res.ndim), t_fac), -1, 0)
-
-    # reformat the result according to the input
-    res = np.squeeze(res)
-    if np.ndim(res) == 0 and is_scal:
-        res = np.asscalar(res)
+    # sumation of c*f
+    res = np.einsum("ij...,j->i...", lap_val, c_fac)
+    # multiply with ln(2)/t
+    res = np.einsum("ij...,i->ij...", res, t_fac)
 
     return res
 
