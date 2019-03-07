@@ -17,8 +17,8 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 from scipy.special import exp1, expi
 
-from anaflow.tools.laplace import stehfest as sf
-from anaflow.tools.special import aniso, specialrange_cut
+from anaflow.tools.laplace import get_lap_inv
+from anaflow.tools.special import aniso, specialrange_cut, Shaper
 from anaflow.tools.mean import rad_hmean_func
 from anaflow.tools.coarse_graining import T_CG, T_CG_error, K_CG, K_CG_error
 from anaflow.flow.laplace import grf_laplace
@@ -37,7 +37,6 @@ def ext_thiem2D(rad, Rref, TG, sig2, corr, Qw, href=0.0, Twell=None, prop=1.6):
 
     The extended Thiem solution for steady-state flow under
     a pumping condition in a confined aquifer.
-    This solution was presented in ''Zech 2013''[R4]_.
     The type curve is describing the effective drawdown
     in a 2D statistical framework, where the transmissivity distribution is
     following a log-normal distribution with a gaussian correlation function.
@@ -71,7 +70,7 @@ def ext_thiem2D(rad, Rref, TG, sig2, corr, Qw, href=0.0, Twell=None, prop=1.6):
 
     References
     ----------
-    .. [R4] Zech, A.
+    .. [Zech2013] Zech, A.
        ''Impact of Aqifer Heterogeneity on Subsurface Flow and Salt
        Transport at Different Scales: from a method determine parameters
        of heterogeneous permeability at local scale to a large-scale model
@@ -90,9 +89,6 @@ def ext_thiem2D(rad, Rref, TG, sig2, corr, Qw, href=0.0, Twell=None, prop=1.6):
     >>> ext_thiem2D([1,2,3], 10, 0.001, 1, 10, -0.001)
     array([-0.53084596, -0.35363029, -0.25419375])
     """
-
-    rad = np.squeeze(rad)
-
     # check the input
     if Rref <= 0.0:
         raise ValueError(
@@ -146,7 +142,6 @@ def ext_thiem3D(
 
     The extended Thiem solution for steady-state flow under
     a pumping condition in a confined aquifer.
-    This solution was presented in ''Zech 2013''[R5]_.
     The type curve is describing the effective drawdown
     in a 3D statistical framework, where the conductivity distribution is
     following a log-normal distribution with a gaussian correlation function
@@ -187,7 +182,7 @@ def ext_thiem3D(
 
     References
     ----------
-    .. [R5] Zech, A.
+    .. [Zech2013] Zech, A.
        ''Impact of Aqifer Heterogeneity on Subsurface Flow and Salt
        Transport at Different Scales: from a method determine parameters
        of heterogeneous permeability at local scale to a large-scale model
@@ -207,9 +202,6 @@ def ext_thiem3D(
     >>> ext_thiem3D([1,2,3], 10, 0.001, 1, 10, 1, -0.001, 1)
     array([-0.48828026, -0.31472059, -0.22043022])
     """
-
-    rad = np.squeeze(rad)
-
     # check the input
     if Rref <= 0.0:
         raise ValueError(
@@ -275,8 +267,8 @@ def ext_thiem3D(
 
 
 def ext_theis2D(
-    rad,
     time,
+    rad,
     TG,
     sig2,
     corr,
@@ -289,8 +281,8 @@ def ext_theis2D(
     Twell=None,
     T_err=0.01,
     prop=1.6,
-    stehfestn=12,
     parts=30,
+    lap_kwargs=None,
 ):
     """
     The extended Theis solution in 2D
@@ -303,10 +295,10 @@ def ext_theis2D(
 
     Parameters
     ----------
-    rad : :class:`numpy.ndarray`
-        Array with all radii where the function should be evaluated
     time : :class:`numpy.ndarray`
         Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
     TG : :class:`float`
         Geometric-mean transmissivity-distribution
     sig2 : :class:`float`
@@ -336,15 +328,15 @@ def ext_theis2D(
     prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
-    stehfestn : :class:`int`, optional
-        Since the solution is calculated in Laplace-space, the
-        back-transformation is performed with the stehfest-algorithm.
-        Here you can specify the number of interations within this
-        algorithm. Default: ``12``
     parts : :class:`int`, optional
         Since the solution is calculated by setting the transmissity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
+    lap_kwargs : :class:`dict` or :any:`None` optional
+        Dictionary for :any:`get_lap_inv` containing `method` and
+        `method_dict`. The default is equivalent to
+        ``lap_kwargs = {"method": "stehfest", "method_dict": None}``.
+        Default: :any:`None`
 
     Returns
     -------
@@ -365,14 +357,8 @@ def ext_theis2D(
     array([[-0.3381231 , -0.17430066, -0.09492601],
            [-0.58557452, -0.40907021, -0.31112835]])
     """
-
-    # ensure that 'rad' and 'time' are arrays
-    rad = np.squeeze(rad)
-    time = np.array(time).reshape(-1)
-
-    if not struc_grid:
-        grid_shape = rad.shape
-        rad = rad.reshape(-1)
+    Input = Shaper(time, rad, struc_grid)
+    lap_kwargs = {} if lap_kwargs is None else lap_kwargs
 
     # check the input
     if rwell < 0.0:
@@ -381,15 +367,9 @@ def ext_theis2D(
         raise ValueError(
             "The upper boundary needs to be greater than the wellradius"
         )
-    if np.any(rad < rwell) or np.any(rad <= 0.0):
+    if Input.rad_min < rwell:
         raise ValueError(
             "The given radii need to be greater than the wellradius"
-        )
-    if np.any(time <= 0.0):
-        raise ValueError("The given times need to be >= 0")
-    if not struc_grid and not rad.shape == time.shape:
-        raise ValueError(
-            "For unstructured grid the number of time- & radii-pts must equal"
         )
     if TG <= 0.0:
         raise ValueError("The Transmissivity needs to be positiv")
@@ -403,20 +383,6 @@ def ext_theis2D(
         raise ValueError("The Storage needs to be positiv")
     if prop <= 0.0:
         raise ValueError("The proportionalityfactor needs to be positiv")
-    if not isinstance(stehfestn, int):
-        raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be an integer"
-        )
-    if stehfestn <= 1:
-        raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be > 1"
-        )
-    if stehfestn % 2 != 0:
-        raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be even"
-        )
-    if not isinstance(parts, int):
-        raise ValueError("The numbor of partitions needs to be an integer")
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < T_err < 1.0:
@@ -426,37 +392,37 @@ def ext_theis2D(
 
     # genearte rlast from a given relativ-error to farfield-transmissivity
     rlast = T_CG_error(T_err, TG, sig2, corr, prop, Twell)
-
     # generate the partition points
     rpart = specialrange_cut(rwell, rinf, parts + 1, rlast)
-
     # calculate the harmonic mean transmissivity values within each partition
     Tpart = rad_hmean_func(
         T_CG, rpart, TG=TG, sig2=sig2, corr=corr, prop=prop, Twell=Twell
     )
 
-    # write the paramters in kwargs to use the stehfest-algorithm
+    # write the paramters in kwargs to use the grf-model
     kwargs = {
-        "rad": rad,
+        "rad": Input.rad,
         "Qw": Qw,
         "dim": 2,
         "lat_ext": 1,
         "rpart": rpart,
-        "Spart": S * np.ones(parts),
+        "Spart": np.full_like(Tpart, S),
         "Kpart": Tpart,
         "Kwell": T_CG(rwell, TG, sig2, corr, prop, Twell),
     }
+    kwargs.update(lap_kwargs)
 
-    # call the stehfest-algorithm
-    res = sf(grf_laplace, time, bound=stehfestn, **kwargs)
-
-    # if the input are unstructured space-time points, return an array
-    if not struc_grid and grid_shape:
-        res = np.copy(np.diag(res).reshape(grid_shape))
-
+    res = np.zeros((Input.time_no, Input.rad_no))
+    # call the grf-model
+    lap_inv = get_lap_inv(grf_laplace, **kwargs)
+    res[Input.time > 0, :] = lap_inv(Input.time[Input.time > 0])
+    res = Input.reshape(res)
+    if Qw > 0:
+        res = np.maximum(res, 0)
+    else:
+        res = np.minimum(res, 0)
     # add the reference head
     res += hinf
-
     return res
 
 
@@ -466,8 +432,8 @@ def ext_theis2D(
 
 
 def ext_theis3D(
-    rad,
     time,
+    rad,
     KG,
     sig2,
     corr,
@@ -482,8 +448,8 @@ def ext_theis3D(
     Kwell="KH",
     K_err=0.01,
     prop=1.6,
-    stehfestn=12,
     parts=30,
+    lap_kwargs=None,
 ):
     """
     The extended Theis solution in 3D
@@ -497,10 +463,10 @@ def ext_theis3D(
 
     Parameters
     ----------
-    rad : :class:`numpy.ndarray`
-        Array with all radii where the function should be evaluated
     time : :class:`numpy.ndarray`
         Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
     KG : :class:`float`
         Geometric-mean conductivity-distribution
     sig2 : :class:`float`
@@ -536,15 +502,15 @@ def ext_theis3D(
     prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
-    stehfestn : :class:`int`, optional
-        Since the solution is calculated in Laplace-space, the
-        back-transformation is performed with the stehfest-algorithm.
-        Here you can specify the number of interations within this
-        algorithm. Default: ``12``
     parts : :class:`int`, optional
         Since the solution is calculated by setting the transmissity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
+    lap_kwargs : :class:`dict` or :any:`None` optional
+        Dictionary for :any:`get_lap_inv` containing `method` and
+        `method_dict`. The default is equivalent to
+        ``lap_kwargs = {"method": "stehfest", "method_dict": None}``.
+        Default: :any:`None`
 
     Returns
     -------
@@ -566,14 +532,8 @@ def ext_theis3D(
     array([[-0.32845576, -0.16741654, -0.09134294],
            [-0.54238241, -0.36982686, -0.27754856]])
     """
-
-    # ensure that 'rad' and 'time' are arrays
-    rad = np.squeeze(rad)
-    time = np.array(time).reshape(-1)
-
-    if not struc_grid:
-        grid_shape = rad.shape
-        rad = rad.reshape(-1)
+    Input = Shaper(time, rad, struc_grid)
+    lap_kwargs = {} if lap_kwargs is None else lap_kwargs
 
     # check the input
     if rwell < 0.0:
@@ -582,15 +542,9 @@ def ext_theis3D(
         raise ValueError(
             "The upper boundary needs to be greater than the wellradius"
         )
-    if np.any(rad < rwell) or np.any(rad <= 0.0):
+    if Input.rad_min < rwell:
         raise ValueError(
             "The given radii need to be greater than the wellradius"
-        )
-    if np.any(time <= 0.0):
-        raise ValueError("The given times need to be >= 0")
-    if not struc_grid and not rad.shape == time.shape:
-        raise ValueError(
-            "For unstructured grid the number of time- & radii-pts must equal"
         )
     if Kwell != "KA" and Kwell != "KH" and not isinstance(Kwell, float):
         raise ValueError(
@@ -610,20 +564,6 @@ def ext_theis3D(
         raise ValueError("The aquifer-thickness needs to be positiv")
     if prop <= 0.0:
         raise ValueError("The proportionalityfactor needs to be positiv")
-    if not isinstance(stehfestn, int):
-        raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be an integer"
-        )
-    if stehfestn <= 1:
-        raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be > 1"
-        )
-    if stehfestn % 2 != 0:
-        raise ValueError(
-            "The boundary for the Stehfest-algorithm needs to be even"
-        )
-    if not isinstance(parts, int):
-        raise ValueError("The numbor of partitions needs to be an integer")
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < K_err < 1.0:
@@ -633,10 +573,8 @@ def ext_theis3D(
 
     # genearte rlast from a given relativ-error to farfield-conductivity
     rlast = K_CG_error(K_err, KG, sig2, corr, e, prop, Kwell=Kwell)
-
     # generate the partition points
     rpart = specialrange_cut(rwell, rinf, parts + 1, rlast)
-
     # calculate the harmonic mean conductivity values within each partition
     Kpart = rad_hmean_func(
         K_CG, rpart, KG=KG, sig2=sig2, corr=corr, e=e, prop=prop, Kwell=Kwell
@@ -644,26 +582,28 @@ def ext_theis3D(
 
     # write the paramters in kwargs to use the stehfest-algorithm
     kwargs = {
-        "rad": rad,
+        "rad": Input.rad,
         "Qw": Qw,
         "dim": 2,
         "lat_ext": L,
         "rpart": rpart,
-        "Spart": S * np.ones(parts),
+        "Spart": np.full_like(Kpart, S),
         "Kpart": Kpart,
         "Kwell": K_CG(rwell, KG, sig2, corr, e, prop, Kwell),
     }
+    kwargs.update(lap_kwargs)
 
-    # call the stehfest-algorithm
-    res = sf(grf_laplace, time, bound=stehfestn, **kwargs)
-
-    # if the input are unstructured space-time points, return an array
-    if not struc_grid and grid_shape:
-        res = np.copy(np.diag(res).reshape(grid_shape))
-
+    res = np.zeros((Input.time_no, Input.rad_no))
+    # call the grf-model in laplace space
+    lap_inv = get_lap_inv(grf_laplace, **kwargs)
+    res[Input.time > 0, :] = lap_inv(Input.time[Input.time > 0])
+    res = Input.reshape(res)
+    if Qw > 0:
+        res = np.maximum(res, 0)
+    else:
+        res = np.minimum(res, 0)
     # add the reference head
     res += hinf
-
     return res
 
 

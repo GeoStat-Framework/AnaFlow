@@ -37,6 +37,7 @@ __all__ = [
 
 class Shaper(object):
     """A class to reshape radius-time input-output in a good way"""
+
     def __init__(self, time, rad, struc_grid):
         self.time_scalar = np.isscalar(time)
         self.rad_scalar = np.isscalar(rad)
@@ -83,14 +84,14 @@ def shift_banded(mat, up, low, col_to_row=True, copy=True):
         mat_flat = mat
     if col_to_row:
         for i in range(up):
-            mat_flat[i, :-(up-i)] = mat_flat[i, (up-i):]
+            mat_flat[i, : -(up - i)] = mat_flat[i, (up - i) :]
         for i in range(low):
-            mat_flat[-i, (low-i):] = mat_flat[-i, :(low-i)]
+            mat_flat[-i, (low - i) :] = mat_flat[-i, : (low - i)]
     else:
         for i in range(up):
-            mat_flat[0, (up-i):] = mat_flat[i, :-(up-i)]
+            mat_flat[0, (up - i) :] = mat_flat[i, : -(up - i)]
         for i in range(low):
-            mat_flat[-i, :(low-i)] = mat_flat[-i, (low-i):]
+            mat_flat[-i, : (low - i)] = mat_flat[-i, (low - i) :]
     return mat_flat
 
 
@@ -330,7 +331,7 @@ def aniso(e):
     return res
 
 
-def well_solution(rad, time, T, S, Qw, struc_grid=True, hinf=0.0):
+def well_solution(time, rad, T, S, Qw, struc_grid=True, hinf=0.0):
     """
     The classical Theis solution
 
@@ -341,10 +342,10 @@ def well_solution(rad, time, T, S, Qw, struc_grid=True, hinf=0.0):
 
     Parameters
     ----------
-    rad : :class:`numpy.ndarray`
-        Array with all radii where the function should be evaluated
     time : :class:`numpy.ndarray`
         Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
     T : :class:`float`
         Given transmissivity of the aquifer
     S : :class:`float`
@@ -369,7 +370,7 @@ def well_solution(rad, time, T, S, Qw, struc_grid=True, hinf=0.0):
     ValueError
         If ``rad`` is not positiv.
     ValueError
-        If ``time`` is not positiv.
+        If ``time`` is negative.
     ValueError
         If shape of ``rad`` and ``time`` differ in case of
         ``struc_grid`` is ``True``.
@@ -397,43 +398,101 @@ def well_solution(rad, time, T, S, Qw, struc_grid=True, hinf=0.0):
     array([[-0.24959541, -0.14506368, -0.08971485],
            [-0.43105106, -0.32132823, -0.25778313]])
     """
+    Input = Shaper(time, rad, struc_grid)
 
-    rad = np.squeeze(rad)
-    time = np.array(time).reshape(-1)
-
-    if not struc_grid:
-        grid_shape = rad.shape
-        rad = rad.reshape(-1)
-
-    if not np.all(rad > 0.0):
-        raise ValueError(
-            "The given radii need to be greater than the wellradius"
-        )
-    if not np.all(time > 0.0):
-        raise ValueError("The given times need to be > 0")
-    if not struc_grid and not rad.shape == time.shape:
-        raise ValueError(
-            "For unstructured grid the number of time- & radii-pts must equal"
-        )
     if not T > 0.0:
         raise ValueError("The Transmissivity needs to be positiv")
     if not S > 0.0:
         raise ValueError("The Storage needs to be positiv")
 
-    res = np.zeros(time.shape + rad.shape)
+    time_mat = np.outer(Input.time[Input.time > 0], np.ones_like(Input.rad))
+    rad_mat = np.outer(np.ones_like(Input.time[Input.time > 0]), Input.rad)
 
-    for ti, te in np.ndenumerate(time):
-        for ri, re in np.ndenumerate(rad):
-            res[ti + ri] = (
-                Qw / (4.0 * np.pi * T) * exp1(re ** 2 * S / (4 * T * te))
-            )
-
-    if not struc_grid and grid_shape:
-        res = np.copy(np.diag(res).reshape(grid_shape))
-
+    res = np.zeros((Input.time_no, Input.rad_no))
+    res[Input.time > 0, :] = (
+        Qw / (4.0 * np.pi * T) * exp1(rad_mat ** 2 * S / (4 * T * time_mat))
+    )
+    res = Input.reshape(res)
+    if Qw > 0:
+        res = np.maximum(res, 0)
+    else:
+        res = np.minimum(res, 0)
     # add the reference head
     res += hinf
+    return res
 
+
+def grf(time, rad, K, S, Qw, dim=2, lat_ext=1.0, struc_grid=True, hinf=0.0):
+    """
+    The general radial flow (GRF) model for a pumping test
+
+    Parameters
+    ----------
+    time : :class:`numpy.ndarray`
+        Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    K : :class:`float`
+        Given conductivity of the aquifer
+    S : :class:`float`
+        Given storativity of the aquifer
+    Qw : :class:`float`
+        Pumpingrate at the well
+    dim : :class:`float`
+        Fractional dimension of the aquifer. Default: ``2.0``
+    lat_ext : :class:`float`
+        Lateral extend of the aquifer. Default: ``1.0``
+    struc_grid : :class:`bool`, optional
+        If this is set to "False", the "rad" and "time" array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured r-t grid is created.
+        Default: ``True``
+    hinf : :class:`float`, optional
+        Reference head at the outer boundary "rinf". Default: ``0.0``
+
+    Returns
+    -------
+    well_solution : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Raises
+    ------
+    ValueError
+        If ``rad`` is not positiv.
+    ValueError
+        If ``time`` is negative.
+    ValueError
+        If shape of ``rad`` and ``time`` differ in case of
+        ``struc_grid`` is ``True``.
+    ValueError
+        If ``K`` is not positiv.
+    ValueError
+        If ``S`` is not positiv.
+    """
+    Input = Shaper(time, rad, struc_grid)
+
+    if not K > 0.0:
+        raise ValueError("The Conductivity needs to be positiv")
+    if not S > 0.0:
+        raise ValueError("The Storage needs to be positiv")
+
+    time_mat = np.outer(Input.time[Input.time > 0], np.ones_like(Input.rad))
+    rad_mat = np.outer(np.ones_like(Input.time[Input.time > 0]), Input.rad)
+    u = S * rad_mat ** 2 / (4 * K * time_mat)
+    nu = 1.0 - dim / 2.0
+
+    res = np.zeros((Input.time_no, Input.rad_no))
+    res[Input.time > 0, :] = inc_gamma(-nu, u)
+    res[Input.time > 0, :] *= (
+        Qw / (4.0 * np.pi ** (1 - nu) * K * lat_ext) * rad_mat ** (2 * nu)
+    )
+    res = Input.reshape(res)
+    if Qw > 0:
+        res = np.maximum(res, 0)
+    else:
+        res = np.minimum(res, 0)
+    # add the reference head
+    res += hinf
     return res
 
 

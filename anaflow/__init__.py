@@ -26,6 +26,7 @@ Solutions for homogeneous aquifers
 .. autosummary::
    thiem
    theis
+   grf_model
 
 Heterogeneous
 ^^^^^^^^^^^^^
@@ -48,7 +49,7 @@ Special
 Special solutions for special aquifers
 
 .. autosummary::
-   grf_model
+   grf_disk
 
 Laplace
 =======
@@ -68,11 +69,12 @@ from anaflow._version import __version__
 from anaflow.flow import (
     thiem,
     theis,
+    grf_model,
     ext_thiem2D,
     ext_theis2D,
     ext_thiem3D,
     ext_theis3D,
-    grf_model,
+    grf_disk,
 )
 from anaflow.tools.laplace import get_lap_inv, get_lap
 
@@ -86,6 +88,7 @@ __all__ += [
     "ext_thiem3D",
     "ext_theis3D",
     "grf_model",
+    "grf_disk",
     "get_lap_inv",
     "get_lap",
 ]
