@@ -7,9 +7,9 @@ from anaflow.tools.special import aniso
 
 time = [10, 600, 36000]                 # 10s, 10min, 10h
 rad = np.geomspace(0.05, 4)             # radial distance from the pumping well in [0, 4]
-var = 0.5                               # variance of the transmissivity
-corr = 10.0                             # correlation length of the conductivity
-e = 0.75                                # anisotropy ratio of the conductivity
+var = 0.5                               # variance of the log-conductivity
+corr = 10.0                             # correlation length of the log-conductivity
+e = 0.75                                # anisotropy ratio of the log-conductivity
 KG = 1e-4                               # the geometric mean of the conductivity
 Kefu = KG*np.exp(var*(0.5 - aniso(e)))  # the effective conductivity for uniform flow
 KH = KG*np.exp(-var/2.0)                # the harmonic mean of the conductivity
@@ -17,9 +17,9 @@ S = 1e-4                                # storage
 Qw = -1e-4                              # pumping rate
 L = 1.0                                 # vertical extend of the aquifer
 
-head_Kefu = theis(rad=rad, time=time, T=Kefu*L, S=S, Qw=Qw)
-head_KH = theis(rad=rad, time=time, T=KH*L, S=S, Qw=Qw)
-head_ef = ext_theis3D(rad=rad, time=time, KG=KG, sig2=var, corr=corr, e=e, S=S, Qw=Qw, L=1)
+head_Kefu = theis(time=time, rad=rad, T=Kefu*L, S=S, Qw=Qw)
+head_KH = theis(time=time, rad=rad, T=KH*L, S=S, Qw=Qw)
+head_ef = ext_theis3D(time=time, rad=rad, KG=KG, sig2=var, corr=corr, e=e, S=S, Qw=Qw, L=1)
 
 for i, step in enumerate(time):
     if i == 0:

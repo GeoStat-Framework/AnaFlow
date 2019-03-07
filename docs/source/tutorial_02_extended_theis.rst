@@ -19,15 +19,15 @@ transmissivity.
     time = [10, 600, 36000]      # 10s, 10min, 10h
     rad = np.geomspace(0.05, 4)  # radius from the pumping well in [0, 4]
     var = 0.5                    # variance of the log-transmissivity
-    corr = 10.0                  # correlation length of the transmissivity
+    corr = 10.0                  # correlation length of the log-transmissivity
     TG = 1e-4                    # the geometric mean of the transmissivity
     TH = TG*np.exp(-var/2.0)     # the harmonic mean of the transmissivity
     S = 1e-4                     # storativity
     Qw = -1e-4                   # pumping rate
 
-    head_TG = theis(rad=rad, time=time, T=TG, S=S, Qw=Qw)
-    head_TH = theis(rad=rad, time=time, T=TH, S=S, Qw=Qw)
-    head_ef = ext_theis2D(rad=rad, time=time, TG=TG, sig2=var, corr=corr, S=S, Qw=Qw)
+    head_TG = theis(time=time, rad=rad, T=TG, S=S, Qw=Qw)
+    head_TH = theis(time=time, rad=rad, T=TH, S=S, Qw=Qw)
+    head_ef = ext_theis2D(time=time, rad=rad, TG=TG, sig2=var, corr=corr, S=S, Qw=Qw)
 
     for i, step in enumerate(time):
         if i == 0:

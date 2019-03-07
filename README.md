@@ -22,13 +22,6 @@ You can install the latest version with the following command:
 
     pip install anaflow
 
-It is highly recomended to install the scipy-scikit `umfpack` to get a solver
-for sparse linear systems:
-
-    pip install scikit-umfpack
-
-Have a look at: https://github.com/scikit-umfpack/scikit-umfpack
-
 
 ## Documentation for AnaFlow
 
@@ -49,7 +42,7 @@ from anaflow import theis
 time = [10, 100, 1000]
 rad = np.geomspace(0.1, 10)
 
-head = theis(rad=rad, time=time, T=1e-4, S=1e-4, Qw=-1e-4)
+head = theis(time=time, rad=rad, T=1e-4, S=1e-4, Qw=-1e-4)
 
 for i, step in enumerate(time):
     plt.plot(rad, head[i], label="Theis(t={})".format(step))
@@ -74,6 +67,8 @@ anaflow.ext_thiem2D  # extended Thiem solution in 2D
 anaflow.ext_theis2D  # extended Theis solution in 2D
 anaflow.ext_thiem3D  # extended Thiem solution in 3D
 anaflow.ext_theis3D  # extended Theis solution in 3D
+anaflow.grf_model    # "General Radial Flow" Model
+anaflow.grf_dist     # extended "General Radial Flow" Model on disks
 ```
 
 
@@ -101,7 +96,7 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[GPL][gpl_link] © 2018-2019
+[GPL][gpl_link] © 2019
 
 [gpl_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE
 [ogs5_link]: https://www.opengeosys.org/ogs-5/

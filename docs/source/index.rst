@@ -22,16 +22,6 @@ Python and pip running.
     pip install anaflow
 
 
-It is highly recomended to install the scipy-scikit `umfpack` to get a solver
-for sparse linear systems:
-
-.. code-block:: none
-
-    pip install scikit-umfpack
-
-Have a look at: https://github.com/scikit-umfpack/scikit-umfpack
-
-
 Provided Functions
 ==================
 
@@ -62,8 +52,8 @@ inverse laplace-transformation of a given function
 Requirements
 ============
 
-- `NumPy >= 1.10.0 <https://www.numpy.org>`_
-- `SciPy >= 0.19.0 <https://www.scipy.org/>`_
+- `NumPy >= 1.13.0 <https://www.numpy.org>`_
+- `SciPy >= 0.19.1 <https://www.scipy.org/>`_
 
 
 License
