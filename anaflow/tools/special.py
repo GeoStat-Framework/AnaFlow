@@ -8,6 +8,7 @@ The following functions are provided
 
 .. autosummary::
 
+   Shaper
    sph_surf
    radii
    specialrange
@@ -23,6 +24,7 @@ import numpy as np
 from scipy.special import gamma, gammaincc, exp1, expn
 
 __all__ = [
+    "Shaper",
     "sph_surf",
     "radii",
     "specialrange",
@@ -31,6 +33,65 @@ __all__ = [
     "well_solution",
     "inc_gamma",
 ]
+
+
+class Shaper(object):
+    """A class to reshape radius-time input-output in a good way"""
+    def __init__(self, time, rad, struc_grid):
+        self.time_scalar = np.isscalar(time)
+        self.rad_scalar = np.isscalar(rad)
+        self.time = np.array(time)
+        self.rad = np.array(rad)
+        self.struc_grid = struc_grid
+        self.time_shape = self.time.shape
+        self.rad_shape = self.rad.shape
+        self.time = self.time.reshape(-1)
+        self.rad = self.rad.reshape(-1)
+        self.time_no = self.time.shape[0]
+        self.rad_no = self.rad.shape[0]
+
+        self.time_min = np.min(self.time)
+        self.time_max = np.max(self.time)
+        self.rad_min = np.min(self.rad)
+        self.rad_max = np.max(self.rad)
+
+        if not self.struc_grid and not self.rad_shape == self.time_shape:
+            raise ValueError("No struc_grid: shape of time & radius differ")
+        if np.any(self.time < 0.0):
+            raise ValueError("The given times need to be positive.")
+        if np.any(self.rad <= 0.0):
+            raise ValueError("The given radii need to be non-negative.")
+
+    def reshape(self, result):
+        np.asanyarray(result)
+        if self.struc_grid:
+            result = result.reshape(self.time_shape + self.rad_shape)
+        elif self.rad_shape:
+            result = np.diag(result).reshape(self.rad_shape)
+        if self.time_scalar and self.rad_scalar:
+            result = np.asscalar(result)
+        return result
+
+
+def shift_banded(mat, up, low, col_to_row=True, copy=True):
+    """Shift row of a banded matrix
+
+    Either from row-wise to column-wise storage or vice versa"""
+    if copy:
+        mat_flat = np.copy(mat)
+    else:
+        mat_flat = mat
+    if col_to_row:
+        for i in range(up):
+            mat_flat[i, :-(up-i)] = mat_flat[i, (up-i):]
+        for i in range(low):
+            mat_flat[-i, (low-i):] = mat_flat[-i, :(low-i)]
+    else:
+        for i in range(up):
+            mat_flat[0, (up-i):] = mat_flat[i, :-(up-i)]
+        for i in range(low):
+            mat_flat[-i, :(low-i)] = mat_flat[-i, (low-i):]
+    return mat_flat
 
 
 def sph_surf(dim):
