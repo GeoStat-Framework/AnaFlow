@@ -7,7 +7,6 @@ Anaflow subpackage providing flow solutions in laplace space.
 The following functions are provided
 
 .. autosummary::
-   lap_trans_flow_cyl
    grf_laplace
 """
 
@@ -16,25 +15,14 @@ from __future__ import absolute_import, division, print_function
 import warnings
 
 import numpy as np
-import scipy.sparse as sps
-from scipy.sparse.linalg import spsolve
 from scipy.special import k0, k1, kn, kv, i0, i1, iv, gamma
 from anaflow.tools.special import sph_surf
+from pentapy import solve
 
-# ignore Umpfack warnings for almost singular matrices
-try:
-    # first look if the umfpack is available
-    from scikits.umfpack import UmfpackWarning
-
-    SlvWarn = UmfpackWarning
-except ImportError:
-    # if umfpack is not present, use scipy.sparse MatrixRankWarning
-    SlvWarn = sps.linalg.MatrixRankWarning
-
-__all__ = ["lap_trans_flow_cyl", "grf_laplace"]
+__all__ = ["grf_laplace"]
 
 
-def get_bessel(nu):
+def get_bessel_prec(nu):
     """Get the right bessel functions for the GRF-model"""
     if np.isclose(nu, 0):
         kv0 = lambda x: k0(x)
@@ -54,195 +42,13 @@ def get_bessel(nu):
     return kv0, kv1, iv0, iv1
 
 
-###############################################################################
-# The generic solver of the 2D radial transient groundwaterflow equation
-# in Laplace-space with a pumping condition and a fix zero boundary-head
-###############################################################################
-
-
-def lap_trans_flow_cyl(
-    s, rad=None, rpart=None, Spart=None, Tpart=None, Qw=None, Twell=None
-):
-    """
-    A diskmodel for transient flow in Laplace-space
-
-    The solution of the diskmodel for transient flow under a pumping condition
-    in a confined aquifer in Laplace-space.
-    The solutions assumes concentric disks around the pumpingwell,
-    where each disk has its own transmissivity and storativity value.
-
-    Parameters
-    ----------
-    s : :class:`numpy.ndarray`
-        Array with all Laplace-space-points
-        where the function should be evaluated
-    rad : :class:`numpy.ndarray`
-        Array with all radii where the function should be evaluated
-    rpart : :class:`numpy.ndarray`
-        Given radii separating the disks as well as starting- and endpoints
-    Tpart : :class:`numpy.ndarray`
-        Given transmissivity values for each disk
-    Spart : :class:`numpy.ndarray`
-        Given storativity values for each disk
-    Qw : :class:`float`
-        Pumpingrate at the well
-    Twell : :class:`float`, optional
-        Transmissivity at the well. Default: ``Tpart[0]``
-
-    Returns
-    -------
-    lap_transgwflow_cyl : :class:`numpy.ndarray`
-        Array with all values in laplace-space
-
-    Examples
-    --------
-    >>> lap_transgwflow_cyl([5,10],[1,2,3],[0,2,10],[1e-3,1e-3],[1e-3,2e-3],-1)
-    array([[ -2.71359196e+00,  -1.66671965e-01,  -2.82986917e-02],
-           [ -4.58447458e-01,  -1.12056319e-02,  -9.85673855e-04]])
-    """
-
-    # ensure that input is treated as arrays
-    s = np.squeeze(s).reshape(-1)
-    rad = np.squeeze(rad).reshape(-1)
-    rpart = np.squeeze(rpart).reshape(-1)
-    Spart = np.squeeze(Spart).reshape(-1)
-    Tpart = np.squeeze(Tpart).reshape(-1)
-
-    # get the number of partitions
-    parts = len(Tpart)
-
-    # initialize the result
-    res = np.zeros(s.shape + rad.shape)
-
-    # set the general pumping-condtion
-    if Twell is None:
-        Twell = Tpart[0]
-    Q = Qw / (2.0 * np.pi * Twell)
-
-    # if there is a homgeneouse aquifer, compute the result by hand
-    if parts == 1:
-        # calculate the square-root of the diffusivities
-        difsr = np.sqrt(Spart[0] / Tpart[0])
-
-        for si, se in np.ndenumerate(s):
-            Cs = np.sqrt(se) * difsr
-
-            # set the pumping-condition at the well
-            Qs = Q / se
-
-            # incorporate the boundary-conditions
-            if rpart[0] == 0.0:
-                Bs = Qs
-                if rpart[-1] == np.inf:
-                    As = 0.0
-                else:
-                    As = -Qs * k0(Cs * rpart[-1]) / i0(Cs * rpart[-1])
-
-            else:
-                if rpart[-1] == np.inf:
-                    As = 0.0
-                    Bs = Qs / (Cs * rpart[0] * k1(Cs * rpart[0]))
-                else:
-                    det = i1(Cs * rpart[0]) * k0(Cs * rpart[-1]) + k1(
-                        Cs * rpart[0]
-                    ) * i0(Cs * rpart[-1])
-                    As = -Qs / (Cs * rpart[0]) * k0(Cs * rpart[-1]) / det
-                    Bs = Qs / (Cs * rpart[0]) * i0(Cs * rpart[-1]) / det
-
-            # calculate the head
-            for ri, re in np.ndenumerate(rad):
-                if re < rpart[-1]:
-                    res[si + ri] = As * i0(Cs * re) + Bs * k0(Cs * re)
-
-    # if there is more than one partition, create an equation system
-    else:
-        # initialize LHS and RHS for the linear equation system
-        # Mb is the banded matrix for the Eq-System
-        V = np.zeros(2 * (parts))
-        Mb = np.zeros((5, 2 * (parts)))
-        # the positions of the diagonals of the matrix set in Mb
-        diagpos = [2, 1, 0, -1, -2]
-        # set the standard boundary conditions for rwell=0.0 and rinf=np.inf
-        Mb[2, 0] = 1.0
-        Mb[-3, -1] = 1.0
-
-        # calculate the consecutive fractions of the transmissivities
-        Tfrac = Tpart[:-1] / Tpart[1:]
-
-        # calculate the square-root of the diffusivities
-        difsr = np.sqrt(Spart / Tpart)
-
-        # calculate a temporal substitution
-        tmp = Tfrac * difsr[:-1] / difsr[1:]
-
-        # match the radii to the different disks
-        pos = np.searchsorted(rpart, rad) - 1
-
-        # iterate over the laplace-variable
-        for si, se in enumerate(s):
-            Cs = np.sqrt(se) * difsr
-
-            # set the pumping-condition at the well
-            # --> implement other pumping conditions
-            V[0] = Q / se
-
-            # set the boundary-conditions if needed
-            if rpart[0] > 0.0:
-                Mb[2, 0] = Cs[0] * rpart[0] * k1(Cs[0] * rpart[0])
-                Mb[1, 1] = -Cs[0] * rpart[0] * i1(Cs[0] * rpart[0])
-            if rpart[-1] < np.inf:
-                Mb[-2, -2] = k0(Cs[-1] * rpart[-1])
-                Mb[-3, -1] = i0(Cs[-1] * rpart[-1])
-
-            # generate the equation system as banded matrix
-            for i in range(parts - 1):
-                Mb[0, 2 * i + 3] = -i0(Cs[i + 1] * rpart[i + 1])
-                Mb[1, 2 * i + 2 : 2 * i + 4] = [
-                    -k0(Cs[i + 1] * rpart[i + 1]),
-                    -i1(Cs[i + 1] * rpart[i + 1]),
-                ]
-                Mb[2, 2 * i + 1 : 2 * i + 3] = [
-                    i0(Cs[i] * rpart[i + 1]),
-                    k1(Cs[i + 1] * rpart[i + 1]),
-                ]
-                Mb[3, 2 * i : 2 * i + 2] = [
-                    k0(Cs[i] * rpart[i + 1]),
-                    tmp[i] * i1(Cs[i] * rpart[i + 1]),
-                ]
-                Mb[4, 2 * i] = -tmp[i] * k1(Cs[i] * rpart[i + 1])
-
-            # genearate the cooeficient matrix as a spare matrix
-            M = sps.spdiags(Mb, diagpos, 2 * parts, 2 * parts, format="csc")
-
-            # solve the Eq-Sys and ignore errors from the umf-pack
-            with warnings.catch_warnings():
-                # warnings.simplefilter("ignore")
-                warnings.simplefilter("ignore", SlvWarn)
-                warnings.simplefilter("ignore", RuntimeWarning)
-                X = spsolve(M, V, use_umfpack=True)
-
-            # to suppress numerical errors, set NAN values to 0
-            X[np.logical_not(np.isfinite(X))] = 0.0
-
-            # calculate the head
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", RuntimeWarning)
-                res[si, :] = X[2 * pos] * k0(Cs[pos] * rad) + X[
-                    2 * pos + 1
-                ] * i0(Cs[pos] * rad)
-
-        # set problematic values to 0
-        # --> the algorithm tends to violate small values,
-        #     therefore this approachu is suitable
-        res[np.logical_not(np.isfinite(res))] = 0.0
-
-    return res
-
-
-###############################################################################
-# The generic solver of the 2D radial transient groundwaterflow equation
-# in Laplace-space with a pumping condition and a fix zero boundary-head
-###############################################################################
+def get_bessel(nu):
+    """Get the right bessel functions for the GRF-model"""
+    kv0 = lambda x: kv(nu, x)
+    kv1 = lambda x: kv(nu - 1, x)
+    iv0 = lambda x: iv(nu, x)
+    iv1 = lambda x: iv(nu - 1, x)
+    return kv0, kv1, iv0, iv1
 
 
 def grf_laplace(
@@ -255,6 +61,7 @@ def grf_laplace(
     Kpart=None,
     Qw=None,
     Kwell=None,
+    cut_off_prec=1e-20,
 ):
     """
     A modified GRF-model for transient flow in Laplace-space
@@ -286,6 +93,9 @@ def grf_laplace(
         Pumpingrate at the well
     Twell : :class:`float`, optional
         Transmissivity at the well. Default: ``Tpart[0]``
+    cut_off_prec : :class:`float`, optional
+        Define a cut of precision for the calculation to select the disks
+        included in the calculation. Default ``1e-20``
 
     Returns
     -------
@@ -298,7 +108,6 @@ def grf_laplace(
     array([[ -2.71359196e+00,  -1.66671965e-01,  -2.82986917e-02],
            [ -4.58447458e-01,  -1.12056319e-02,  -9.85673855e-04]])
     """
-
     # ensure that input is treated as arrays
     s = np.squeeze(s).reshape(-1)
     rad = np.squeeze(rad).reshape(-1)
@@ -312,29 +121,20 @@ def grf_laplace(
     # the lateral extend is a bit subtle in fractured dimension
     lat_ext = float(lat_ext)
     Qw = float(Qw)
-
     # get the number of partitions
     parts = len(Kpart)
-
     # initialize the result
     res = np.zeros(s.shape + rad.shape)
-
     # set the conductivity at the well
     if Kwell is None:
         Kwell = Kpart[0]
-
     # the first sqrt of the diffusivity values
     diff_sr0 = np.sqrt(Spart[0] / Kpart[0])
-    # the pumping-condition
-    Q = Qw / (Kwell * sph_surf(dim) * lat_ext ** (3.0 - dim))
-
     # set the general pumping-condtion depending on the well-radius
     if rpart[0] > 0.0:
-        Q /= -diff_sr0 * rpart[0] ** (1 - nu)
-        Qs = Q * s ** (-1.5)
+        Qs = -s ** (-1.5) / diff_sr0 * rpart[0] ** (1 - nu)
     else:
-        Q *= (2 / diff_sr0) ** nu / gamma(1 - nu)
-        Qs = Q * s ** (-nu / 2 - 1)
+        Qs = (2 / diff_sr0) ** nu / gamma(1 - nu) * s ** (-nu / 2 - 1)
 
     # get the right modified bessel-functions according to the dimension
     # Jv0 = J(v) ; Jv1 = J(v-1) for J in [k, i]
@@ -342,25 +142,21 @@ def grf_laplace(
 
     # if there is a homgeneouse aquifer, compute the result by hand
     if parts == 1:
-        # calculate the square-root of the diffusivities
-        difsr = np.sqrt(Spart[0] / Kpart[0])
-
         # initialize the equation system
         V = np.zeros(2, dtype=float)
         M = np.eye(2, dtype=float)
 
         for si, se in enumerate(s):
-            Cs = np.sqrt(se) * difsr
-
+            Cs = np.sqrt(se) * diff_sr0
             # set the pumping-condition at the well
             V[0] = Qs[si]
-
             # incorporate the boundary-conditions
             if rpart[0] > 0.0:
                 M[0, :] = [-kv1(Cs * rpart[0]), iv1(Cs * rpart[0])]
             if rpart[-1] < np.inf:
                 M[1, :] = [kv0(Cs * rpart[-1]), iv0(Cs * rpart[-1])]
-
+            else:
+                M[0, 1] = 0  # Bs is 0 in this case either way
             # solve the equation system
             As, Bs = np.linalg.solve(M, V)
 
@@ -375,23 +171,19 @@ def grf_laplace(
     else:
         # initialize LHS and RHS for the linear equation system
         # Mb is the banded matrix for the Eq-System
-        V = np.zeros(2 * (parts))
-        Mb = np.zeros((5, 2 * (parts)))
-        # the positions of the diagonals of the matrix set in Mb
-        diagpos = [2, 1, 0, -1, -2]
+        V = np.zeros(2 * parts)
+        Mb = np.zeros((5, 2 * parts))
+        X = np.zeros(2 * parts)
         # set the standard boundary conditions for rwell=0.0 and rinf=np.inf
         Mb[2, 0] = 1.0
-        Mb[-3, -1] = 1.0
+        Mb[2, -1] = 1.0
 
         # calculate the consecutive fractions of the conductivities
         Kfrac = Kpart[:-1] / Kpart[1:]
-
         # calculate the square-root of the diffusivities
         difsr = np.sqrt(Spart / Kpart)
-
         # calculate a temporal substitution (factor from mass-conservation)
         tmp = Kfrac * difsr[:-1] / difsr[1:]
-
         # match the radii to the different disks
         pos = np.searchsorted(rpart, rad) - 1
 
@@ -402,14 +194,6 @@ def grf_laplace(
             # set the pumping-condition at the well
             # --> implement other pumping conditions
             V[0] = Qs[si]
-
-            # set the boundary-conditions if needed
-            if rpart[0] > 0.0:
-                Mb[2, 0] = -kv1(Cs[0] * rpart[0])
-                Mb[1, 1] = iv1(Cs[0] * rpart[0])
-            if rpart[-1] < np.inf:
-                Mb[-2, -2] = kv0(Cs[-1] * rpart[-1])
-                Mb[-3, -1] = iv0(Cs[-1] * rpart[-1])
 
             # generate the equation system as banded matrix
             for i in range(parts - 1):
@@ -428,32 +212,67 @@ def grf_laplace(
                 ]
                 Mb[4, 2 * i] = -tmp[i] * kv1(Cs[i] * rpart[i + 1])
 
-            # genearate the cooeficient matrix as a spare matrix
-            M = sps.spdiags(Mb, diagpos, 2 * parts, 2 * parts, format="csc")
+            # set the boundary-conditions if needed
+            if rpart[0] > 0.0:
+                Mb[2, 0] = -kv1(Cs[0] * rpart[0])
+                Mb[1, 1] = iv1(Cs[0] * rpart[0])
+            if rpart[-1] < np.inf:
+                Mb[-2, -2] = kv0(Cs[-1] * rpart[-1])
+                Mb[2, -1] = iv0(Cs[-1] * rpart[-1])
+            else:
+                # erase the last row, since X[-1] will be 0
+                Mb[0, -1] = 0
+                Mb[1, -1] = 0
 
-            # solve the Eq-Sys and ignore errors from the umf-pack
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", SlvWarn)
-                warnings.simplefilter("ignore", RuntimeWarning)
-                X = spsolve(M, V, use_umfpack=True)
+            # find first disk which has no impact
+            Mb_cond = np.max(np.abs(Mb), axis=0)
+            Mb_cond = np.logical_or(
+                Mb_cond < cut_off_prec, Mb_cond > 1 / cut_off_prec
+            )
+            cond = np.where(Mb_cond)[0]
+            found = cond.shape[0] > 0
+            first = cond[0] // 2 if found else parts
 
-            # to suppress numerical errors, set NAN values to 0
-            # --> the algorithm tends to violate small values,
-            #     therefore this approachu is suitable
-            X[np.logical_not(np.isfinite(X))] = 0.0
-
-            # calculate the head
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", RuntimeWarning)
-                res[si, :] = rad ** nu * (
-                    X[2 * pos] * kv0(Cs[pos] * rad)
-                    + X[2 * pos + 1] * iv0(Cs[pos] * rad)
+            # initialize coefficients
+            X[2 * first :] = 0.0
+            # only the first disk has an impact
+            if first <= 1:
+                M_sgl = np.eye(2, dtype=float)
+                M_sgl[:, 0] = Mb[2:4, 0]
+                M_sgl[:, 1] = Mb[1:3, 1]
+                # solve the equation system
+                try:
+                    X[:2] = np.linalg.solve(M_sgl, V[:2])
+                except np.linalg.LinAlgError:
+                    # set 0 if matrix singular
+                    X[:2] = 0
+            elif first > 1:
+                # shrink the matrix
+                M_sgl = Mb[:, : 2 * first]
+                if first < parts:
+                    M_sgl[-1, -1] = 0
+                    M_sgl[-2, -1] = 0
+                    M_sgl[-1, -2] = 0
+                X[: 2 * first] = solve(
+                    M_sgl, V[: 2 * first], is_flat=True, index_row_wise=False
                 )
+            np.nan_to_num(X, copy=False)
 
-        # set problematic values to 0
-        # --> the algorithm tends to violate small values,
-        #     therefore this approachu is suitable
-        res[np.logical_not(np.isfinite(res))] = 0.0
+            # calculate the head (ignore small values)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                k0_sub = X[2 * pos] * kv0(Cs[pos] * rad)
+                k0_sub[np.abs(X[2 * pos]) < cut_off_prec] = 0
+                i0_sub = X[2 * pos + 1] * iv0(Cs[pos] * rad)
+                i0_sub[np.abs(X[2 * pos + 1]) < cut_off_prec] = 0
+                res[si, :] = rad ** nu * (k0_sub + i0_sub)
+
+    # set problematic values to 0
+    # --> the algorithm tends to violate small values,
+    #     therefore this approach is suitable
+    np.nan_to_num(res, copy=False)
+    # scale to pumpingrate
+    res *= Qw / (Kwell * sph_surf(dim) * lat_ext ** (3.0 - dim))
 
     return res
 
