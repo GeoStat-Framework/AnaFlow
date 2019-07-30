@@ -12,6 +12,7 @@ The following functions are provided
    ext_theis2D
    ext_theis3D
 """
+# pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
@@ -33,7 +34,7 @@ __all__ = ["ext_thiem2D", "ext_thiem3D", "ext_theis2D", "ext_theis3D"]
 
 def ext_thiem2D(rad, Rref, TG, sig2, corr, Qw, href=0.0, Twell=None, prop=1.6):
     """
-    The extended Thiem solution in 2D
+    The extended Thiem solution in 2D.
 
     The extended Thiem solution for steady-state flow under
     a pumping condition in a confined aquifer.
@@ -89,6 +90,7 @@ def ext_thiem2D(rad, Rref, TG, sig2, corr, Qw, href=0.0, Twell=None, prop=1.6):
     >>> ext_thiem2D([1,2,3], 10, 0.001, 1, 10, -0.001)
     array([-0.53084596, -0.35363029, -0.25419375])
     """
+    rad = np.array(rad, dtype=float)
     # check the input
     if Rref <= 0.0:
         raise ValueError(
@@ -138,7 +140,7 @@ def ext_thiem3D(
     rad, Rref, KG, sig2, corr, e, Qw, L, href=0.0, Kwell="KH", prop=1.6
 ):
     """
-    The extended Thiem solution in 3D
+    The extended Thiem solution in 3D.
 
     The extended Thiem solution for steady-state flow under
     a pumping condition in a confined aquifer.
@@ -202,6 +204,7 @@ def ext_thiem3D(
     >>> ext_thiem3D([1,2,3], 10, 0.001, 1, 10, 1, -0.001, 1)
     array([-0.48828026, -0.31472059, -0.22043022])
     """
+    rad = np.array(rad, dtype=float)
     # check the input
     if Rref <= 0.0:
         raise ValueError(
@@ -285,7 +288,7 @@ def ext_theis2D(
     lap_kwargs=None,
 ):
     """
-    The extended Theis solution in 2D
+    The extended Theis solution in 2D.
 
     The extended Theis solution for transient flow under
     a pumping condition in a confined aquifer.
@@ -353,9 +356,9 @@ def ext_theis2D(
 
     Examples
     --------
-    >>> ext_theis2D([1,2,3], [10,100], 0.001, 1, 10, 0.001, -0.001)
-    array([[-0.3381231 , -0.17430066, -0.09492601],
-           [-0.58557452, -0.40907021, -0.31112835]])
+    >>> ext_theis2D([10,100], [1,2,3], 0.001, 1, 10, 0.001, -0.001)
+    array([[-0.33737576, -0.17400123, -0.09489812],
+           [-0.58443489, -0.40847176, -0.31095166]])
     """
     Input = Shaper(time, rad, struc_grid)
     lap_kwargs = {} if lap_kwargs is None else lap_kwargs
@@ -452,7 +455,7 @@ def ext_theis3D(
     lap_kwargs=None,
 ):
     """
-    The extended Theis solution in 3D
+    The extended Theis solution in 3D.
 
     The extended Theis solution for transient flow under
     a pumping condition in a confined aquifer.
@@ -528,9 +531,9 @@ def ext_theis3D(
 
     Examples
     --------
-    >>> ext_theis3D([1,2,3], [10,100], 0.001, 1, 10, 1, 0.001, -0.001, 1)
-    array([[-0.32845576, -0.16741654, -0.09134294],
-           [-0.54238241, -0.36982686, -0.27754856]])
+    >>> ext_theis3D([10,100], [1,2,3], 0.001, 1, 10, 1, 0.001, -0.001, 1)
+    array([[-0.32756786, -0.16717569, -0.09141211],
+           [-0.5416396 , -0.36982684, -0.27798614]])
     """
     Input = Shaper(time, rad, struc_grid)
     lap_kwargs = {} if lap_kwargs is None else lap_kwargs

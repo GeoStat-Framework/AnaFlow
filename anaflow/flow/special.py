@@ -9,7 +9,7 @@ The following functions are provided
 .. autosummary::
    grf_disk
 """
-
+# pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
@@ -37,7 +37,7 @@ def grf_disk(
     lap_kwargs=None,
 ):
     """
-    The extended "General radial flow" model for transient flow
+    The extended "General radial flow" model for transient flow.
 
     The general radial flow (GRF) model by Barker introduces an arbitrary
     dimension for radial groundwater flow. We introduced the possibility to

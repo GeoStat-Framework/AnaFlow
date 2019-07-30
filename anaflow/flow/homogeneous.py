@@ -11,7 +11,7 @@ The following functions are provided
    theis
    grf_model
 """
-
+# pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
@@ -30,7 +30,7 @@ __all__ = ["thiem", "theis", "grf_model"]
 
 def thiem(rad, Rref, T, Qw, href=0.0):
     """
-    The Thiem solution
+    The Thiem solution.
 
     The Thiem solution for steady-state flow under a pumping condition
     in a confined and homogeneous aquifer.
@@ -70,7 +70,6 @@ def thiem(rad, Rref, T, Qw, href=0.0):
     >>> thiem([1,2,3], 10, 0.001, -0.001)
     array([-0.3664678 , -0.25615   , -0.19161822])
     """
-
     rad = np.squeeze(rad)
 
     # check the input
@@ -104,7 +103,7 @@ def theis(
     lap_kwargs=None,
 ):
     """
-    The Theis solution
+    The Theis solution.
 
     The Theis solution for transient flow under a pumping condition
     in a confined and homogeneous aquifer.
@@ -192,7 +191,7 @@ def theis(
     res = np.zeros((Input.time_no, Input.rad_no))
     # call the grf-model
     lap_inv = get_lap_inv(grf_laplace, **kwargs)
-    res[Input.time > 0, :] = lap_inv(Input.time[Input.time > 0])
+    res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
     res = Input.reshape(res)
     if Qw > 0:
         res = np.maximum(res, 0)
@@ -218,7 +217,7 @@ def grf_model(
     lap_kwargs=None,
 ):
     """
-    The general radial flow (GRF) model for a pumping test
+    The general radial flow (GRF) model for a pumping test.
 
     This solution was  presented in [Barker88]_.
 
@@ -312,7 +311,7 @@ def grf_model(
     res = np.zeros((Input.time_no, Input.rad_no))
     # call the grf-model
     lap_inv = get_lap_inv(grf_laplace, **kwargs)
-    res[Input.time > 0, :] = lap_inv(Input.time[Input.time > 0])
+    res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
     res = Input.reshape(res)
     if Qw > 0:
         res = np.maximum(res, 0)

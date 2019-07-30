@@ -9,21 +9,21 @@ The following functions are provided
 .. autosummary::
    grf_laplace
 """
-
+# pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
 
 import warnings
 
 import numpy as np
 from scipy.special import k0, k1, kn, kv, i0, i1, iv, gamma
-from anaflow.tools.special import sph_surf
 from pentapy import solve
+from anaflow.tools.special import sph_surf
 
 __all__ = ["grf_laplace"]
 
 
 def get_bessel_prec(nu):
-    """Get the right bessel functions for the GRF-model"""
+    """Get the right bessel functions for the GRF-model."""
     if np.isclose(nu, 0):
         kv0 = lambda x: k0(x)
         kv1 = lambda x: k1(x)
@@ -43,7 +43,7 @@ def get_bessel_prec(nu):
 
 
 def get_bessel(nu):
-    """Get the right bessel functions for the GRF-model"""
+    """Get the right bessel functions for the GRF-model."""
     kv0 = lambda x: kv(nu, x)
     kv1 = lambda x: kv(nu - 1, x)
     iv0 = lambda x: iv(nu, x)
@@ -64,7 +64,7 @@ def grf_laplace(
     cut_off_prec=1e-20,
 ):
     """
-    A modified GRF-model for transient flow in Laplace-space
+    A modified GRF-model for transient flow in Laplace-space.
 
     The General Radial Flow (GRF) Model allowes fractured dimensions for
     transient flow under a pumping condition
@@ -94,7 +94,7 @@ def grf_laplace(
     Twell : :class:`float`, optional
         Transmissivity at the well. Default: ``Tpart[0]``
     cut_off_prec : :class:`float`, optional
-        Define a cut of precision for the calculation to select the disks
+        Define a cut-off precision for the calculation to select the disks
         included in the calculation. Default ``1e-20``
 
     Returns
@@ -105,8 +105,8 @@ def grf_laplace(
     Examples
     --------
     >>> grf_laplace([5,10],[1,2,3], 2, 1, [0,2,10],[1e-3,1e-3],[1e-3,2e-3],-1)
-    array([[ -2.71359196e+00,  -1.66671965e-01,  -2.82986917e-02],
-           [ -4.58447458e-01,  -1.12056319e-02,  -9.85673855e-04]])
+    array([[-2.71359196e+00, -1.66671965e-01, -2.82986917e-02],
+           [-4.58447458e-01, -1.12056319e-02, -9.85673855e-04]])
     """
     # ensure that input is treated as arrays
     s = np.squeeze(s).reshape(-1)
