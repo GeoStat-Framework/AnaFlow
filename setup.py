@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" AnaFlow - analytical solutions for the groundwater-flow equation"""
+"""AnaFlow - analytical solutions for the groundwater-flow equation."""
 
 import os
 import codecs
@@ -12,14 +12,14 @@ from setuptools import setup, find_packages
 
 
 def read(*parts):
-    """read file data"""
+    """Read file data."""
     here = os.path.abspath(os.path.dirname(__file__))
     with codecs.open(os.path.join(here, *parts), "r") as fp:
         return fp.read()
 
 
 def find_version(*file_paths):
-    """find version without importing module"""
+    """Find version without importing module."""
     version_file = read(*file_paths)
     version_match = re.search(
         r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M
@@ -34,26 +34,26 @@ def find_version(*file_paths):
 
 DOCLINES = __doc__.split("\n")
 README = open("README.md").read()
-CLASSIFIERS = """\
-Development Status :: 3 - Alpha
-Intended Audience :: Developers
-Intended Audience :: End Users/Desktop
-Intended Audience :: Science/Research
-License :: OSI Approved :: GNU General Public License v3 (GPLv3)
-Natural Language :: English
-Operating System :: MacOS
-Operating System :: MacOS :: MacOS X
-Operating System :: Microsoft
-Operating System :: Microsoft :: Windows
-Operating System :: POSIX
-Operating System :: Unix
-Programming Language :: Python
-Programming Language :: Python :: 2
-Programming Language :: Python :: 3
-Topic :: Scientific/Engineering
-Topic :: Software Development
-Topic :: Utilities
-"""
+CLASSIFIERS = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
+]
 
 VERSION = find_version("anaflow", "_version.py")
 
@@ -68,13 +68,13 @@ setup(
     author="Sebastian Mueller",
     author_email="sebastian.mueller@ufz.de",
     url='https://github.com/GeoStat-Framework/AnaFlow',
-    license='GPL - see LICENSE',
-    classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
+    license="MIT",
+    classifiers=CLASSIFIERS,
     platforms=["Windows", "Linux", "Mac OS-X"],
     include_package_data=True,
     install_requires=[
-        'numpy >= 1.13.0',
-        'scipy >= 0.19.1',
+        "numpy>=1.14.5",
+        "scipy>=1.1.0",
         'pentapy',
     ],
     packages=find_packages(exclude=['tests*', 'docs*']),
