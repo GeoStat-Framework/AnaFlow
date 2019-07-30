@@ -396,7 +396,10 @@ def ext_theis2D(
     # genearte rlast from a given relativ-error to farfield-transmissivity
     rlast = T_CG_error(T_err, TG, sig2, corr, prop, Twell)
     # generate the partition points
-    rpart = specialrange_cut(rwell, rinf, parts + 1, rlast)
+    if rlast > 0.0:
+        rpart = specialrange_cut(rwell, rinf, parts + 1, rlast)
+    else:
+        rpart = np.array([rwell, rinf])
     # calculate the harmonic mean transmissivity values within each partition
     Tpart = rad_hmean_func(
         T_CG, rpart, TG=TG, sig2=sig2, corr=corr, prop=prop, Twell=Twell
@@ -577,7 +580,10 @@ def ext_theis3D(
     # genearte rlast from a given relativ-error to farfield-conductivity
     rlast = K_CG_error(K_err, KG, sig2, corr, e, prop, Kwell=Kwell)
     # generate the partition points
-    rpart = specialrange_cut(rwell, rinf, parts + 1, rlast)
+    if rlast > 0.0:
+        rpart = specialrange_cut(rwell, rinf, parts + 1, rlast)
+    else:
+        rpart = np.array([rwell, rinf])
     # calculate the harmonic mean conductivity values within each partition
     Kpart = rad_hmean_func(
         K_CG, rpart, KG=KG, sig2=sig2, corr=corr, e=e, prop=prop, Kwell=Kwell
