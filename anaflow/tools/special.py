@@ -484,7 +484,9 @@ def grf(time, rad, K, S, Qw, dim=2, lat_ext=1.0, struc_grid=True, hinf=0.0):
     res = np.zeros((Input.time_no, Input.rad_no))
     res[Input.time > 0, :] = inc_gamma(-nu, u)
     res[Input.time > 0, :] *= (
-        Qw / (4.0 * np.pi ** (1 - nu) * K * lat_ext) * rad_mat ** (2 * nu)
+        Qw
+        / (4.0 * np.pi ** (1 - nu) * K * lat_ext ** (3.0 - dim))
+        * rad_mat ** (2 * nu)
     )
     res = Input.reshape(res)
     if Qw > 0:
