@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Anaflow subpackage providing special functions
+Anaflow subpackage providing special functions.
 
 .. currentmodule:: anaflow.tools.special
 
@@ -21,7 +21,7 @@ The following functions are provided
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
-from scipy.special import gamma, gammaincc, exp1, expn
+from scipy.special import gamma, gammaincc, exp1, expn, hyp2f1
 
 __all__ = [
     "Shaper",
@@ -36,7 +36,7 @@ __all__ = [
 
 
 class Shaper(object):
-    """A class to reshape radius-time input-output in a good way"""
+    """A class to reshape radius-time input-output in a good way."""
 
     def __init__(self, time, rad, struc_grid):
         self.time_scalar = np.isscalar(time)
@@ -56,6 +56,14 @@ class Shaper(object):
         self.rad_min = np.min(self.rad)
         self.rad_max = np.max(self.rad)
 
+        self.time_gz = self.time > 0
+        self.time_mat = np.outer(
+            self.time[self.time_gz], np.ones_like(self.rad)
+        )
+        self.rad_mat = np.outer(
+            np.ones_like(self.time[self.time_gz]), self.rad
+        )
+
         if not self.struc_grid and not self.rad_shape == self.time_shape:
             raise ValueError("No struc_grid: shape of time & radius differ")
         if np.any(self.time < 0.0):
@@ -64,6 +72,7 @@ class Shaper(object):
             raise ValueError("The given radii need to be non-negative.")
 
     def reshape(self, result):
+        """Reshape a time-rad result according to the input shape."""
         np.asanyarray(result)
         if self.struc_grid:
             result = result.reshape(self.time_shape + self.rad_shape)
@@ -75,9 +84,11 @@ class Shaper(object):
 
 
 def shift_banded(mat, up, low, col_to_row=True, copy=True):
-    """Shift row of a banded matrix
+    """
+    Shift row of a banded matrix.
 
-    Either from row-wise to column-wise storage or vice versa"""
+    Either from row-wise to column-wise storage or vice versa
+    """
     if copy:
         mat_flat = np.copy(mat)
     else:
@@ -96,13 +107,13 @@ def shift_banded(mat, up, low, col_to_row=True, copy=True):
 
 
 def sph_surf(dim):
-    """surface of the d-dimensional sphere"""
+    """Surface of the d-dimensional sphere."""
     return 2.0 * np.sqrt(np.pi) ** dim / gamma(dim / 2.0)
 
 
 def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
     """
-    Calculation of specific point distributions
+    Calculation of specific point distributions.
 
     Calculation of specific point distributions for the diskmodel.
 
@@ -131,7 +142,6 @@ def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
     >>> radii(2)
     (array([   0.,  500.,   inf]), array([  0.,  inf]))
     """
-
     if typ == "log":
         if rinf == np.inf:
             # define the partition radii
@@ -171,7 +181,7 @@ def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
 
 def specialrange(val_min, val_max, steps, typ="log"):
     """
-    Calculation of special point ranges
+    Calculation of special point ranges.
 
     Parameters
     ----------
@@ -203,7 +213,6 @@ def specialrange(val_min, val_max, steps, typ="log"):
     >>> specialrange(1,10,4)
     array([  1.        ,   2.53034834,   5.23167968,  10.        ])
     """
-
     if typ in ["logarithmic", "log"]:
         rng = np.expm1(
             np.linspace(np.log1p(val_min), np.log1p(val_max), steps)
@@ -234,7 +243,7 @@ def specialrange(val_min, val_max, steps, typ="log"):
 
 def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
     """
-    Calculation of special point ranges
+    Calculation of special point ranges.
 
     Calculation of special point ranges with a cut-off value.
 
@@ -271,7 +280,6 @@ def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
     >>> specialrange_cut(1,10,4)
     array([  1.        ,   2.53034834,   5.23167968,  10.        ])
     """
-
     if val_max > val_cut:
         rng = specialrange(val_min, val_cut, steps - 1, typ)
         return np.hstack((rng, val_max))
@@ -281,7 +289,7 @@ def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
 
 def aniso(e):
     """
-    The anisotropy function
+    The anisotropy function.
 
     Known from ''Dagan (1989)''[R2]_.
 
@@ -311,7 +319,6 @@ def aniso(e):
     >>> aniso(0.5)
     0.23639985871871511
     """
-
     if not 0.0 <= e <= 1.0:
         raise ValueError("Anisotropieratio 'e' must be within 0 and 1")
 
@@ -333,7 +340,7 @@ def aniso(e):
 
 def well_solution(time, rad, T, S, Qw, struc_grid=True, hinf=0.0):
     """
-    The classical Theis solution
+    The classical Theis solution.
 
     The classical Theis solution for transient flow under a pumping condition
     in a confined and homogeneous aquifer.
@@ -405,11 +412,11 @@ def well_solution(time, rad, T, S, Qw, struc_grid=True, hinf=0.0):
     if not S > 0.0:
         raise ValueError("The Storage needs to be positiv")
 
-    time_mat = np.outer(Input.time[Input.time > 0], np.ones_like(Input.rad))
-    rad_mat = np.outer(np.ones_like(Input.time[Input.time > 0]), Input.rad)
+    time_mat = Input.time_mat
+    rad_mat = Input.rad_mat
 
     res = np.zeros((Input.time_no, Input.rad_no))
-    res[Input.time > 0, :] = (
+    res[Input.time_gz, :] = (
         Qw / (4.0 * np.pi * T) * exp1(rad_mat ** 2 * S / (4 * T * time_mat))
     )
     res = Input.reshape(res)
@@ -424,7 +431,7 @@ def well_solution(time, rad, T, S, Qw, struc_grid=True, hinf=0.0):
 
 def grf(time, rad, K, S, Qw, dim=2, lat_ext=1.0, struc_grid=True, hinf=0.0):
     """
-    The general radial flow (GRF) model for a pumping test
+    The general radial flow (GRF) model for a pumping test.
 
     Parameters
     ----------
@@ -476,14 +483,14 @@ def grf(time, rad, K, S, Qw, dim=2, lat_ext=1.0, struc_grid=True, hinf=0.0):
     if not S > 0.0:
         raise ValueError("The Storage needs to be positiv")
 
-    time_mat = np.outer(Input.time[Input.time > 0], np.ones_like(Input.rad))
-    rad_mat = np.outer(np.ones_like(Input.time[Input.time > 0]), Input.rad)
+    time_mat = Input.time_mat
+    rad_mat = Input.rad_mat
     u = S * rad_mat ** 2 / (4 * K * time_mat)
     nu = 1.0 - dim / 2.0
 
     res = np.zeros((Input.time_no, Input.rad_no))
-    res[Input.time > 0, :] = inc_gamma(-nu, u)
-    res[Input.time > 0, :] *= (
+    res[Input.time_gz, :] = inc_gamma(-nu, u)
+    res[Input.time_gz, :] *= (
         Qw
         / (4.0 * np.pi ** (1 - nu) * K * lat_ext ** (3.0 - dim))
         * rad_mat ** (2 * nu)
@@ -499,7 +506,7 @@ def grf(time, rad, K, S, Qw, dim=2, lat_ext=1.0, struc_grid=True, hinf=0.0):
 
 
 def inc_gamma(s, x):
-    r"""The (upper) incomplete gamma function
+    r"""The (upper) incomplete gamma function.
 
     Given by: :math:`\Gamma(s,x) = \int_x^{\infty} t^{s-1}\,e^{-t}\,{\rm d}t`
 
@@ -517,6 +524,17 @@ def inc_gamma(s, x):
     if s < 0:
         return (inc_gamma(s + 1, x) - x ** s * np.exp(-x)) / s
     return gamma(s) * gammaincc(s, x)
+
+
+def tpl_hyp(rad, dim, hurst, corr, prop):
+    """Hyp_2F1 for the TPL CG model."""
+    rad = np.array(rad, dtype=np.double)
+    z_gz = (corr / (prop * rad[rad > 0])) ** 2
+    x = np.ones_like(rad)
+    x[rad > 0] = z_gz / (z_gz + 1.0)
+    return x ** (dim / 2.0) * hyp2f1(
+        dim / 2.0, 1.0, dim / 2.0 + 1.0 + hurst, x
+    )
 
 
 if __name__ == "__main__":

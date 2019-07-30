@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Anaflow subpackage providing several helper functions related to coarse graining.
+Anaflow subpackage providing helper functions related to coarse graining.
 
 .. currentmodule:: anaflow.tools.coarse_graining
 
@@ -15,12 +15,13 @@ The following functions are provided
    K_CG_inverse
    K_CG_error
 """
-
+# pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
+from scipy.optimize import root
 
-from anaflow.tools.special import aniso
+from anaflow.tools.special import aniso, tpl_hyp
 
 __all__ = [
     "T_CG",
@@ -34,7 +35,7 @@ __all__ = [
 
 def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
     """
-    The coarse-graining Transmissivity
+    The coarse-graining Transmissivity.
 
     This solution was presented in ''Schneider & Attinger 2008''[R3]_.
 
@@ -74,9 +75,8 @@ def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
     Examples
     --------
     >>> T_CG([1,2,3], 0.001, 1, 10, 2)
-    array([ 0.00061831,  0.00064984,  0.00069236])
+    array([0.00061831, 0.00064984, 0.00069236])
     """
-
     rad = np.squeeze(rad)
 
     if Twell is not None:
@@ -89,7 +89,7 @@ def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
 
 def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
     """
-    The inverse coarse-graining Transmissivity
+    The inverse coarse-graining Transmissivity.
 
     See: :func:`T_CG`
 
@@ -118,9 +118,8 @@ def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
     Examples
     --------
     >>> T_CG_inverse([7e-4,8e-4,9e-4], 0.001, 1, 10, 2)
-    array([ 3.16952925,  5.56935826,  9.67679026])
+    array([3.16952925, 5.56935826, 9.67679026])
     """
-
     T = np.squeeze(T)
 
     if Twell is not None:
@@ -133,7 +132,7 @@ def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
 
 def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
     """
-    Calculating the radial-point for given error
+    Calculating the radial-point for given error.
 
     Calculating the radial-point where the relative error of the farfield
     value is less than the given tollerance.
@@ -163,9 +162,8 @@ def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
     Examples
     --------
     >>> T_CG_error(0.01, 0.001, 1, 10, 2)
-    34.910450167790387
+    34.91045016779039
     """
-
     if Twell is not None:
         chi = np.log(Twell) - np.log(TG)
     else:
@@ -176,16 +174,16 @@ def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
             return (corr / prop) * np.sqrt(chi / np.log(1.0 + err) - 1.0)
         # standard value if the error is less then the variation
         return 1.0
-    else:
-        if chi / np.log(1.0 - err) >= 1.0:
-            return (corr / prop) * np.sqrt(chi / np.log(1.0 - err) - 1.0)
-        # standard value if the error is less then the variation
-        return 1.0
+
+    if chi / np.log(1.0 - err) >= 1.0:
+        return (corr / prop) * np.sqrt(chi / np.log(1.0 - err) - 1.0)
+    # standard value if the error is less then the variation
+    return 1.0
 
 
 def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     """
-    The coarse-graining conductivity
+    The coarse-graining conductivity.
 
     This solution was presented in ''Zech 2013''[R8]_.
 
@@ -232,9 +230,8 @@ def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     Examples
     --------
     >>> K_CG([1,2,3], 0.001, 1, 10, 1, 2)
-    array([ 0.00063008,  0.00069285,  0.00077595])
+    array([0.00063008, 0.00069285, 0.00077595])
     """
-
     rad = np.squeeze(rad)
 
     Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
@@ -252,7 +249,7 @@ def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
 
 def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     """
-    The inverse coarse-graining conductivity
+    The inverse coarse-graining conductivity.
 
     See: :func:`K_CG`
 
@@ -285,9 +282,8 @@ def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     Examples
     --------
     >>> K_CG_inverse([7e-4,8e-4,9e-4], 0.001, 1, 10, 1, 2)
-    array([ 2.09236867,  3.27914996,  4.52143956])
+    array([2.09236867, 3.27914996, 4.52143956])
     """
-
     K = np.squeeze(K)
 
     Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
@@ -308,7 +304,7 @@ def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
 
 def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     """
-    Calculating the radial-point for given error
+    Calculating the radial-point for given error.
 
     Calculating the radial-point where the relative error of the farfield
     value is less than the given tollerance.
@@ -344,7 +340,6 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     >>> K_CG_error(0.01, 0.001, 1, 10, 1, 2)
     19.612796453639845
     """
-
     Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
     if Kwell == "KH":
         chi = sig2 * (aniso(e) - 1.0)
@@ -362,13 +357,129 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
             )
         # standard value if the error is less then the variation
         return 1.0
+
+    if chi / np.log(1.0 - err) >= 1.0:
+        return coef * np.sqrt((chi / np.log(1.0 - err)) ** (2.0 / 3.0) - 1.0)
+    # standard value if the error is less then the variation
+    return 1.0
+
+
+def TPL_CG(
+    rad, KG, corr, hurst, c=1.0, dim=2.0, prop=1.6, sig2=None, Kwell="KH"
+):
+    """
+    The truncated power-law coarse-graining conductivity.
+
+    Parameters
+    ----------
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    KG : :class:`float`
+        Geometric-mean conductivity-distribution
+    corr : :class:`float`
+        corralation-length of conductivity-distribution
+    c : :class:`float`
+        Intensity of variation in the TPL model.
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+    hurst: :class:`float`
+        Hurst coefficient of the TPL model. Should be in (0, 1).
+    sig2: :class:`float` or :any:`None`
+        If sig2 is given, c will be calculated accordingly.
+        Default: :any:`None`
+    Kwell :  :class:`str` or  :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``),
+        the arithmetic mean (``"KA"``) or an arbitrary float
+        value. Default: ``"KH"``
+
+    Returns
+    -------
+    TPL_CG : :class:`numpy.ndarray`
+        Array containing the effective conductivity values.
+    """
+    rad = np.squeeze(rad)
+    sig2 = c * corr ** (2 * hurst) / (2 * hurst) if sig2 is None else sig2
+    Kefu = KG * np.exp(sig2 * (0.5 - 1.0 / dim))
+    if Kwell == "KH":
+        chi = sig2 * (1.0 / dim - 1.0)
+    elif Kwell == "KA":
+        chi = sig2 * 1.0 / dim
     else:
-        if chi / np.log(1.0 - err) >= 1.0:
-            return coef * np.sqrt(
-                (chi / np.log(1.0 - err)) ** (2.0 / 3.0) - 1.0
-            )
-        # standard value if the error is less then the variation
+        chi = np.log(Kwell) - np.log(Kefu)
+
+    return Kefu * np.exp(
+        (chi * 2.0 * hurst / (dim + 2.0 * hurst))
+        * tpl_hyp(rad, dim, hurst, corr, prop)
+    )
+
+
+def TPL_CG_error(
+    err, KG, corr, hurst, c=1.0, dim=2.0, prop=1.6, sig2=None, Kwell="KH"
+):
+    """
+    Calculating the radial-point for given error.
+
+    Calculating the radial-point where the relative error of the farfield
+    value is less than the given tollerance.
+    See: :func:`TPL_CG`
+
+    Parameters
+    ----------
+    err : :class:`float`
+        Given relative error for the farfield conductivity
+    KG : :class:`float`
+        Geometric-mean conductivity-distribution
+    corr : :class:`float`
+        corralation-length of conductivity-distribution
+    c : :class:`float`
+        Intensity of variation in the TPL model.
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+    hurst: :class:`float`
+        Hurst coefficient of the TPL model. Should be in (0, 1).
+    sig2: :class:`float` or :any:`None`
+        If sig2 is given, c will be calculated accordingly.
+        Default: :any:`None`
+    Kwell :  :class:`str` or  :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``),
+        the arithmetic mean (``"KA"``) or an arbitrary float
+        value. Default: ``"KH"``
+
+    Returns
+    -------
+    rad : :class:`float`
+        Radial point, where the relative error is less than the given one.
+    """
+    sig2 = c * corr ** (2 * hurst) / (2 * hurst) if sig2 is None else sig2
+    Kefu = KG * np.exp(sig2 * (0.5 - 1.0 / dim))
+    if Kwell == "KH":
+        chi = sig2 * (1.0 / dim - 1.0)
+    elif Kwell == "KA":
+        chi = sig2 * 1.0 / dim
+    else:
+        chi = np.log(Kwell) - np.log(Kefu)
+    Kw = np.exp(chi + np.log(Kefu))
+    # define a curve, that has its root at the wanted point
+    if chi > 0:
+        per = (1 + err) * Kefu
+        if not per < Kw:
+            return 1.0
+    elif chi < 0:
+        per = (1 - err) * Kefu
+        if not per > Kw:
+            return 1.0
+    else:
         return 1.0
+
+    def curve(x):
+        """Curve for fitting."""
+        return TPL_CG(x, KG, corr, hurst, c, dim, prop, sig2, Kwell) - per
+
+    return root(curve, corr ** (2 * hurst))["x"][0]
 
 
 if __name__ == "__main__":
