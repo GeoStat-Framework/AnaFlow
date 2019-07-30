@@ -177,12 +177,12 @@ def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
         if chi / np.log(1.0 + err) >= 1.0:
             return (corr / prop) * np.sqrt(chi / np.log(1.0 + err) - 1.0)
         # standard value if the error is less then the variation
-        return 1.0
+        return 0
 
     if chi / np.log(1.0 - err) >= 1.0:
         return (corr / prop) * np.sqrt(chi / np.log(1.0 - err) - 1.0)
     # standard value if the error is less then the variation
-    return 1.0
+    return 0
 
 
 def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
@@ -360,16 +360,16 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
                 (chi / np.log(1.0 + err)) ** (2.0 / 3.0) - 1.0
             )
         # standard value if the error is less then the variation
-        return 1.0
+        return 0
 
     if chi / np.log(1.0 - err) >= 1.0:
         return coef * np.sqrt((chi / np.log(1.0 - err)) ** (2.0 / 3.0) - 1.0)
     # standard value if the error is less then the variation
-    return 1.0
+    return 0
 
 
 def TPL_CG(
-    rad, KG, corr, hurst, c=1.0, dim=2.0, prop=1.6, sig2=None, Kwell="KH"
+    rad, KG, corr, hurst, c=1.0, dim=2.0, prop=1.6, sig2=None, Kwell="KH", e=1
 ):
     """
     The truncated power-law coarse-graining conductivity.
@@ -397,6 +397,10 @@ def TPL_CG(
         harmonic mean (``"KH"``),
         the arithmetic mean (``"KA"``) or an arbitrary float
         value. Default: ``"KH"``
+    e : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        This is only applied in 3 dimensions.
+        Default: 1.0
 
     Returns
     -------
@@ -404,23 +408,27 @@ def TPL_CG(
         Array containing the effective conductivity values.
     """
     rad = np.squeeze(rad)
+    # handle special case in 3D with anisotropy
+    e = 1.0 if not np.isclose(dim, 3) else e
+    ani = aniso(e) if np.isclose(dim, 3) else 1.0 / dim
     sig2 = c * corr ** (2 * hurst) / (2 * hurst) if sig2 is None else sig2
-    Kefu = KG * np.exp(sig2 * (0.5 - 1.0 / dim))
+    Kefu = KG * np.exp(sig2 * (0.5 - ani))
+
     if Kwell == "KH":
-        chi = sig2 * (1.0 / dim - 1.0)
+        chi = sig2 * (ani - 1.0)
     elif Kwell == "KA":
-        chi = sig2 * 1.0 / dim
+        chi = sig2 * ani
     else:
         chi = np.log(Kwell) - np.log(Kefu)
 
     return Kefu * np.exp(
         (chi * 2.0 * hurst / (dim + 2.0 * hurst))
-        * tpl_hyp(rad, dim, hurst, corr, prop)
+        * tpl_hyp(rad, dim, hurst, corr * e ** (1 / 3.0), prop)
     )
 
 
 def TPL_CG_error(
-    err, KG, corr, hurst, c=1.0, dim=2.0, prop=1.6, sig2=None, Kwell="KH"
+    err, KG, corr, hurst, c=1.0, dim=2.0, prop=1.6, sig2=None, Kwell="KH", e=1
 ):
     """
     Calculating the radial-point for given error.
@@ -452,38 +460,47 @@ def TPL_CG_error(
         harmonic mean (``"KH"``),
         the arithmetic mean (``"KA"``) or an arbitrary float
         value. Default: ``"KH"``
+    e : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        This is only applied in 3 dimensions.
+        Default: 1.0
 
     Returns
     -------
     rad : :class:`float`
         Radial point, where the relative error is less than the given one.
     """
+    # handle special case in 3D with anisotropy
+    e = 1.0 if not np.isclose(dim, 3) else e
+    ani = aniso(e) if np.isclose(dim, 3) else 1.0 / dim
     sig2 = c * corr ** (2 * hurst) / (2 * hurst) if sig2 is None else sig2
-    Kefu = KG * np.exp(sig2 * (0.5 - 1.0 / dim))
+    Kefu = KG * np.exp(sig2 * (0.5 - ani))
+
     if Kwell == "KH":
-        chi = sig2 * (1.0 / dim - 1.0)
+        chi = sig2 * (ani - 1.0)
     elif Kwell == "KA":
-        chi = sig2 * 1.0 / dim
+        chi = sig2 * ani
     else:
         chi = np.log(Kwell) - np.log(Kefu)
     Kw = np.exp(chi + np.log(Kefu))
+
     # define a curve, that has its root at the wanted point
     if chi > 0:
         per = (1 + err) * Kefu
         if not per < Kw:
-            return 1.0
+            return 0
     elif chi < 0:
         per = (1 - err) * Kefu
         if not per > Kw:
-            return 1.0
+            return 0
     else:
-        return 1.0
+        return 0
 
     def curve(x):
         """Curve for fitting."""
-        return TPL_CG(x, KG, corr, hurst, c, dim, prop, sig2, Kwell) - per
+        return TPL_CG(x, KG, corr, hurst, c, dim, prop, sig2, Kwell, e) - per
 
-    return root(curve, corr ** (2 * hurst))["x"][0]
+    return root(curve, 2 * corr)["x"][0]
 
 
 if __name__ == "__main__":
