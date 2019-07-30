@@ -25,7 +25,7 @@ __all__ = ["get_lap", "lap_trans", "get_lap_inv", "stehfest"]
 
 def get_lap(func, arg_dict=None, **kwargs):
     """
-    Callable Laplace transform
+    Callable Laplace transform.
 
     Get the Laplace transform of a given function as a callable function.
 
@@ -71,7 +71,7 @@ def get_lap(func, arg_dict=None, **kwargs):
 
 def lap_trans(func, phase, arg_dict=None, **kwargs):
     """
-    The laplace transform
+    The laplace transform.
 
     Parameters
     ----------
@@ -119,12 +119,10 @@ def lap_trans(func, phase, arg_dict=None, **kwargs):
     phase = np.array(phase, dtype=float)
     result = np.zeros_like(phase)
 
-    def make_integrand(ph):
+    def make_integrand(phase):
         def integrand(val):
-            """
-            Integrand for the laplace transform
-            """
-            return np.exp(-ph * val) * func(val, **kwargs)
+            """Integrand for the laplace transform."""
+            return np.exp(-phase * val) * func(val, **kwargs)
 
         return integrand
 
@@ -143,7 +141,7 @@ def get_lap_inv(
     func, method="stehfest", method_dict=None, arg_dict=None, **kwargs
 ):
     """
-    Callable Laplace inversion
+    Callable Laplace inversion.
 
     Get the Laplace inversion of a given function as a callable function.
 
@@ -210,25 +208,25 @@ def get_lap_inv(
 
 
 def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
-    """
-    The stehfest-algorithm for numerical laplace inversion
+    r"""
+    The stehfest-algorithm for numerical laplace inversion.
 
     The Inversion was derivide in ''Stehfest 1970''[R1]_
     and is given by the formula
 
     .. math::
-       f\\left(t\\right) &=\\frac{\\ln2}{t}\\sum_{n=1}^{N}c_{n}\\cdot\\tilde{f}
-       \\left(n\\cdot\\frac{\\ln2}{t}\\right)\\\\
-       c_{n} &=\\left(-1\\right)^{n+\\frac{N}{2}}\\cdot
-       \\sum_{k=\\left\\lfloor \\frac{n+1}{2}\\right\\rfloor }
-       ^{\\min\\left\\{ n,\\frac{N}{2}\\right\\} }
-       \\frac{k^{\\frac{N}{2}+1}\\cdot\\binom{2k}{k}}
-       {\\left(\\frac{N}{2}-k\\right)!\\cdot\\left(n-k\\right)!
-       \\cdot\\left(2k-n\\right)!}
+       f\left(t\right) &=\frac{\ln2}{t}\sum_{n=1}^{N}c_{n}\cdot\tilde{f}
+       \left(n\cdot\frac{\ln2}{t}\right)\\
+       c_{n} &=\left(-1\right)^{n+\frac{N}{2}}\cdot
+       \sum_{k=\left\lfloor \frac{n+1}{2}\right\rfloor }
+       ^{\min\left\{ n,\frac{N}{2}\right\} }
+       \frac{k^{\frac{N}{2}+1}\cdot\binom{2k}{k}}
+       {\left(\frac{N}{2}-k\right)!\cdot\left(n-k\right)!
+       \cdot\left(2k-n\right)!}
 
     In the algorithm
     :math:`N` corresponds to ``bound``,
-    :math:`\\tilde{f}` to ``func`` and
+    :math:`\tilde{f}` to ``func`` and
     :math:`t` to ``time``.
 
     Parameters
@@ -289,7 +287,6 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
     >>> stehfest(f, [1,10,100])
     array([ 1.,  1.,  1.])
     """
-
     if arg_dict is None:
         arg_dict = {}
     kwargs.update(arg_dict)

@@ -13,7 +13,7 @@ The following functions are provided
    rad_hmean_func
    rad_pmean_func
 """
-
+# pylint: disable=E1137, C0103
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
@@ -29,15 +29,15 @@ __all__ = [
 
 
 def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
-    """
-    Calculating the arithmetic mean
+    r"""
+    Calculating the arithmetic mean.
 
     Calculating the arithmetic mean of a radial symmetric function
     for given consecutive radii defining 2D disks by the following formula
 
     .. math::
-       f_i=\\frac{2}{r_{i+1}^2-r_i^2}
-       \\intop^{r_{i+1}}_{r_i} r\\cdot f(r)\\, dr
+       f_i=\frac{2}{r_{i+1}^2-r_i^2}
+       \intop^{r_{i+1}}_{r_i} r\cdot f(r)\, dr
 
     Parameters
     ----------
@@ -98,14 +98,10 @@ def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
 
     # dummy function defining the needed integrand
     def _step(func, kwargs):
-        """
-        dummy function providing the integrand
-        """
+        """Dummy function providing the integrand."""
 
         def integrand(val):
-            """
-            Integrand for the geometric mean ``r*log(f(r))``
-            """
+            """Integrand for the geometric mean ``r*log(f(r))``."""
             return 2 * val * func(val, **kwargs)
 
         return integrand
@@ -128,15 +124,15 @@ def rad_amean_func(func, val_arr, arg_dict=None, **kwargs):
 
 
 def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
-    """
-    Calculating the geometric mean
+    r"""
+    Calculating the geometric mean.
 
     Calculating the geometric meanof a radial symmetric function
     for given consecutive radii defining 2D disks by the following formula
 
     .. math::
-       f_i=\\exp\\left(\\frac{2}{r_{i+1}^2-r_i^2}
-       \\intop^{r_{i+1}}_{r_i} r\\cdot\\ln(f(r))\\, dr\\right)
+       f_i=\exp\left(\frac{2}{r_{i+1}^2-r_i^2}
+       \intop^{r_{i+1}}_{r_i} r\cdot\ln(f(r))\, dr\right)
 
     Parameters
     ----------
@@ -181,7 +177,6 @@ def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
     >>> rad_gmean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
     """
-
     if arg_dict is None:
         arg_dict = {}
     kwargs.update(arg_dict)
@@ -198,14 +193,10 @@ def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
 
     # dummy function defining the needed integrand
     def _step(func, kwargs):
-        """
-        dummy function providing the integrand
-        """
+        """Dummy function providing the integrand."""
 
         def integrand(val):
-            """
-            Integrand for the geometric mean ``r*log(f(r))``
-            """
+            """Integrand for the geometric mean ``r*log(f(r))``."""
             return 2 * val * np.log(func(val, **kwargs))
 
         return integrand
@@ -230,15 +221,15 @@ def rad_gmean_func(func, val_arr, arg_dict=None, **kwargs):
 
 
 def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
-    """
-    Calculating the harmonic mean
+    r"""
+    Calculating the harmonic mean.
 
     Calculating the harmonic mean of a radial symmetric function
     for given consecutive radii defining 2D disks by the following formula
 
     .. math::
-       f_i=\\left(\\frac{2}{r_{i+1}^2-r_i^2}
-       \\intop^{r_{i+1}}_{r_i} r\\cdot(f(r))^{-1}\\, dr\\right)^{-1}
+       f_i=\left(\frac{2}{r_{i+1}^2-r_i^2}
+       \intop^{r_{i+1}}_{r_i} r\cdot(f(r))^{-1}\, dr\right)^{-1}
 
     Parameters
     ----------
@@ -283,7 +274,6 @@ def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
     >>> rad_hmean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
     """
-
     if arg_dict is None:
         arg_dict = {}
     kwargs.update(arg_dict)
@@ -300,14 +290,10 @@ def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
 
     # dummy function defining the needed integrand
     def _step(func, kwargs):
-        """
-        dummy function providing the integrand
-        """
+        """Dummy function providing the integrand."""
 
         def integrand(val):
-            """
-            Integrand for the geometric mean ``r*log(f(r))``
-            """
+            """Integrand for the geometric mean ``r*log(f(r))``."""
             return 2 * val / func(val, **kwargs)
 
         return integrand
@@ -332,15 +318,15 @@ def rad_hmean_func(func, val_arr, arg_dict=None, **kwargs):
 
 
 def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
-    """
-    Calculating the p-mean
+    r"""
+    Calculating the p-mean.
 
     Calculating the p-mean of a radial symmetric function
     for given consecutive radii defining 2D disks by the following formula
 
     .. math::
-       f_i=\\left(\\frac{2}{r_{i+1}^2-r_i^2}
-       \\intop^{r_{i+1}}_{r_i} r\\cdot(f(r))^p\\, dr\\right)^{\\frac{1}{p}}
+       f_i=\left(\frac{2}{r_{i+1}^2-r_i^2}
+       \intop^{r_{i+1}}_{r_i} r\cdot(f(r))^p\, dr\right)^{\frac{1}{p}}
 
     Parameters
     ----------
@@ -388,7 +374,6 @@ def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
     >>> rad_pmean_func(f, [1,2,3])
     array([ 2.33588885,  6.33423311])
     """
-
     # if p is 0, the limit-case of the geometric mean is returned
     if p == 0:
         return rad_gmean_func(func, val_arr, arg_dict, **kwargs)
@@ -409,14 +394,10 @@ def rad_pmean_func(func, val_arr, p=1.0, arg_dict=None, **kwargs):
 
     # dummy function defining the needed integrand
     def _step(func, kwargs):
-        """
-        dummy function providing the integrand
-        """
+        """Dummy function providing the integrand."""
 
         def integrand(val):
-            """
-            Integrand for the geometric mean ``r*log(f(r))``
-            """
+            """Integrand for the geometric mean ``r*log(f(r))``."""
             return 2 * val * func(val, **kwargs) ** p
 
         return integrand
