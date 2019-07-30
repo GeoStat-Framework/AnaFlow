@@ -10,12 +10,12 @@ The following functions are provided
 
    Shaper
    sph_surf
-   radii
    specialrange
    specialrange_cut
    aniso
    well_solution
    inc_gamma
+   tpl_hyp
 """
 
 from __future__ import absolute_import, division, print_function
@@ -26,12 +26,12 @@ from scipy.special import gamma, gammaincc, exp1, expn, hyp2f1
 __all__ = [
     "Shaper",
     "sph_surf",
-    "radii",
     "specialrange",
     "specialrange_cut",
     "aniso",
     "well_solution",
     "inc_gamma",
+    "tpl_hyp",
 ]
 
 
@@ -83,100 +83,9 @@ class Shaper(object):
         return result
 
 
-def shift_banded(mat, up, low, col_to_row=True, copy=True):
-    """
-    Shift row of a banded matrix.
-
-    Either from row-wise to column-wise storage or vice versa
-    """
-    if copy:
-        mat_flat = np.copy(mat)
-    else:
-        mat_flat = mat
-    if col_to_row:
-        for i in range(up):
-            mat_flat[i, : -(up - i)] = mat_flat[i, (up - i) :]
-        for i in range(low):
-            mat_flat[-i, (low - i) :] = mat_flat[-i, : (low - i)]
-    else:
-        for i in range(up):
-            mat_flat[0, (up - i) :] = mat_flat[i, : -(up - i)]
-        for i in range(low):
-            mat_flat[-i, : (low - i)] = mat_flat[-i, (low - i) :]
-    return mat_flat
-
-
 def sph_surf(dim):
     """Surface of the d-dimensional sphere."""
     return 2.0 * np.sqrt(np.pi) ** dim / gamma(dim / 2.0)
-
-
-def radii(parts, rwell=0.0, rinf=np.inf, rlast=500.0, typ="log"):
-    """
-    Calculation of specific point distributions.
-
-    Calculation of specific point distributions for the diskmodel.
-
-    Parameters
-    ----------
-    parts : :class:`int`
-        Number of partitions.
-    rwell : :class:`float`, optional
-        Radius at the well. Default: ``0.0``
-    rinf : :class:`float`, optional
-        Radius at the outer boundary. Default: :any:``np.inf``
-    rlast : :class:`float`, optional
-        Setting the last radius befor the outer boundary. Default: ``500.0``
-    typ : :class:`str`, optional
-        Setting the distribution type of the radii. Default: ``"log"``
-
-    Returns
-    -------
-    p_rad : :class:`numpy.ndarray`
-        Array containing the separating radii
-    f_rad : :class:`numpy.ndarray`
-        Array containing the function-evaluation points within each disk
-
-    Examples
-    --------
-    >>> radii(2)
-    (array([   0.,  500.,   inf]), array([  0.,  inf]))
-    """
-    if typ == "log":
-        if rinf == np.inf:
-            # define the partition radii
-            p_rad = np.expm1(
-                np.linspace(np.log1p(rwell), np.log1p(rlast), parts)
-            )
-            p_rad = np.append(p_rad, [np.inf])
-
-            # define the points within the partitions to evaluate the function
-            f_rad = np.expm1(
-                np.linspace(np.log1p(rwell), np.log1p(rlast), parts - 1)
-            )
-            f_rad = np.append(f_rad, [np.inf])
-        else:
-            p_rad = np.expm1(
-                np.linspace(np.log1p(rwell), np.log1p(rinf), parts + 1)
-            )
-            f_rad = np.expm1(
-                np.linspace(np.log1p(rwell), np.log1p(rinf), parts)
-            )
-
-    else:
-        if rinf == np.inf:
-            # define the partition radii
-            p_rad = np.linspace(rwell, rlast, parts)
-            p_rad = np.append(p_rad, [np.inf])
-
-            # define the points within the partitions to evaluate the function
-            f_rad = np.linspace(rwell, rlast, parts - 1)
-            f_rad = np.append(f_rad, [np.inf])
-        else:
-            p_rad = np.linspace(rwell, rinf, parts + 1)
-            f_rad = np.linspace(rwell, rinf, parts)
-
-    return p_rad, f_rad
 
 
 def specialrange(val_min, val_max, steps, typ="log"):
@@ -319,12 +228,12 @@ def aniso(e):
     >>> aniso(0.5)
     0.23639985871871511
     """
-    if not 0.0 <= e <= 1.0:
-        raise ValueError("Anisotropieratio 'e' must be within 0 and 1")
+    if e < 0 or e > 1:
+        raise ValueError("Anisotropy ratio 'e' must be within 0 and 1")
 
-    if e == 1.0:
+    if np.isclose(e, 1):
         res = 1.0 / 3.0
-    elif e == 0.0:
+    elif np.isclose(e, 0):
         res = 0.0
     else:
         res = e / (2 * (1.0 - e ** 2))
@@ -528,13 +437,8 @@ def inc_gamma(s, x):
 
 def tpl_hyp(rad, dim, hurst, corr, prop):
     """Hyp_2F1 for the TPL CG model."""
-    rad = np.array(rad, dtype=np.double)
-    z_gz = (corr / (prop * rad[rad > 0])) ** 2
-    x = np.ones_like(rad)
-    x[rad > 0] = z_gz / (z_gz + 1.0)
-    return x ** (dim / 2.0) * hyp2f1(
-        dim / 2.0, 1.0, dim / 2.0 + 1.0 + hurst, x
-    )
+    x = 1.0 / (1.0 + (prop * rad / corr) ** 2)
+    return x ** (dim / 2.0) * hyp2f1(dim / 2.0, 1, dim / 2.0 + 1 + hurst, x)
 
 
 if __name__ == "__main__":
