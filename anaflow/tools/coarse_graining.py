@@ -14,6 +14,8 @@ The following functions are provided
    K_CG
    K_CG_inverse
    K_CG_error
+   TPL_CG
+   TPL_CG_error
 """
 # pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
@@ -30,6 +32,8 @@ __all__ = [
     "K_CG",
     "K_CG_inverse",
     "K_CG_error",
+    "TPL_CG",
+    "TPL_CG_error",
 ]
 
 
