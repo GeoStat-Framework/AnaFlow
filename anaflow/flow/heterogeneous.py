@@ -20,7 +20,7 @@ from scipy.special import exp1, expi
 
 from anaflow.tools.laplace import get_lap_inv
 from anaflow.tools.special import aniso, specialrange_cut, Shaper
-from anaflow.tools.mean import rad_hmean_func
+from anaflow.tools.mean import annular_hmean
 from anaflow.tools.coarse_graining import T_CG, T_CG_error, K_CG, K_CG_error
 from anaflow.flow.laplace import grf_laplace
 
@@ -401,7 +401,7 @@ def ext_theis2D(
     else:
         rpart = np.array([rwell, rinf])
     # calculate the harmonic mean transmissivity values within each partition
-    Tpart = rad_hmean_func(
+    Tpart = annular_hmean(
         T_CG, rpart, TG=TG, sig2=sig2, corr=corr, prop=prop, Twell=Twell
     )
 
@@ -585,7 +585,7 @@ def ext_theis3D(
     else:
         rpart = np.array([rwell, rinf])
     # calculate the harmonic mean conductivity values within each partition
-    Kpart = rad_hmean_func(
+    Kpart = annular_hmean(
         K_CG, rpart, KG=KG, sig2=sig2, corr=corr, e=e, prop=prop, Kwell=Kwell
     )
 
