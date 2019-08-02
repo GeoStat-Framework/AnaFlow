@@ -91,8 +91,7 @@ def annular_fmean(
     If the last value in val_arr is "inf", the given function should provide
     a value for "inf" as input: ``func(float("inf"))``
     """
-    if arg_dict is None:
-        arg_dict = {}
+    arg_dict = {} if arg_dict is None else arg_dict
     kwargs.update(arg_dict)
 
     val_arr = np.array(val_arr, dtype=np.double).reshape(-1)
@@ -104,7 +103,11 @@ def annular_fmean(
         raise ValueError("The f-mean function needs to be callable")
     if not callable(f_inv):
         raise ValueError("The inverse f-mean function needs to be callable")
-    if not np.all(np.isclose(f_inv(f_def(val_arr)), val_arr)):
+    if not np.all(
+        np.isclose(
+            f_inv(f_def(func(val_arr, **kwargs))), func(val_arr, **kwargs)
+        )
+    ):
         raise ValueError("f_def and f_inv need to be inverse to each other")
     if len(val_arr) < 2:
         raise ValueError("To few input values in val_arr. Need at least 2.")

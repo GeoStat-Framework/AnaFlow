@@ -369,38 +369,43 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
 
 
 def TPL_CG(
-    rad, KG, corr, hurst, c=1.0, dim=2.0, prop=1.6, sig2=None, Kwell="KH", e=1
+    rad, KG, corr, hurst, sig2=None, c=1.0, e=1, dim=2.0, Kwell="KH", prop=1.6
 ):
     """
-    The truncated power-law coarse-graining conductivity.
+    The gaussian truncated power-law coarse-graining conductivity.
 
     Parameters
     ----------
     rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
     KG : :class:`float`
-        Geometric-mean conductivity-distribution
+        Geometric-mean conductivity
     corr : :class:`float`
-        corralation-length of conductivity-distribution
-    c : :class:`float`
-        Intensity of variation in the TPL model.
-    prop: :class:`float`, optional
-        Proportionality factor used within the upscaling procedure.
-        Default: ``1.6``
+        upper bound of the corralation-length of conductivity-distribution
     hurst: :class:`float`
         Hurst coefficient of the TPL model. Should be in (0, 1).
     sig2: :class:`float` or :any:`None`
         If sig2 is given, c will be calculated accordingly.
         Default: :any:`None`
+    c : :class:`float`, optional
+        Intensity of variation in the TPL model.
+        Is overwritten if sig2 is given.
+        Default: ``1.0``
+    e : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        This is only applied in 3 dimensions.
+        Default: 1.0
+    dim: :class:`float`, optional
+        Dimension of space.
+        Default: ``2.0``
     Kwell :  :class:`str` or  :class:`float`, optional
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``),
         the arithmetic mean (``"KA"``) or an arbitrary float
         value. Default: ``"KH"``
-    e : :class:`float`, optional
-        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
-        This is only applied in 3 dimensions.
-        Default: 1.0
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
 
     Returns
     -------
@@ -428,7 +433,7 @@ def TPL_CG(
 
 
 def TPL_CG_error(
-    err, KG, corr, hurst, c=1.0, dim=2.0, prop=1.6, sig2=None, Kwell="KH", e=1
+    err, KG, corr, hurst, sig2=None, c=1.0, e=1, dim=2.0, Kwell="KH", prop=1.6
 ):
     """
     Calculating the radial-point for given error.
@@ -442,28 +447,33 @@ def TPL_CG_error(
     err : :class:`float`
         Given relative error for the farfield conductivity
     KG : :class:`float`
-        Geometric-mean conductivity-distribution
+        Geometric-mean conductivity
     corr : :class:`float`
-        corralation-length of conductivity-distribution
-    c : :class:`float`
-        Intensity of variation in the TPL model.
-    prop: :class:`float`, optional
-        Proportionality factor used within the upscaling procedure.
-        Default: ``1.6``
+        upper bound of the corralation-length of conductivity-distribution
     hurst: :class:`float`
         Hurst coefficient of the TPL model. Should be in (0, 1).
     sig2: :class:`float` or :any:`None`
         If sig2 is given, c will be calculated accordingly.
         Default: :any:`None`
+    c : :class:`float`, optional
+        Intensity of variation in the TPL model.
+        Is overwritten if sig2 is given.
+        Default: ``1.0``
+    e : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        This is only applied in 3 dimensions.
+        Default: 1.0
+    dim: :class:`float`, optional
+        Dimension.
+        Default: ``2.0``
     Kwell :  :class:`str` or  :class:`float`, optional
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``),
         the arithmetic mean (``"KA"``) or an arbitrary float
         value. Default: ``"KH"``
-    e : :class:`float`, optional
-        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
-        This is only applied in 3 dimensions.
-        Default: 1.0
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
 
     Returns
     -------
@@ -484,7 +494,7 @@ def TPL_CG_error(
         chi = np.log(Kwell) - np.log(Kefu)
     Kw = np.exp(chi + np.log(Kefu))
 
-    # define a curve, that has its root at the wanted point
+    # define a curve, that has its root at the wanted percentile
     if chi > 0:
         per = (1 + err) * Kefu
         if not per < Kw:
@@ -498,7 +508,21 @@ def TPL_CG_error(
 
     def curve(x):
         """Curve for fitting."""
-        return TPL_CG(x, KG, corr, hurst, c, dim, prop, sig2, Kwell, e) - per
+        return (
+            TPL_CG(
+                x,
+                KG=KG,
+                corr=corr,
+                hurst=hurst,
+                sig2=sig2,
+                c=c,
+                e=e,
+                dim=dim,
+                Kwell=Kwell,
+                prop=prop,
+            )
+            - per
+        )
 
     return root(curve, 2 * corr)["x"][0]
 

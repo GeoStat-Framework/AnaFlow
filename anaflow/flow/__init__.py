@@ -40,6 +40,7 @@ Solutions for heterogeneous aquifers
    ext_theis2D
    ext_thiem3D
    ext_theis3D
+   ext_theis_tpl
 
 Special
 ~~~~~~~
@@ -59,6 +60,7 @@ from anaflow.flow.heterogeneous import (
     ext_theis2D,
     ext_thiem3D,
     ext_theis3D,
+    ext_theis_tpl,
 )
 from anaflow.flow.special import grf_disk
 
@@ -70,5 +72,6 @@ __all__ = [
     "ext_theis2D",
     "ext_thiem3D",
     "ext_theis3D",
+    "ext_theis_tpl",
     "grf_disk",
 ]
