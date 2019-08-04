@@ -56,11 +56,11 @@ def grf_laplace(
     rad=None,
     dim=2,
     lat_ext=1.0,
-    rpart=None,
-    Spart=None,
-    Kpart=None,
-    Qw=None,
-    Kwell=None,
+    R_part=None,
+    S_part=None,
+    K_part=None,
+    rate=None,
+    K_well=None,
     cut_off_prec=1e-20,
 ):
     """
@@ -83,16 +83,16 @@ def grf_laplace(
         Flow dimension. Default: 3
     lat_ext : :class:`float`
         The lateral extend of the flow-domain in `L^(3-dim)`. Default: 1
-    rpart : :class:`numpy.ndarray` of length N+1
+    R_part : :class:`numpy.ndarray` of length N+1
         Given radii separating the disks as well as starting- and endpoints
-    Kpart : :class:`numpy.ndarray` of length N
+    K_part : :class:`numpy.ndarray` of length N
         Given conductivity values for each disk
-    Spart : :class:`numpy.ndarray` of length N
+    S_part : :class:`numpy.ndarray` of length N
         Given storativity values for each disk
-    Qw : :class:`float`
+    rate : :class:`float`
         Pumpingrate at the well
-    Kwell : :class:`float`, optional
-        Conductivity at the well. Default: ``Kpart[0]``
+    K_well : :class:`float`, optional
+        Conductivity at the well. Default: ``K_part[0]``
     cut_off_prec : :class:`float`, optional
         Define a cut-off precision for the calculation to select the disks
         included in the calculation. Default ``1e-20``
@@ -111,27 +111,27 @@ def grf_laplace(
     # ensure that input is treated as arrays
     s = np.squeeze(s).reshape(-1)
     rad = np.squeeze(rad).reshape(-1)
-    rpart = np.squeeze(rpart).reshape(-1)
-    Spart = np.squeeze(Spart).reshape(-1)
-    Kpart = np.squeeze(Kpart).reshape(-1)
+    R_part = np.squeeze(R_part).reshape(-1)
+    S_part = np.squeeze(S_part).reshape(-1)
+    K_part = np.squeeze(K_part).reshape(-1)
 
     # the dimension is used by nu in the literature (See Barker 88)
     dim = float(dim)
     nu = 1.0 - dim / 2.0
     # the lateral extend is a bit subtle in fractured dimension
     lat_ext = float(lat_ext)
-    Qw = float(Qw)
+    rate = float(rate)
     # get the number of partitions
-    parts = len(Kpart)
+    parts = len(K_part)
     # initialize the result
     res = np.zeros(s.shape + rad.shape)
     # set the conductivity at the well
-    Kwell = Kpart[0] if Kwell is None else float(Kwell)
+    K_well = K_part[0] if K_well is None else float(K_well)
     # the first sqrt of the diffusivity values
-    diff_sr0 = np.sqrt(Spart[0] / Kpart[0])
+    diff_sr0 = np.sqrt(S_part[0] / K_part[0])
     # set the general pumping-condtion depending on the well-radius
-    if rpart[0] > 0.0:
-        Qs = -s ** (-1.5) / diff_sr0 * rpart[0] ** (nu - 1)
+    if R_part[0] > 0.0:
+        Qs = -s ** (-1.5) / diff_sr0 * R_part[0] ** (nu - 1)
     else:
         Qs = (2 / diff_sr0) ** nu / gamma(1 - nu) * s ** (-nu / 2 - 1)
 
@@ -150,10 +150,10 @@ def grf_laplace(
             # set the pumping-condition at the well
             V[0] = Qs[si]
             # incorporate the boundary-conditions
-            if rpart[0] > 0.0:
-                M[0, :] = [-kv1(Cs * rpart[0]), iv1(Cs * rpart[0])]
-            if rpart[-1] < np.inf:
-                M[1, :] = [kv0(Cs * rpart[-1]), iv0(Cs * rpart[-1])]
+            if R_part[0] > 0.0:
+                M[0, :] = [-kv1(Cs * R_part[0]), iv1(Cs * R_part[0])]
+            if R_part[-1] < np.inf:
+                M[1, :] = [kv0(Cs * R_part[-1]), iv0(Cs * R_part[-1])]
             else:
                 M[0, 1] = 0  # Bs is 0 in this case either way
             # solve the equation system
@@ -161,7 +161,7 @@ def grf_laplace(
 
             # calculate the head
             for ri, re in enumerate(rad):
-                if re < rpart[-1]:
+                if re < R_part[-1]:
                     res[si, ri] = re ** nu * (
                         As * kv0(Cs * re) + Bs * iv0(Cs * re)
                     )
@@ -178,13 +178,13 @@ def grf_laplace(
         Mb[2, -1] = 1.0
 
         # calculate the consecutive fractions of the conductivities
-        Kfrac = Kpart[:-1] / Kpart[1:]
+        Kfrac = K_part[:-1] / K_part[1:]
         # calculate the square-root of the diffusivities
-        difsr = np.sqrt(Spart / Kpart)
+        difsr = np.sqrt(S_part / K_part)
         # calculate a temporal substitution (factor from mass-conservation)
         tmp = Kfrac * difsr[:-1] / difsr[1:]
         # match the radii to the different disks
-        pos = np.searchsorted(rpart, rad) - 1
+        pos = np.searchsorted(R_part, rad) - 1
 
         # iterate over the laplace-variable
         for si, se in enumerate(s):
@@ -196,28 +196,28 @@ def grf_laplace(
 
             # generate the equation system as banded matrix
             for i in range(parts - 1):
-                Mb[0, 2 * i + 3] = -iv0(Cs[i + 1] * rpart[i + 1])
+                Mb[0, 2 * i + 3] = -iv0(Cs[i + 1] * R_part[i + 1])
                 Mb[1, 2 * i + 2 : 2 * i + 4] = [
-                    -kv0(Cs[i + 1] * rpart[i + 1]),
-                    -iv1(Cs[i + 1] * rpart[i + 1]),
+                    -kv0(Cs[i + 1] * R_part[i + 1]),
+                    -iv1(Cs[i + 1] * R_part[i + 1]),
                 ]
                 Mb[2, 2 * i + 1 : 2 * i + 3] = [
-                    iv0(Cs[i] * rpart[i + 1]),
-                    kv1(Cs[i + 1] * rpart[i + 1]),
+                    iv0(Cs[i] * R_part[i + 1]),
+                    kv1(Cs[i + 1] * R_part[i + 1]),
                 ]
                 Mb[3, 2 * i : 2 * i + 2] = [
-                    kv0(Cs[i] * rpart[i + 1]),
-                    tmp[i] * iv1(Cs[i] * rpart[i + 1]),
+                    kv0(Cs[i] * R_part[i + 1]),
+                    tmp[i] * iv1(Cs[i] * R_part[i + 1]),
                 ]
-                Mb[4, 2 * i] = -tmp[i] * kv1(Cs[i] * rpart[i + 1])
+                Mb[4, 2 * i] = -tmp[i] * kv1(Cs[i] * R_part[i + 1])
 
             # set the boundary-conditions if needed
-            if rpart[0] > 0.0:
-                Mb[2, 0] = -kv1(Cs[0] * rpart[0])
-                Mb[1, 1] = iv1(Cs[0] * rpart[0])
-            if rpart[-1] < np.inf:
-                Mb[-2, -2] = kv0(Cs[-1] * rpart[-1])
-                Mb[2, -1] = iv0(Cs[-1] * rpart[-1])
+            if R_part[0] > 0.0:
+                Mb[2, 0] = -kv1(Cs[0] * R_part[0])
+                Mb[1, 1] = iv1(Cs[0] * R_part[0])
+            if R_part[-1] < np.inf:
+                Mb[-2, -2] = kv0(Cs[-1] * R_part[-1])
+                Mb[2, -1] = iv0(Cs[-1] * R_part[-1])
             else:  # erase the last row, since X[-1] will be 0
                 Mb[0, -1] = 0
                 Mb[1, -1] = 0
@@ -270,7 +270,7 @@ def grf_laplace(
     #     therefore this approach is suitable
     np.nan_to_num(res, copy=False)
     # scale to pumpingrate
-    res *= Qw / (Kwell * sph_surf(dim) * lat_ext ** (3.0 - dim))
+    res *= rate / (K_well * sph_surf(dim) * lat_ext ** (3.0 - dim))
 
     return res
 
