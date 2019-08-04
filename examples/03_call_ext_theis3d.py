@@ -23,16 +23,13 @@ head_KH = theis(time=time, rad=rad, T=KH*L, S=S, Qw=Qw)
 head_ef = ext_theis3D(time=time, rad=rad, KG=KG, sig2=var, corr=corr, e=e, S=S, Qw=Qw, L=1)
 time_ticks=[]
 for i, step in enumerate(time):
-    if i == 0:
-        label_TG = "Theis($K_{efu}$)"
-        label_TH = "Theis($K_H$)"
-        label_ef = "extended Theis 3D"
-    else:
-        label_TG = label_TH = label_ef = None
+    label_TG = "Theis($K_{efu}$)" if i == 0 else None
+    label_TH = "Theis($K_H$)" if i == 0 else None
+    label_ef = "extended Theis 3D" if i == 0 else None
     plt.plot(rad, head_Kefu[i], label=label_TG, color="C"+str(i), linestyle="--")
     plt.plot(rad, head_KH[i], label=label_TH, color="C"+str(i), linestyle=":")
     plt.plot(rad, head_ef[i], label=label_ef, color="C"+str(i))
-    time_ticks.append(head_Kefu[i][-1])
+    time_ticks.append(head_ef[i][-1])
 
 plt.xlabel("r in [m]")
 plt.ylabel("h in [m]")

@@ -16,6 +16,7 @@ The following functions are provided
    well_solution
    inc_gamma
    tpl_hyp
+   neuman2004_trans
 """
 
 from __future__ import absolute_import, division, print_function
@@ -32,6 +33,7 @@ __all__ = [
     "well_solution",
     "inc_gamma",
     "tpl_hyp",
+    "neuman2004_trans",
 ]
 
 
@@ -439,6 +441,39 @@ def tpl_hyp(rad, dim, hurst, corr, prop):
     """Hyp_2F1 for the TPL CG model."""
     x = 1.0 / (1.0 + (prop * rad / corr) ** 2)
     return x ** (dim / 2.0) * hyp2f1(dim / 2.0, 1, dim / 2.0 + 1 + hurst, x)
+
+
+def neuman2004_trans(rad, trans_gmean, var, len_scale):
+    r"""The apparent transmissivity from Neuman 2004.
+
+    Parameters
+    ----------
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    trans_gmean : :class:`float`
+        Geometric-mean transmissivity.
+    var : :class:`float`
+        Variance of log-transmissivity.
+    len_scale : :class:`float`
+        Correlation-length of log-transmissivity.
+    """
+    t_h = trans_gmean * np.exp(-var / 2)
+    return t_h + (trans_gmean - t_h) * neuman2004_phi(0.5 * rad / len_scale)
+
+
+def neuman2004_phi(alpha):
+    r"""The phi function from Neuman 2004.
+
+    Parameters
+    ----------
+    alpha : :class:`numpy.ndarray`
+        The ratio r/(2l)
+    """
+    alpha = np.array(np.abs(alpha), dtype=np.double)
+    a_lo = alpha < 1
+    res = np.ones_like(alpha)
+    res[a_lo] = 3 * alpha[a_lo] ** 2 - 2 * alpha[a_lo] ** 3
+    return res
 
 
 if __name__ == "__main__":

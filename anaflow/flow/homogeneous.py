@@ -285,7 +285,7 @@ def grf_model(
     if S <= 0.0:
         raise ValueError("The Storage needs to be positiv")
     if dim <= 0.0 or dim > 3.0:
-        raise ValueError("The dimension needs to be positiv and < 3")
+        raise ValueError("The dimension needs to be positiv and <= 3")
     if lat_ext <= 0.0:
         raise ValueError("The lateral extend needs to be positiv")
 

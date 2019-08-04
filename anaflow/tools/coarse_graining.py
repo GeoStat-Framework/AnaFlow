@@ -83,10 +83,10 @@ def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
     """
     rad = np.squeeze(rad)
 
-    if Twell is not None:
-        chi = np.log(Twell) - np.log(TG)
+    if Twell is None:
+        chi = -sig2 / 2.0  # T_well = T_H
     else:
-        chi = -sig2 / 2.0
+        chi = np.log(Twell) - np.log(TG)
 
     return TG * np.exp(chi / (1.0 + (prop * rad / corr) ** 2))
 

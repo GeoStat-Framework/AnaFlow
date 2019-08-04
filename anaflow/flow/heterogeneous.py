@@ -12,6 +12,7 @@ The following functions are provided
    ext_theis2D
    ext_theis3D
    ext_theis_tpl
+   neuman2004
 """
 # pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
@@ -20,7 +21,12 @@ import numpy as np
 from scipy.special import exp1, expi
 
 from anaflow.tools.laplace import get_lap_inv
-from anaflow.tools.special import aniso, specialrange_cut, Shaper
+from anaflow.tools.special import (
+    aniso,
+    specialrange_cut,
+    Shaper,
+    neuman2004_trans,
+)
 from anaflow.tools.mean import annular_hmean
 from anaflow.tools.coarse_graining import (
     T_CG,
@@ -38,6 +44,7 @@ __all__ = [
     "ext_theis2D",
     "ext_theis3D",
     "ext_theis_tpl",
+    "neuman2004",
 ]
 
 
@@ -680,14 +687,14 @@ def ext_theis_tpl(
         corralation-length of conductivity-distribution
     hurst: :class:`float`
         Hurst coefficient of the TPL model. Should be in (0, 1).
-    c : :class:`float`, optional
-        Intensity of variation in the TPL model.
-        Is overwritten if sig2 is given.
-        Default: ``1.0``
     sig2: :class:`float` or :any:`None`
         Log-normal-variance of the conductivity-distribution.
         If sig2 is given, c will be calculated accordingly.
         Default: :any:`None`
+    c : :class:`float`, optional
+        Intensity of variation in the TPL model.
+        Is overwritten if sig2 is given.
+        Default: ``1.0``
     e : :class:`float`, optional
         Anisotropy-ratio of the vertical and horizontal corralation-lengths.
         This is only applied in 3 dimensions.
@@ -695,10 +702,12 @@ def ext_theis_tpl(
     dim: :class:`float`, optional
         Dimension of space.
         Default: ``2.0``
-    Qw : :class:`float`
+    lat_ext : :class:`float`, optional
+        Thickness of the aquifer (lateral extend).
+        Default: ``1.0``
+    Qw : :class:`float`, optional
         Pumpingrate at the well
-    L : :class:`float`
-        Thickness of the aquifer
+        Default: ``-1e-4``
     struc_grid : :class:`bool`, optional
         If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
@@ -843,6 +852,150 @@ def ext_theis_tpl(
         res = np.minimum(res, 0)
     # add the reference head
     res += hinf
+    return res
+
+
+###############################################################################
+# transient solution for apparent transmissity from Neuman 1994
+###############################################################################
+
+
+def neuman2004(
+    time,
+    rad,
+    storage,
+    trans_gmean,
+    var,
+    len_scale,
+    rate=-1e-4,
+    struc_grid=True,
+    r_well=0.0,
+    r_bound=np.inf,
+    h_bound=0.0,
+    parts=30,
+    lap_kwargs=None,
+):
+    """
+    The transient solution for the apparent transmissivity from [Neuman2004].
+
+    This solution is build on the apparent transmissivity from Neuman 1994,
+    which represents a mean drawdown in an ensemble of pumping tests in
+    heterogeneous transmissivity fields following an exponential covariance.
+
+    Parameters
+    ----------
+    time : :class:`numpy.ndarray`
+        Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    storage : :class:`float`
+        Given storativity of the aquifer
+    trans_gmean : :class:`float`
+        Geometric-mean transmissivity.
+    var : :class:`float`
+        Variance of log-transmissivity.
+    len_scale : :class:`float`
+        Correlation-length of log-transmissivity.
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured r-t grid is created.
+        Default: ``True``
+    r_well : :class:`float`, optional
+        Inner radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary as well as initial condition.
+        Default: ``0.0``
+    parts : :class:`int`, optional
+        Since the solution is calculated by setting the transmissity to local
+        constant values, one needs to specify the number of partitions of the
+        transmissivity. Default: ``30``
+    lap_kwargs : :class:`dict` or :any:`None` optional
+        Dictionary for :any:`get_lap_inv` containing `method` and
+        `method_dict`. The default is equivalent to
+        ``lap_kwargs = {"method": "stehfest", "method_dict": None}``.
+        Default: :any:`None`
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    References
+    ----------
+    .. [Neuman2004] Neuman, Shlomo P., Alberto Guadagnini, and Monica Riva.
+       ''Type-curve estimation of statistical heterogeneity.''
+       Water resources research 40.4, 2004
+    """
+    Input = Shaper(time, rad, struc_grid)
+    lap_kwargs = {} if lap_kwargs is None else lap_kwargs
+
+    # check the input
+    if r_well < 0.0:
+        raise ValueError("The wellradius needs to be >= 0")
+    if r_bound <= r_well:
+        raise ValueError(
+            "The upper boundary needs to be greater than the wellradius"
+        )
+    if Input.rad_min < r_well:
+        raise ValueError(
+            "The given radii need to be greater than the wellradius"
+        )
+    if trans_gmean <= 0.0:
+        raise ValueError("The Transmissivity needs to be positiv")
+    if var <= 0.0:
+        raise ValueError("The variance needs to be positiv")
+    if len_scale <= 0.0:
+        raise ValueError("The correlationlength needs to be positiv")
+    if storage <= 0.0:
+        raise ValueError("The Storage needs to be positiv")
+    if parts <= 1:
+        raise ValueError("The numbor of partitions needs to be at least 2")
+
+    # genearte rlast from a given relativ-error to farfield-transmissivity
+    rlast = 2 * len_scale
+    # generate the partition points
+    if rlast > r_well:
+        rpart = specialrange_cut(r_well, r_bound, parts + 1, rlast)
+    else:
+        rpart = np.array([r_well, r_bound])
+    # calculate the harmonic mean transmissivity values within each partition
+    Tpart = annular_hmean(
+        neuman2004_trans,
+        rpart,
+        trans_gmean=trans_gmean,
+        var=var,
+        len_scale=len_scale,
+    )
+
+    # write the paramters in kwargs to use the grf-model
+    kwargs = {
+        "rad": Input.rad,
+        "Qw": rate,
+        "dim": 2,
+        "lat_ext": 1,
+        "rpart": rpart,
+        "Spart": np.full_like(Tpart, storage),
+        "Kpart": Tpart,
+        "Kwell": neuman2004_trans(r_well, trans_gmean, var, len_scale),
+    }
+    kwargs.update(lap_kwargs)
+
+    res = np.zeros((Input.time_no, Input.rad_no))
+    # call the grf-model
+    lap_inv = get_lap_inv(grf_laplace, **kwargs)
+    res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
+    res = Input.reshape(res)
+    if rate > 0:
+        res = np.maximum(res, 0)
+    else:
+        res = np.minimum(res, 0)
+    # add the reference head
+    res += h_bound
     return res
 
 

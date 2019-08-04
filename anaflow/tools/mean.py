@@ -391,7 +391,7 @@ def annular_pmean(func, val_arr, p=2.0, ann_dim=2, arg_dict=None, **kwargs):
         func=func,
         val_arr=val_arr,
         f_def=lambda x: np.power(x, p),
-        f_inv=lambda x: np.power(x, 1 / p),
+        f_inv=lambda x: np.power(x, 1.0 / p),
         ann_dim=ann_dim,
         arg_dict=arg_dict,
         **kwargs

@@ -91,8 +91,8 @@ def grf_laplace(
         Given storativity values for each disk
     Qw : :class:`float`
         Pumpingrate at the well
-    Twell : :class:`float`, optional
-        Transmissivity at the well. Default: ``Tpart[0]``
+    Kwell : :class:`float`, optional
+        Conductivity at the well. Default: ``Kpart[0]``
     cut_off_prec : :class:`float`, optional
         Define a cut-off precision for the calculation to select the disks
         included in the calculation. Default ``1e-20``
@@ -126,8 +126,7 @@ def grf_laplace(
     # initialize the result
     res = np.zeros(s.shape + rad.shape)
     # set the conductivity at the well
-    if Kwell is None:
-        Kwell = Kpart[0]
+    Kwell = Kpart[0] if Kwell is None else float(Kwell)
     # the first sqrt of the diffusivity values
     diff_sr0 = np.sqrt(Spart[0] / Kpart[0])
     # set the general pumping-condtion depending on the well-radius
@@ -219,8 +218,7 @@ def grf_laplace(
             if rpart[-1] < np.inf:
                 Mb[-2, -2] = kv0(Cs[-1] * rpart[-1])
                 Mb[2, -1] = iv0(Cs[-1] * rpart[-1])
-            else:
-                # erase the last row, since X[-1] will be 0
+            else:  # erase the last row, since X[-1] will be 0
                 Mb[0, -1] = 0
                 Mb[1, -1] = 0
 
