@@ -38,7 +38,7 @@ from anaflow.tools.coarse_graining import (
     TPL_CG_error,
 )
 from anaflow.flow.laplace import grf_laplace
-from anaflow.flow.special import grf_steady
+from anaflow.flow.ext_grf import ext_grf_steady
 
 __all__ = [
     "ext_thiem2D",
@@ -1048,7 +1048,7 @@ def neuman2004_steady(
     if len_scale <= 0.0:
         raise ValueError("The correlationlength needs to be positiv")
 
-    return grf_steady(
+    return ext_grf_steady(
         rad=rad,
         r_ref=r_ref,
         conductivity=neuman2004_trans,

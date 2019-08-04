@@ -73,7 +73,7 @@ from anaflow._version import __version__
 from anaflow.flow import (
     thiem,
     theis,
-    grf_model,
+    grf,
     ext_thiem2D,
     ext_theis2D,
     ext_thiem3D,
@@ -81,8 +81,8 @@ from anaflow.flow import (
     ext_theis_tpl,
     neuman2004,
     neuman2004_steady,
-    grf_disk,
-    grf_steady,
+    ext_grf,
+    ext_grf_steady,
 )
 from anaflow.tools.laplace import get_lap_inv, get_lap
 
@@ -98,9 +98,9 @@ __all__ += [
     "ext_theis_tpl",
     "neuman2004",
     "neuman2004_steady",
-    "grf_model",
-    "grf_disk",
-    "grf_steady",
+    "grf",
+    "ext_grf",
+    "ext_grf_steady",
     "get_lap_inv",
     "get_lap",
 ]

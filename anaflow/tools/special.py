@@ -140,7 +140,7 @@ def specialrange(val_min, val_max, steps, typ="log"):
     Examples
     --------
     >>> specialrange(1,10,4)
-    array([  1.        ,   2.53034834,   5.23167968,  10.        ])
+    array([ 1.        ,  2.53034834,  5.23167968, 10.        ])
     """
     if typ in ["logarithmic", "log"]:
         rng = np.expm1(
@@ -207,7 +207,7 @@ def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
     Examples
     --------
     >>> specialrange_cut(1,10,4)
-    array([  1.        ,   2.53034834,   5.23167968,  10.        ])
+    array([ 1.        ,  2.53034834,  5.23167968, 10.        ])
     """
     if val_max > val_cut:
         rng = specialrange(val_min, val_cut, steps - 1, typ)
@@ -246,7 +246,7 @@ def aniso(e):
     Examples
     --------
     >>> aniso(0.5)
-    0.23639985871871511
+    0.2363998587187151
     """
     if e < 0 or e > 1:
         raise ValueError("Anisotropy ratio 'e' must be within 0 and 1")
@@ -319,9 +319,9 @@ def well_solution(
         If shape of ``rad`` and ``time`` differ in case of
         ``struc_grid`` is ``True``.
     ValueError
-        If ``T`` is not positiv.
+        If ``transmissivity`` is not positiv.
     ValueError
-        If ``S`` is not positiv.
+        If ``storage`` is not positiv.
 
     References
     ----------
@@ -338,7 +338,7 @@ def well_solution(
 
     Examples
     --------
-    >>> well_solution([1,2,3], [10,100], 0.001, 0.001, -0.001)
+    >>> well_solution([10,100], [1,2,3], 0.001, 0.001, -0.001)
     array([[-0.24959541, -0.14506368, -0.08971485],
            [-0.43105106, -0.32132823, -0.25778313]])
     """
@@ -421,9 +421,9 @@ def grf_solution(
         If shape of ``rad`` and ``time`` differ in case of
         ``struc_grid`` is ``True``.
     ValueError
-        If ``K`` is not positiv.
+        If ``conductivity`` is not positiv.
     ValueError
-        If ``S`` is not positiv.
+        If ``storage`` is not positiv.
     """
     Input = Shaper(time, rad, struc_grid)
 

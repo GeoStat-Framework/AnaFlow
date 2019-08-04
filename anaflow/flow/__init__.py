@@ -44,20 +44,20 @@ Solutions for heterogeneous aquifers
    neuman2004
    neuman2004_steady
 
-Special
-~~~~~~~
+Extended GRF
+~~~~~~~~~~~~
 
 .. currentmodule:: anaflow.flow.special
 
-Special solutions for special aquifers
+The extended general radial flow model.
 
 .. autosummary::
-   grf_disk
-   grf_stedy
+   ext_grf
+   ext_grf_steady
 """
 from __future__ import absolute_import
 
-from anaflow.flow.homogeneous import thiem, theis, grf_model
+from anaflow.flow.homogeneous import thiem, theis, grf
 from anaflow.flow.heterogeneous import (
     ext_thiem2D,
     ext_theis2D,
@@ -67,7 +67,7 @@ from anaflow.flow.heterogeneous import (
     neuman2004,
     neuman2004_steady,
 )
-from anaflow.flow.special import grf_disk, grf_steady
+from anaflow.flow.ext_grf import ext_grf, ext_grf_steady
 
 __all__ = [
     "thiem",
@@ -80,6 +80,7 @@ __all__ = [
     "ext_theis_tpl",
     "neuman2004",
     "neuman2004_steady",
-    "grf_disk",
-    "grf_steady",
+    "grf",
+    "ext_grf",
+    "ext_grf_steady",
 ]
