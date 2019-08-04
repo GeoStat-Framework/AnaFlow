@@ -9,18 +9,17 @@ The following functions are provided
 .. autosummary::
    thiem
    theis
-   grf_model
+   grf
 """
 # pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from anaflow.tools.laplace import get_lap_inv
-from anaflow.tools.special import well_solution, Shaper, grf
-from anaflow.flow.laplace import grf_laplace
+from anaflow.tools.special import well_solution, grf_solution
+from anaflow.flow.ext_grf import ext_grf
 
-__all__ = ["thiem", "theis", "grf_model"]
+__all__ = ["thiem", "theis", "grf"]
 
 
 ###############################################################################
@@ -28,7 +27,7 @@ __all__ = ["thiem", "theis", "grf_model"]
 ###############################################################################
 
 
-def thiem(rad, Rref, T, Qw, href=0.0):
+def thiem(rad, r_ref, transmissivity, rate=-1e-4, h_ref=0.0):
     """
     The Thiem solution.
 
@@ -39,19 +38,19 @@ def thiem(rad, Rref, T, Qw, href=0.0):
     Parameters
     ----------
     rad : :class:`numpy.ndarray`
-        Array with all radii where the function should be evaluated
-    Rref : :class:`float`
-        Reference radius with known head (see `href`)
-    T : :class:`float`
-        Given transmissivity of the aquifer
-    Qw : :class:`float`
-        Pumpingrate at the well
-    href : :class:`float`, optional
-        Reference head at the reference-radius `Rref`. Default: ``0.0``
+        Array with all radii where the function should be evaluated.
+    r_ref : :class:`float`
+        Reference radius with known head (see `h_ref`).
+    transmissivity : :class:`float`
+        Transmissivity of the aquifer.
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    h_ref : :class:`float`, optional
+        Reference head at the reference-radius `r_ref`. Default: ``0.0``
 
     Returns
     -------
-    thiem : :class:`numpy.ndarray`
+    head : :class:`numpy.ndarray`
         Array with all heads at the given radii.
 
     References
@@ -61,7 +60,8 @@ def thiem(rad, Rref, T, Qw, href=0.0):
 
     Notes
     -----
-    The parameters ``rad``, ``Rref`` and ``T`` will be checked for positivity.
+    The parameters ``rad``, ``r_ref`` and ``transmissivity``
+    will be checked for positivity.
     If you want to use cartesian coordiantes, just use the formula
     ``r = sqrt(x**2 + y**2)``
 
@@ -73,16 +73,16 @@ def thiem(rad, Rref, T, Qw, href=0.0):
     rad = np.squeeze(rad)
 
     # check the input
-    if Rref <= 0.0:
+    if r_ref <= 0:
         raise ValueError("The reference-radius needs to be greater than 0")
-    if np.any(rad <= 0.0):
+    if np.any(rad <= 0):
         raise ValueError(
             "The given radii need to be greater than the wellradius"
         )
-    if T <= 0.0:
+    if transmissivity <= 0:
         raise ValueError("The Transmissivity needs to be positiv")
 
-    return -Qw / (2.0 * np.pi * T) * np.log(rad / Rref) + href
+    return -rate / (2 * np.pi * transmissivity) * np.log(rad / r_ref) + h_ref
 
 
 ###############################################################################
@@ -93,13 +93,13 @@ def thiem(rad, Rref, T, Qw, href=0.0):
 def theis(
     time,
     rad,
-    T,
-    S,
-    Qw,
+    storage,
+    transmissivity,
+    rate,
     struc_grid=True,
-    rwell=0.0,
-    rinf=np.inf,
-    hinf=0.0,
+    r_well=0.0,
+    r_bound=np.inf,
+    h_bound=0.0,
     lap_kwargs=None,
 ):
     """
@@ -119,19 +119,19 @@ def theis(
         Given transmissivity of the aquifer
     S : :class:`float`
         Given storativity of the aquifer
-    Qw : :class:`float`
+    rate : :class:`float`
         Pumpingrate at the well
+    r_well : :class:`float`, optional
+        Inner radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundariy of the aquifer. Default: ``np.inf``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary `r_bound`. Default: ``0.0``
     struc_grid : :class:`bool`, optional
         If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
-    rwell : :class:`float`, optional
-        Inner radius of the pumping-well. Default: ``0.0``
-    rinf : :class:`float`, optional
-        Radius of the outer boundariy of the aquifer. Default: ``np.inf``
-    hinf : :class:`float`, optional
-        Reference head at the outer boundary `rinf`. Default: ``0.0``
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -140,7 +140,7 @@ def theis(
 
     Returns
     -------
-    :class:`numpy.ndarray`
+    head : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
 
     References
@@ -150,70 +150,36 @@ def theis(
        rate and duration of discharge of a well using groundwater storage'',
        Trans. Am. Geophys. Union, 16, 519-524, 1935
     """
-    Input = Shaper(time, rad, struc_grid)
-    lap_kwargs = {} if lap_kwargs is None else lap_kwargs
-
-    # check the input
-    if rwell < 0.0:
-        raise ValueError("The wellradius needs to be >= 0")
-    if rinf <= rwell:
-        raise ValueError(
-            "The upper boundary needs to be greater than the wellradius"
-        )
-    if Input.rad_min < rwell:
-        raise ValueError(
-            "The given radii need to be greater than the wellradius"
-        )
-    if T <= 0.0:
-        raise ValueError("The Transmissivity needs to be positiv")
-    if S <= 0.0:
-        raise ValueError("The Storage needs to be positiv")
-
-    if rwell == 0.0 and rinf == np.inf:
-        return well_solution(time, rad, T, S, Qw)
-
-    rpart = np.array([rwell, rinf])
-    Tpart = np.array([T])
-    Spart = np.array([S])
-
-    # write the paramters in kwargs to use the stehfest-algorithm
-    kwargs = {
-        "rad": Input.rad,
-        "Qw": Qw,
-        "dim": 2,
-        "lat_ext": 1,
-        "rpart": rpart,
-        "Spart": Spart,
-        "Kpart": Tpart,
-    }
-    kwargs.update(lap_kwargs)
-
-    res = np.zeros((Input.time_no, Input.rad_no))
-    # call the grf-model
-    lap_inv = get_lap_inv(grf_laplace, **kwargs)
-    res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
-    res = Input.reshape(res)
-    if Qw > 0:
-        res = np.maximum(res, 0)
-    else:
-        res = np.minimum(res, 0)
-    # add the reference head
-    res += hinf
-    return res
+    if np.isclose(r_well, 0) and np.isposinf(r_bound):
+        return well_solution(time, rad, transmissivity, storage, rate)
+    return ext_grf(
+        time=time,
+        rad=rad,
+        S_part=[storage],
+        K_part=[transmissivity],
+        R_part=[r_well, r_bound],
+        dim=2,
+        lat_ext=1,
+        rate=rate,
+        K_well=None,
+        h_bound=h_bound,
+        lap_kwargs=lap_kwargs,
+        struc_grid=struc_grid,
+    )
 
 
-def grf_model(
+def grf(
     time,
     rad,
-    K,
-    S,
-    Qw,
-    dim=2.0,
+    storage,
+    conductivity,
+    dim=2,
     lat_ext=1.0,
+    rate=-1e-4,
+    r_well=0.0,
+    r_bound=np.inf,
+    h_bound=0.0,
     struc_grid=True,
-    rwell=0.0,
-    rinf=np.inf,
-    hinf=0.0,
     lap_kwargs=None,
 ):
     """
@@ -224,30 +190,30 @@ def grf_model(
     Parameters
     ----------
     time : :class:`numpy.ndarray`
-        Array with all time-points where the function should be evaluated
+        Array with all time-points where the function should be evaluated.
     rad : :class:`numpy.ndarray`
-        Array with all radii where the function should be evaluated
-    K : :class:`float`
-        Given conductivity of the aquifer
-    S : :class:`float`
-        Given storativity of the aquifer
-    Qw : :class:`float`
-        Pumpingrate at the well
-    dim : :class:`float`
+        Array with all radii where the function should be evaluated.
+    storage : :class:`float`
+        Storage coefficient of the aquifer.
+    conductivity : :class:`float`
+        Conductivity of the aquifer.
+    dim : :class:`float`, optional
         Fractional dimension of the aquifer. Default: ``2.0``
-    lat_ext : :class:`float`
+    lat_ext : :class:`float`, optional
         Lateral extend of the aquifer. Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    r_well : :class:`float`, optional
+        Inner radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary at infinity. Default: ``0.0``
     struc_grid : :class:`bool`, optional
-        If this is set to ``False``, the `rad` and `time` array will be merged
+        If this is set to "False", the "rad" and "time" array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
-    rwell : :class:`float`, optional
-        Inner radius of the pumping-well. Default: ``0.0``
-    rinf : :class:`float`, optional
-        Radius of the outer boundary of the aquifer. Default: ``np.inf``
-    hinf : :class:`float`, optional
-        Reference head at the outer boundary `rinf`. Default: ``0.0``
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -256,7 +222,7 @@ def grf_model(
 
     Returns
     -------
-    :class:`numpy.ndarray`
+    head : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
 
     References
@@ -266,60 +232,32 @@ def grf_model(
        in fractured rock.'',
        Water Resources Research 24.10, 1796-1804, 1988
     """
-    Input = Shaper(time, rad, struc_grid)
-    lap_kwargs = {} if lap_kwargs is None else lap_kwargs
-
-    # check the input
-    if rwell < 0.0:
-        raise ValueError("The wellradius needs to be >= 0")
-    if rinf <= rwell:
-        raise ValueError(
-            "The upper boundary needs to be greater than the wellradius"
+    if np.isclose(r_well, 0) and np.isposinf(r_bound):
+        return grf_solution(
+            time=time,
+            rad=rad,
+            storage=storage,
+            conductivity=conductivity,
+            dim=dim,
+            lat_ext=lat_ext,
+            rate=rate,
+            h_bound=h_bound,
+            struc_grid=struc_grid,
         )
-    if Input.rad_min < rwell:
-        raise ValueError(
-            "The given radii need to be greater than the wellradius"
-        )
-    if K <= 0.0:
-        raise ValueError("The Transmissivity needs to be positiv")
-    if S <= 0.0:
-        raise ValueError("The Storage needs to be positiv")
-    if dim <= 0.0 or dim > 3.0:
-        raise ValueError("The dimension needs to be positiv and <= 3")
-    if lat_ext <= 0.0:
-        raise ValueError("The lateral extend needs to be positiv")
-
-    if rwell == 0.0 and rinf == np.inf:
-        return grf(time, rad, K, S, Qw, dim, lat_ext, struc_grid, hinf)
-
-    rpart = np.array([rwell, rinf])
-    Kpart = np.array([K])
-    Spart = np.array([S])
-
-    # write the paramters in kwargs to use the stehfest-algorithm
-    kwargs = {
-        "rad": Input.rad,
-        "Qw": Qw,
-        "dim": dim,
-        "lat_ext": lat_ext,
-        "rpart": rpart,
-        "Spart": Spart,
-        "Kpart": Kpart,
-    }
-    kwargs.update(lap_kwargs)
-
-    res = np.zeros((Input.time_no, Input.rad_no))
-    # call the grf-model
-    lap_inv = get_lap_inv(grf_laplace, **kwargs)
-    res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
-    res = Input.reshape(res)
-    if Qw > 0:
-        res = np.maximum(res, 0)
-    else:
-        res = np.minimum(res, 0)
-    # add the reference head
-    res += hinf
-    return res
+    return ext_grf(
+        time=time,
+        rad=rad,
+        S_part=[storage],
+        K_part=[conductivity],
+        R_part=[r_well, r_bound],
+        dim=dim,
+        lat_ext=lat_ext,
+        rate=rate,
+        K_well=None,
+        h_bound=h_bound,
+        struc_grid=struc_grid,
+        lap_kwargs=lap_kwargs,
+    )
 
 
 if __name__ == "__main__":

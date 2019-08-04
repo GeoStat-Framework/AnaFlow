@@ -15,31 +15,11 @@ from __future__ import absolute_import, division, print_function
 import warnings
 
 import numpy as np
-from scipy.special import k0, k1, kn, kv, i0, i1, iv, gamma
+from scipy.special import kv, iv, gamma
 from pentapy import solve
 from anaflow.tools.special import sph_surf
 
 __all__ = ["grf_laplace"]
-
-
-def get_bessel_prec(nu):
-    """Get the right bessel functions for the GRF-model."""
-    if np.isclose(nu, 0):
-        kv0 = lambda x: k0(x)
-        kv1 = lambda x: k1(x)
-        iv0 = lambda x: i0(x)
-        iv1 = lambda x: i1(x)
-    if np.isclose(nu, np.around(nu)):
-        kv0 = lambda x: kn(int(nu), x)
-        kv1 = lambda x: kn(int(nu - 1), x)
-        iv0 = lambda x: iv(int(nu), x)
-        iv1 = lambda x: iv(int(nu - 1), x)
-    else:
-        kv0 = lambda x: kv(nu, x)
-        kv1 = lambda x: kv(nu - 1, x)
-        iv0 = lambda x: iv(nu, x)
-        iv1 = lambda x: iv(nu - 1, x)
-    return kv0, kv1, iv0, iv1
 
 
 def get_bessel(nu):
@@ -114,7 +94,6 @@ def grf_laplace(
     R_part = np.squeeze(R_part).reshape(-1)
     S_part = np.squeeze(S_part).reshape(-1)
     K_part = np.squeeze(K_part).reshape(-1)
-
     # the dimension is used by nu in the literature (See Barker 88)
     dim = float(dim)
     nu = 1.0 - dim / 2.0
@@ -123,10 +102,29 @@ def grf_laplace(
     rate = float(rate)
     # get the number of partitions
     parts = len(K_part)
-    # initialize the result
-    res = np.zeros(s.shape + rad.shape)
     # set the conductivity at the well
     K_well = K_part[0] if K_well is None else float(K_well)
+
+    # check the input
+    if not len(R_part) - 1 == len(S_part) == len(K_part):
+        raise ValueError("R_part, S_part and K_part need the same length.")
+    if R_part[0] < 0.0:
+        raise ValueError("The wellradius needs to be >= 0.")
+    if not all([r1 < r2 for r1, r2 in zip[R_part[:-1], R_part[1:]]]):
+        raise ValueError("The radii values need to be sorted.")
+    if not all([con > 0 for con in K_part]):
+        raise ValueError("The Conductivity needs to be positiv.")
+    if not all([stor > 0 for stor in S_part]):
+        raise ValueError("The Storage needs to be positiv.")
+    if dim <= 0.0 or dim > 3.0:
+        raise ValueError("The dimension needs to be positiv and <= 3.")
+    if lat_ext <= 0.0:
+        raise ValueError("The lateral extend needs to be positiv.")
+    if K_well <= 0:
+        raise ValueError("The well conductivity needs to be positiv.")
+
+    # initialize the result
+    res = np.zeros(s.shape + rad.shape)
     # the first sqrt of the diffusivity values
     diff_sr0 = np.sqrt(S_part[0] / K_part[0])
     # set the general pumping-condtion depending on the well-radius

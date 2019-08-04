@@ -29,12 +29,12 @@ def ext_grf(
     S_part,
     K_part,
     R_part,
-    Qw=-1e-4,
     dim=2,
     lat_ext=1.0,
+    rate=-1e-4,
     K_well=None,
+    h_bound=0.0,
     struc_grid=True,
-    head_bound=0.0,
     lap_kwargs=None,
 ):
     """
@@ -58,17 +58,17 @@ def ext_grf(
         Given conductivity values for each disk
     R_part : :class:`numpy.ndarray`
         Given radii separating the disks (including r_well and r_bound).
-    Qw : :class:`float`, optional
+    rate : :class:`float`, optional
         Pumpingrate at the well. Default: -1e-4
     K_well : :class:`float`, optional
         Conductivity at the well. Default: ``K_part[0]``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary `R_part[-1]`. Default: ``0.0``
     struc_grid : :class:`bool`, optional
         If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
-    head_bound : :class:`float`, optional
-        Reference head at the outer boundary `R_part[-1]`. Default: ``0.0``
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -93,13 +93,13 @@ def ext_grf(
     # write the paramters in kwargs to use the stehfest-algorithm
     kwargs = {
         "rad": rad,
-        "Qw": Qw,
-        "rpart": R_part,
-        "Spart": S_part,
-        "Kpart": K_part,
+        "R_part": R_part,
+        "S_part": S_part,
+        "K_part": K_part,
         "dim": dim,
         "lat_ext": lat_ext,
-        "Kwell": K_well,
+        "rate": rate,
+        "K_well": K_well,
     }
     kwargs.update(lap_kwargs)
 
@@ -108,12 +108,12 @@ def ext_grf(
     lap_inv = get_lap_inv(grf_laplace, **kwargs)
     res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
     res = Input.reshape(res)
-    if Qw > 0:
+    if rate > 0:
         res = np.maximum(res, 0)
     else:
         res = np.minimum(res, 0)
     # add the reference head
-    res += head_bound
+    res += h_bound
     return res
 
 

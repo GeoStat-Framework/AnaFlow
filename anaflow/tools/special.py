@@ -14,6 +14,7 @@ The following functions are provided
    specialrange_cut
    aniso
    well_solution
+   grf_solution
    inc_gamma
    tpl_hyp
    neuman2004_trans
@@ -31,6 +32,7 @@ __all__ = [
     "specialrange_cut",
     "aniso",
     "well_solution",
+    "grf_solution",
     "inc_gamma",
     "tpl_hyp",
     "neuman2004_trans",
@@ -265,7 +267,15 @@ def aniso(e):
     return res
 
 
-def well_solution(time, rad, T, S, Qw, struc_grid=True, hinf=0.0):
+def well_solution(
+    time,
+    rad,
+    storage,
+    transmissivity,
+    rate=-1e-4,
+    h_bound=0.0,
+    struc_grid=True,
+):
     """
     The classical Theis solution.
 
@@ -277,26 +287,26 @@ def well_solution(time, rad, T, S, Qw, struc_grid=True, hinf=0.0):
     Parameters
     ----------
     time : :class:`numpy.ndarray`
-        Array with all time-points where the function should be evaluated
+        Array with all time-points where the function should be evaluated.
     rad : :class:`numpy.ndarray`
-        Array with all radii where the function should be evaluated
-    T : :class:`float`
-        Given transmissivity of the aquifer
-    S : :class:`float`
-        Given storativity of the aquifer
-    Qw : :class:`float`
-        Pumpingrate at the well
+        Array with all radii where the function should be evaluated.
+    storage : :class:`float`
+        Storage of the aquifer.
+    transmissivity : :class:`float`
+        Transmissivity of the aquifer.
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary at infinity. Default: ``0.0``
     struc_grid : :class:`bool`, optional
         If this is set to "False", the "rad" and "time" array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
-    hinf : :class:`float`, optional
-        Reference head at the outer boundary "rinf". Default: ``0.0``
 
     Returns
     -------
-    well_solution : :class:`numpy.ndarray`
+    head : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
 
     Raises
@@ -334,9 +344,9 @@ def well_solution(time, rad, T, S, Qw, struc_grid=True, hinf=0.0):
     """
     Input = Shaper(time, rad, struc_grid)
 
-    if not T > 0.0:
+    if not transmissivity > 0.0:
         raise ValueError("The Transmissivity needs to be positiv")
-    if not S > 0.0:
+    if not storage > 0.0:
         raise ValueError("The Storage needs to be positiv")
 
     time_mat = Input.time_mat
@@ -344,49 +354,61 @@ def well_solution(time, rad, T, S, Qw, struc_grid=True, hinf=0.0):
 
     res = np.zeros((Input.time_no, Input.rad_no))
     res[Input.time_gz, :] = (
-        Qw / (4.0 * np.pi * T) * exp1(rad_mat ** 2 * S / (4 * T * time_mat))
+        rate
+        / (4.0 * np.pi * transmissivity)
+        * exp1(rad_mat ** 2 * storage / (4 * transmissivity * time_mat))
     )
     res = Input.reshape(res)
-    if Qw > 0:
+    if rate > 0:
         res = np.maximum(res, 0)
     else:
         res = np.minimum(res, 0)
     # add the reference head
-    res += hinf
+    res += h_bound
     return res
 
 
-def grf(time, rad, K, S, Qw, dim=2, lat_ext=1.0, struc_grid=True, hinf=0.0):
+def grf_solution(
+    time,
+    rad,
+    storage,
+    conductivity,
+    dim=2,
+    lat_ext=1.0,
+    rate=-1e-4,
+    h_bound=0.0,
+    struc_grid=True,
+):
     """
     The general radial flow (GRF) model for a pumping test.
 
     Parameters
     ----------
     time : :class:`numpy.ndarray`
-        Array with all time-points where the function should be evaluated
+        Array with all time-points where the function should be evaluated.
     rad : :class:`numpy.ndarray`
-        Array with all radii where the function should be evaluated
-    K : :class:`float`
-        Given conductivity of the aquifer
-    S : :class:`float`
-        Given storativity of the aquifer
-    Qw : :class:`float`
-        Pumpingrate at the well
-    dim : :class:`float`
+        Array with all radii where the function should be evaluated.
+    storage : :class:`float`
+        Storage coefficient of the aquifer.
+    conductivity : :class:`float`
+        Conductivity of the aquifer.
+    dim : :class:`float`, optional
         Fractional dimension of the aquifer. Default: ``2.0``
-    lat_ext : :class:`float`
+    lat_ext : :class:`float`, optional
         Lateral extend of the aquifer. Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary at infinity. Default: ``0.0``
     struc_grid : :class:`bool`, optional
         If this is set to "False", the "rad" and "time" array will be merged
         and interpreted as single, r-t points. In this case they need to have
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
-    hinf : :class:`float`, optional
-        Reference head at the outer boundary "rinf". Default: ``0.0``
 
     Returns
     -------
-    well_solution : :class:`numpy.ndarray`
+    head : :class:`numpy.ndarray`
         Array with all heads at the given radii and time-points.
 
     Raises
@@ -405,30 +427,30 @@ def grf(time, rad, K, S, Qw, dim=2, lat_ext=1.0, struc_grid=True, hinf=0.0):
     """
     Input = Shaper(time, rad, struc_grid)
 
-    if not K > 0.0:
+    if not conductivity > 0.0:
         raise ValueError("The Conductivity needs to be positiv")
-    if not S > 0.0:
+    if not storage > 0.0:
         raise ValueError("The Storage needs to be positiv")
 
     time_mat = Input.time_mat
     rad_mat = Input.rad_mat
-    u = S * rad_mat ** 2 / (4 * K * time_mat)
+    u = storage * rad_mat ** 2 / (4 * conductivity * time_mat)
     nu = 1.0 - dim / 2.0
 
     res = np.zeros((Input.time_no, Input.rad_no))
     res[Input.time_gz, :] = inc_gamma(-nu, u)
     res[Input.time_gz, :] *= (
-        Qw
-        / (4.0 * np.pi ** (1 - nu) * K * lat_ext ** (3.0 - dim))
+        rate
+        / (4.0 * np.pi ** (1 - nu) * conductivity * lat_ext ** (3.0 - dim))
         * rad_mat ** (2 * nu)
     )
     res = Input.reshape(res)
-    if Qw > 0:
+    if rate > 0:
         res = np.maximum(res, 0)
     else:
         res = np.minimum(res, 0)
     # add the reference head
-    res += hinf
+    res += h_bound
     return res
 
 
