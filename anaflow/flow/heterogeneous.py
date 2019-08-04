@@ -13,6 +13,7 @@ The following functions are provided
    ext_theis3D
    ext_theis_tpl
    neuman2004
+   neuman2004_steady
 """
 # pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
@@ -37,6 +38,7 @@ from anaflow.tools.coarse_graining import (
     TPL_CG_error,
 )
 from anaflow.flow.laplace import grf_laplace
+from anaflow.flow.special import grf_steady
 
 __all__ = [
     "ext_thiem2D",
@@ -45,6 +47,7 @@ __all__ = [
     "ext_theis3D",
     "ext_theis_tpl",
     "neuman2004",
+    "neuman2004_steady",
 ]
 
 
@@ -856,7 +859,7 @@ def ext_theis_tpl(
 
 
 ###############################################################################
-# transient solution for apparent transmissity from Neuman 1994
+# solution for apparent transmissity from Neuman 2004
 ###############################################################################
 
 
@@ -997,6 +1000,66 @@ def neuman2004(
     # add the reference head
     res += h_bound
     return res
+
+
+def neuman2004_steady(
+    rad, r_ref, trans_gmean, var, len_scale, rate=-1e-4, h_ref=0.0
+):
+    """
+    The steady solution for the apparent transmissivity from [Neuman2004].
+
+    This solution is build on the apparent transmissivity from Neuman 1994,
+    which represents a mean drawdown in an ensemble of pumping tests in
+    heterogeneous transmissivity fields following an exponential covariance.
+
+    Parameters
+    ----------
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    r_ref : :class:`float`
+        Radius of the reference head.
+    trans_gmean : :class:`float`
+        Geometric-mean transmissivity.
+    var : :class:`float`
+        Variance of log-transmissivity.
+    len_scale : :class:`float`
+        Correlation-length of log-transmissivity.
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    h_ref : :class:`float`, optional
+        Reference head at the reference-radius `r_ref`. Default: ``0.0``
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii.
+
+    References
+    ----------
+    .. [Neuman2004] Neuman, Shlomo P., Alberto Guadagnini, and Monica Riva.
+       ''Type-curve estimation of statistical heterogeneity.''
+       Water resources research 40.4, 2004
+    """
+    # check the input
+    if trans_gmean <= 0.0:
+        raise ValueError("The Transmissivity needs to be positiv")
+    if var <= 0.0:
+        raise ValueError("The variance needs to be positiv")
+    if len_scale <= 0.0:
+        raise ValueError("The correlationlength needs to be positiv")
+
+    return grf_steady(
+        rad=rad,
+        r_ref=r_ref,
+        conductivity=neuman2004_trans,
+        dim=2,
+        lat_ext=1,
+        rate=rate,
+        h_ref=h_ref,
+        trans_gmean=trans_gmean,
+        var=var,
+        len_scale=len_scale,
+    )
 
 
 if __name__ == "__main__":

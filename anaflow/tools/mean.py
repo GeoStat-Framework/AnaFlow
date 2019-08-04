@@ -61,7 +61,7 @@ def annular_fmean(
     arg_dict : :class:`dict` or :any:`None`, optional
         Keyword-arguments given as a dictionary that are forwarded to the
         function given in ``func``. Will be merged with ``**kwargs``.
-        This is designed for overlapping keywords in ``rad_amean_func`` and
+        This is designed for overlapping keywords in ``annular_fmean`` and
         ``func``.
         Default: ``None``
     **kwargs
@@ -357,7 +357,7 @@ def annular_pmean(func, val_arr, p=2.0, ann_dim=2, arg_dict=None, **kwargs):
     arg_dict : :class:`dict` or :any:`None`, optional
         Keyword-arguments given as a dictionary that are forwarded to the
         function given in ``func``. Will be merged with ``**kwargs``.
-        This is designed for overlapping keywords in ``rad_pmean_func`` and
+        This is designed for overlapping keywords in ``annular_pmean`` and
         ``func``.
         Default: ``None``
     **kwargs

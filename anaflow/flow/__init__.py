@@ -42,6 +42,7 @@ Solutions for heterogeneous aquifers
    ext_theis3D
    ext_theis_tpl
    neuman2004
+   neuman2004_steady
 
 Special
 ~~~~~~~
@@ -52,6 +53,7 @@ Special solutions for special aquifers
 
 .. autosummary::
    grf_disk
+   grf_stedy
 """
 from __future__ import absolute_import
 
@@ -63,8 +65,9 @@ from anaflow.flow.heterogeneous import (
     ext_theis3D,
     ext_theis_tpl,
     neuman2004,
+    neuman2004_steady,
 )
-from anaflow.flow.special import grf_disk
+from anaflow.flow.special import grf_disk, grf_steady
 
 __all__ = [
     "thiem",
@@ -76,5 +79,7 @@ __all__ = [
     "ext_theis3D",
     "ext_theis_tpl",
     "neuman2004",
+    "neuman2004_steady",
     "grf_disk",
+    "grf_steady",
 ]

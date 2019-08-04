@@ -42,6 +42,7 @@ Solutions for heterogeneous aquifers
    ext_theis3D
    ext_theis_tpl
    neuman2004
+   neuman2004_steady
 
 Special
 ^^^^^^^
@@ -52,6 +53,7 @@ Special solutions for special aquifers
 
 .. autosummary::
    grf_disk
+   grf_steady
 
 Laplace
 =======
@@ -78,7 +80,9 @@ from anaflow.flow import (
     ext_theis3D,
     ext_theis_tpl,
     neuman2004,
+    neuman2004_steady,
     grf_disk,
+    grf_steady,
 )
 from anaflow.tools.laplace import get_lap_inv, get_lap
 
@@ -93,8 +97,10 @@ __all__ += [
     "ext_theis3D",
     "ext_theis_tpl",
     "neuman2004",
+    "neuman2004_steady",
     "grf_model",
     "grf_disk",
+    "grf_steady",
     "get_lap_inv",
     "get_lap",
 ]

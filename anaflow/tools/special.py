@@ -38,9 +38,25 @@ __all__ = [
 
 
 class Shaper(object):
-    """A class to reshape radius-time input-output in a good way."""
+    """
+    A class to reshape radius-time input-output in a good way.
 
-    def __init__(self, time, rad, struc_grid):
+    Parameters
+    ----------
+    time : :class:`numpy.ndarray` or :class:`float`, optional
+        Array with all time-points where the function should be evaluated.
+        Default: 0
+    rad : :class:`numpy.ndarray` or :class:`float`, optional
+        Array with all radii where the function should be evaluated.
+        Default: 0
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured t-r grid is created.
+        Default: ``True``
+    """
+
+    def __init__(self, time=0, rad=0, struc_grid=True):
         self.time_scalar = np.isscalar(time)
         self.rad_scalar = np.isscalar(rad)
         self.time = np.array(time)
