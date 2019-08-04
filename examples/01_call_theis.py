@@ -13,4 +13,5 @@ for i, step in enumerate(time):
     plt.plot(rad, head[i], label="Theis(t={})".format(step))
 
 plt.legend()
+plt.tight_layout()
 plt.show()
