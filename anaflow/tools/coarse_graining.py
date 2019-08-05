@@ -37,7 +37,7 @@ __all__ = [
 ]
 
 
-def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
+def T_CG(rad, trans_gmean, var, len_scale, T_well=None, prop=1.6):
     """
     The coarse-graining Transmissivity.
 
@@ -52,17 +52,17 @@ def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
     ----------
     rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    TG : :class:`float`
-        Geometric-mean of the transmissivity-distribution
-    sig2 : :class:`float`
-        log-normal-variance of the transmissivity-distribution
-    corr : :class:`float`
-        corralation-length of transmissivity-distribution
+    trans_gmean : :class:`float`
+        Geometric-mean transmissivity.
+    var : :class:`float`
+        Variance of log-transmissivity.
+    len_scale : :class:`float`
+        Correlation-length of log-transmissivity.
+    T_well : :class:`float`, optional
+        Explicit transmissivity value at the well. Harmonic mean by default.
     prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
-    Twell : :class:`float`, optional
-        Explicit transmissivity value at the well. Default: ``None``
 
     Returns
     -------
@@ -81,17 +81,11 @@ def T_CG(rad, TG, sig2, corr, prop=1.6, Twell=None):
     >>> T_CG([1,2,3], 0.001, 1, 10, 2)
     array([0.00061831, 0.00064984, 0.00069236])
     """
-    rad = np.squeeze(rad)
-
-    if Twell is None:
-        chi = -sig2 / 2.0  # T_well = T_H
-    else:
-        chi = np.log(Twell) - np.log(TG)
-
-    return TG * np.exp(chi / (1.0 + (prop * rad / corr) ** 2))
+    chi = -var / 2.0 if T_well is None else np.log(T_well / trans_gmean)
+    return trans_gmean * np.exp(chi / (1.0 + (prop * rad / len_scale) ** 2))
 
 
-def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
+def T_CG_inverse(T, trans_gmean, var, len_scale, T_well=None, prop=1.6):
     """
     The inverse coarse-graining Transmissivity.
 
@@ -102,17 +96,17 @@ def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
     T : :class:`numpy.ndarray`
         Array with all transmissivity values
         where the function should be evaluated
-    TG : :class:`float`
-        Geometric-mean of the transmissivity-distribution
-    sig2 : :class:`float`
-        log-normal-variance of the transmissivity-distribution
-    corr : :class:`float`
-        corralation-length of transmissivity-distribution
+    trans_gmean : :class:`float`
+        Geometric-mean transmissivity.
+    var : :class:`float`
+        Variance of log-transmissivity.
+    len_scale : :class:`float`
+        Correlation-length of log-transmissivity.
+    T_well : :class:`float`, optional
+        Explicit transmissivity value at the well. Harmonic mean by default.
     prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
-    Twell : :class:`float`, optional
-        Explicit transmissivity value at the well. Default: ``None``
 
     Returns
     -------
@@ -124,17 +118,11 @@ def T_CG_inverse(T, TG, sig2, corr, prop=1.6, Twell=None):
     >>> T_CG_inverse([7e-4,8e-4,9e-4], 0.001, 1, 10, 2)
     array([3.16952925, 5.56935826, 9.67679026])
     """
-    T = np.squeeze(T)
-
-    if Twell is not None:
-        chi = np.log(Twell) - np.log(TG)
-    else:
-        chi = -sig2 / 2.0
-
-    return (corr / prop) * np.sqrt(chi / np.log(T / TG) - 1.0)
+    chi = -var / 2.0 if T_well is None else np.log(T_well / trans_gmean)
+    return (len_scale / prop) * np.sqrt(chi / np.log(T / trans_gmean) - 1.0)
 
 
-def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
+def T_CG_error(err, trans_gmean, var, len_scale, T_well=None, prop=1.6):
     """
     Calculating the radial-point for given error.
 
@@ -146,17 +134,17 @@ def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
     ----------
     err : :class:`float`
         Given relative error for the farfield transmissivity
-    TG : :class:`float`
-        Geometric-mean of the transmissivity-distribution
-    sig2 : :class:`float`
-        log-normal-variance of the transmissivity-distribution
-    corr : :class:`float`
-        corralation-length of transmissivity-distribution
+    trans_gmean : :class:`float`
+        Geometric-mean transmissivity.
+    var : :class:`float`
+        Variance of log-transmissivity.
+    len_scale : :class:`float`
+        Correlation-length of log-transmissivity.
+    T_well : :class:`float`, optional
+        Explicit transmissivity value at the well. Harmonic mean by default.
     prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
-    Twell : :class:`float`, optional
-        Explicit transmissivity value at the well. Default: ``None``
 
     Returns
     -------
@@ -168,24 +156,19 @@ def T_CG_error(err, TG, sig2, corr, prop=1.6, Twell=None):
     >>> T_CG_error(0.01, 0.001, 1, 10, 2)
     34.91045016779039
     """
-    if Twell is not None:
-        chi = np.log(Twell) - np.log(TG)
-    else:
-        chi = -sig2 / 2.0
-
+    chi = -var / 2.0 if T_well is None else np.log(T_well / trans_gmean)
     if chi > 0.0:
         if chi / np.log(1.0 + err) >= 1.0:
-            return (corr / prop) * np.sqrt(chi / np.log(1.0 + err) - 1.0)
+            return (len_scale / prop) * np.sqrt(chi / np.log(1.0 + err) - 1.0)
         # standard value if the error is less then the variation
         return 0
-
     if chi / np.log(1.0 - err) >= 1.0:
-        return (corr / prop) * np.sqrt(chi / np.log(1.0 - err) - 1.0)
+        return (len_scale / prop) * np.sqrt(chi / np.log(1.0 - err) - 1.0)
     # standard value if the error is less then the variation
     return 0
 
 
-def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
+def K_CG(rad, cond_gmean, var, len_scale, anis, K_well="KH", prop=1.6):
     """
     The coarse-graining conductivity.
 
@@ -200,22 +183,21 @@ def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     ----------
     rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    KG : :class:`float`
-        Geometric-mean conductivity-distribution
-    sig2 : :class:`float`
-        log-normal-variance of the conductivity-distribution
-    corr : :class:`float`
-        corralation-length of conductivity-distribution
-    e : :class:`float`
-        Anisotropy-ratio of the vertical and horizontal corralation-lengths
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+    var : :class:`float`
+        Variance of the log-conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    anis : :class:`float`
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+    K_well : string/float, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
     prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
-    Kwell :  :class:`str` or  :class:`float`, optional
-        Explicit conductivity value at the well. One can choose between the
-        harmonic mean (``"KH"``),
-        the arithmetic mean (``"KA"``) or an arbitrary float
-        value. Default: ``"KH"``
 
     Returns
     -------
@@ -236,22 +218,22 @@ def K_CG(rad, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     >>> K_CG([1,2,3], 0.001, 1, 10, 1, 2)
     array([0.00063008, 0.00069285, 0.00077595])
     """
-    rad = np.squeeze(rad)
-
-    Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
-    if Kwell == "KH":
-        chi = sig2 * (aniso(e) - 1.0)
-    elif Kwell == "KA":
-        chi = sig2 * aniso(e)
+    K_efu = cond_gmean * np.exp(var * (0.5 - aniso(anis)))
+    if K_well == "KH":
+        chi = var * (aniso(anis) - 1.0)
+    elif K_well == "KA":
+        chi = var * aniso(anis)
     else:
-        chi = np.log(Kwell) - np.log(Kefu)
+        chi = np.log(K_well / K_efu)
 
-    return Kefu * np.exp(
-        chi / np.sqrt(1.0 + (prop * rad / (corr * e ** (1.0 / 3.0))) ** 2) ** 3
+    return K_efu * np.exp(
+        chi
+        / np.sqrt(1.0 + (prop * rad / (len_scale * anis ** (1.0 / 3.0))) ** 2)
+        ** 3
     )
 
 
-def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
+def K_CG_inverse(K, cond_gmean, var, len_scale, anis, K_well="KH", prop=1.6):
     """
     The inverse coarse-graining conductivity.
 
@@ -262,21 +244,21 @@ def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     K : :class:`numpy.ndarray`
         Array with all conductivity values
         where the function should be evaluated
-    KG : :class:`float`
-        Geometric-mean conductivity-distribution
-    sig2 : :class:`float`
-        log-normal-variance of the conductivity-distribution
-    corr : :class:`float`
-        corralation-length of conductivity-distribution
-    e : :class:`float`
-        Anisotropy-ratio of the vertical and horizontal corralation-lengths
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+    var : :class:`float`
+        Variance of the log-conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    anis : :class:`float`
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+    K_well : string/float, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
     prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
-    Kwell :  :class:`str` or  :class:`float`, optional
-        Explicit conductivity value at the well. One can choose between the
-        harmonic mean ("KH"), the arithmetic mean ("KA") or an arbitrary float
-        value. Default: ``"KH"``
 
     Returns
     -------
@@ -288,25 +270,23 @@ def K_CG_inverse(K, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     >>> K_CG_inverse([7e-4,8e-4,9e-4], 0.001, 1, 10, 1, 2)
     array([2.09236867, 3.27914996, 4.52143956])
     """
-    K = np.squeeze(K)
-
-    Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
-    if Kwell == "KH":
-        chi = sig2 * (aniso(e) - 1.0)
-    elif Kwell == "KA":
-        chi = sig2 * aniso(e)
+    K_efu = cond_gmean * np.exp(var * (0.5 - aniso(anis)))
+    if K_well == "KH":
+        chi = var * (aniso(anis) - 1.0)
+    elif K_well == "KA":
+        chi = var * aniso(anis)
     else:
-        chi = np.log(Kwell) - np.log(Kefu)
+        chi = np.log(K_well / K_efu)
 
     return (
-        corr
-        * e ** (1.0 / 3.0)
+        len_scale
+        * anis ** (1.0 / 3.0)
         / prop
-        * np.sqrt((chi / np.log(K / Kefu)) ** (2.0 / 3.0) - 1.0)
+        * np.sqrt((chi / np.log(K / K_efu)) ** (2.0 / 3.0) - 1.0)
     )
 
 
-def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
+def K_CG_error(err, cond_gmean, var, len_scale, anis, K_well="KH", prop=1.6):
     """
     Calculating the radial-point for given error.
 
@@ -318,21 +298,21 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     ----------
     err : :class:`float`
         Given relative error for the farfield conductivity
-    KG : :class:`float`
-        Geometric-mean conductivity-distribution
-    sig2 : :class:`float`
-        log-normal-variance of the conductivity-distribution
-    corr : :class:`float`
-        corralation-length of conductivity-distribution
-    e : :class:`float`
-        Anisotropy-ratio of the vertical and horizontal corralation-lengths
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+    var : :class:`float`
+        Variance of the log-conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    anis : :class:`float`
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+    K_well : string/float, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
     prop: :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
-    Kwell :  :class:`str` or  :class:`float`, optional
-        Explicit conductivity value at the well. One can choose between the
-        harmonic mean ("KH"), the arithmetic mean ("KA") or an arbitrary float
-        value. Default: ``"KH"``
 
     Returns
     -------
@@ -344,15 +324,15 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
     >>> K_CG_error(0.01, 0.001, 1, 10, 1, 2)
     19.612796453639845
     """
-    Kefu = KG * np.exp(sig2 * (0.5 - aniso(e)))
-    if Kwell == "KH":
-        chi = sig2 * (aniso(e) - 1.0)
-    elif Kwell == "KA":
-        chi = sig2 * aniso(e)
+    K_efu = cond_gmean * np.exp(var * (0.5 - aniso(anis)))
+    if K_well == "KH":
+        chi = var * (aniso(anis) - 1.0)
+    elif K_well == "KA":
+        chi = var * aniso(anis)
     else:
-        chi = np.log(Kwell) - np.log(Kefu)
+        chi = np.log(K_well / K_efu)
 
-    coef = corr * e ** (1.0 / 3.0) / prop
+    coef = len_scale * anis ** (1.0 / 3.0) / prop
 
     if chi > 0.0:
         if chi / np.log(1.0 + err) >= 1.0:
@@ -369,7 +349,16 @@ def K_CG_error(err, KG, sig2, corr, e, prop=1.6, Kwell="KH"):
 
 
 def TPL_CG(
-    rad, KG, corr, hurst, sig2=None, c=1.0, e=1, dim=2.0, Kwell="KH", prop=1.6
+    rad,
+    cond_gmean,
+    len_scale,
+    hurst,
+    var=None,
+    c=1.0,
+    anis=1,
+    dim=2.0,
+    K_well="KH",
+    prop=1.6,
 ):
     """
     The gaussian truncated power-law coarse-graining conductivity.
@@ -378,27 +367,28 @@ def TPL_CG(
     ----------
     rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    KG : :class:`float`
+    cond_gmean : :class:`float`
         Geometric-mean conductivity
-    corr : :class:`float`
+    len_scale : :class:`float`
         upper bound of the corralation-length of conductivity-distribution
     hurst: :class:`float`
         Hurst coefficient of the TPL model. Should be in (0, 1).
-    sig2: :class:`float` or :any:`None`
-        If sig2 is given, c will be calculated accordingly.
+    var : :class:`float` or :any:`None`, optional
+        Variance of log-conductivity
+        If given, c will be calculated accordingly.
         Default: :any:`None`
     c : :class:`float`, optional
         Intensity of variation in the TPL model.
-        Is overwritten if sig2 is given.
+        Is overwritten if var is given.
         Default: ``1.0``
-    e : :class:`float`, optional
+    anis : :class:`float`, optional
         Anisotropy-ratio of the vertical and horizontal corralation-lengths.
         This is only applied in 3 dimensions.
         Default: 1.0
     dim: :class:`float`, optional
         Dimension of space.
         Default: ``2.0``
-    Kwell :  :class:`str` or  :class:`float`, optional
+    K_well :  :class:`str` or  :class:`float`, optional
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``),
         the arithmetic mean (``"KA"``) or an arbitrary float
@@ -412,28 +402,35 @@ def TPL_CG(
     TPL_CG : :class:`numpy.ndarray`
         Array containing the effective conductivity values.
     """
-    rad = np.squeeze(rad)
     # handle special case in 3D with anisotropy
-    e = 1.0 if not np.isclose(dim, 3) else e
-    ani = aniso(e) if np.isclose(dim, 3) else 1.0 / dim
-    sig2 = c * corr ** (2 * hurst) / (2 * hurst) if sig2 is None else sig2
-    Kefu = KG * np.exp(sig2 * (0.5 - ani))
-
-    if Kwell == "KH":
-        chi = sig2 * (ani - 1.0)
-    elif Kwell == "KA":
-        chi = sig2 * ani
+    anis = 1.0 if not np.isclose(dim, 3) else anis
+    ani = aniso(anis) if np.isclose(dim, 3) else 1.0 / dim
+    var = c * len_scale ** (2 * hurst) / (2 * hurst) if var is None else var
+    K_efu = cond_gmean * np.exp(var * (0.5 - ani))
+    if K_well == "KH":
+        chi = var * (ani - 1.0)
+    elif K_well == "KA":
+        chi = var * ani
     else:
-        chi = np.log(Kwell) - np.log(Kefu)
+        chi = np.log(K_well / K_efu)
 
-    return Kefu * np.exp(
+    return K_efu * np.exp(
         (chi * 2.0 * hurst / (dim + 2.0 * hurst))
-        * tpl_hyp(rad, dim, hurst, corr * e ** (1 / 3.0), prop)
+        * tpl_hyp(rad, dim, hurst, len_scale * anis ** (1 / 3.0), prop)
     )
 
 
 def TPL_CG_error(
-    err, KG, corr, hurst, sig2=None, c=1.0, e=1, dim=2.0, Kwell="KH", prop=1.6
+    err,
+    cond_gmean,
+    len_scale,
+    hurst,
+    var=None,
+    c=1.0,
+    anis=1,
+    dim=2.0,
+    K_well="KH",
+    prop=1.6,
 ):
     """
     Calculating the radial-point for given error.
@@ -446,27 +443,28 @@ def TPL_CG_error(
     ----------
     err : :class:`float`
         Given relative error for the farfield conductivity
-    KG : :class:`float`
+    cond_gmean : :class:`float`
         Geometric-mean conductivity
-    corr : :class:`float`
+    len_scale : :class:`float`
         upper bound of the corralation-length of conductivity-distribution
     hurst: :class:`float`
         Hurst coefficient of the TPL model. Should be in (0, 1).
-    sig2: :class:`float` or :any:`None`
-        If sig2 is given, c will be calculated accordingly.
+    var : :class:`float` or :any:`None`, optional
+        Variance of log-conductivity
+        If given, c will be calculated accordingly.
         Default: :any:`None`
     c : :class:`float`, optional
         Intensity of variation in the TPL model.
-        Is overwritten if sig2 is given.
+        Is overwritten if var is given.
         Default: ``1.0``
-    e : :class:`float`, optional
+    anis : :class:`float`, optional
         Anisotropy-ratio of the vertical and horizontal corralation-lengths.
         This is only applied in 3 dimensions.
         Default: 1.0
     dim: :class:`float`, optional
-        Dimension.
+        Dimension of space.
         Default: ``2.0``
-    Kwell :  :class:`str` or  :class:`float`, optional
+    K_well :  :class:`str` or  :class:`float`, optional
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``),
         the arithmetic mean (``"KA"``) or an arbitrary float
@@ -481,26 +479,25 @@ def TPL_CG_error(
         Radial point, where the relative error is less than the given one.
     """
     # handle special case in 3D with anisotropy
-    e = 1.0 if not np.isclose(dim, 3) else e
-    ani = aniso(e) if np.isclose(dim, 3) else 1.0 / dim
-    sig2 = c * corr ** (2 * hurst) / (2 * hurst) if sig2 is None else sig2
-    Kefu = KG * np.exp(sig2 * (0.5 - ani))
-
-    if Kwell == "KH":
-        chi = sig2 * (ani - 1.0)
-    elif Kwell == "KA":
-        chi = sig2 * ani
+    anis = 1.0 if not np.isclose(dim, 3) else anis
+    ani = aniso(anis) if np.isclose(dim, 3) else 1.0 / dim
+    var = c * len_scale ** (2 * hurst) / (2 * hurst) if var is None else var
+    K_efu = cond_gmean * np.exp(var * (0.5 - ani))
+    if K_well == "KH":
+        chi = var * (ani - 1.0)
+    elif K_well == "KA":
+        chi = var * ani
     else:
-        chi = np.log(Kwell) - np.log(Kefu)
-    Kw = np.exp(chi + np.log(Kefu))
+        chi = np.log(K_well / K_efu)
+    Kw = np.exp(chi + np.log(K_efu))
 
     # define a curve, that has its root at the wanted percentile
     if chi > 0:
-        per = (1 + err) * Kefu
+        per = (1 + err) * K_efu
         if not per < Kw:
             return 0
     elif chi < 0:
-        per = (1 - err) * Kefu
+        per = (1 - err) * K_efu
         if not per > Kw:
             return 0
     else:
@@ -511,20 +508,20 @@ def TPL_CG_error(
         return (
             TPL_CG(
                 x,
-                KG=KG,
-                corr=corr,
+                cond_gmean=cond_gmean,
+                len_scale=len_scale,
                 hurst=hurst,
-                sig2=sig2,
+                var=var,
                 c=c,
-                e=e,
+                anis=anis,
                 dim=dim,
-                Kwell=Kwell,
+                K_well=K_well,
                 prop=prop,
             )
             - per
         )
 
-    return root(curve, 2 * corr)["x"][0]
+    return root(curve, 2 * len_scale)["x"][0]
 
 
 if __name__ == "__main__":

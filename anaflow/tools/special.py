@@ -170,7 +170,7 @@ def specialrange(val_min, val_max, steps, typ="log"):
     return rng
 
 
-def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
+def specialrange_cut(val_min, val_max, steps, val_cut=None, typ="log"):
     """
     Calculation of special point ranges.
 
@@ -184,9 +184,10 @@ def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
         Ending value
     steps : :class:`int`
         Number of steps.
-    val_cut : :class:`float`
+    val_cut : :class:`float`, optional
         Cutting value, if val_max is bigger than this value, the last interval
-        will be between val_cut and val_max
+        will be between val_cut and val_max.
+        Default: 100.0
     typ : :class:`str` or :class:`float`, optional
         Setting the kind of range-distribution. One can choose between
 
@@ -209,10 +210,10 @@ def specialrange_cut(val_min, val_max, steps, val_cut=np.inf, typ="log"):
     >>> specialrange_cut(1,10,4)
     array([ 1.        ,  2.53034834,  5.23167968, 10.        ])
     """
+    val_cut = 100.0 if val_cut is None else val_cut
     if val_max > val_cut:
         rng = specialrange(val_min, val_cut, steps - 1, typ)
         return np.hstack((rng, val_max))
-
     return specialrange(val_min, val_max, steps, typ)
 
 

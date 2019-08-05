@@ -108,14 +108,11 @@ def lap_trans(func, phase, arg_dict=None, **kwargs):
     if not callable(func):
         raise ValueError("The given function needs to be callable")
 
-    if arg_dict is None:
-        arg_dict = {}
+    arg_dict = {} if arg_dict is None else arg_dict
     kwargs.update(arg_dict)
 
     # check and save if phase is scalar
     is_scal = np.isscalar(phase)
-
-    # ensure that t is handled as an 1d-array
     phase = np.array(phase, dtype=float)
     result = np.zeros_like(phase)
 
@@ -287,8 +284,7 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
     >>> stehfest(f, [1,10,100])
     array([ 1.,  1.,  1.])
     """
-    if arg_dict is None:
-        arg_dict = {}
+    arg_dict = {} if arg_dict is None else arg_dict
     kwargs.update(arg_dict)
 
     # ensure that t is handled as an 1d-array
