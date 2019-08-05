@@ -34,23 +34,22 @@ def get_bessel(nu):
 def grf_laplace(
     s,
     rad=None,
-    dim=2,
-    lat_ext=1.0,
-    R_part=None,
     S_part=None,
     K_part=None,
+    R_part=None,
+    dim=2,
+    lat_ext=1.0,
     rate=None,
     K_well=None,
     cut_off_prec=1e-20,
 ):
     """
-    A modified GRF-model for transient flow in Laplace-space.
+    The extended GRF-model for transient flow in Laplace-space.
 
     The General Radial Flow (GRF) Model allowes fractured dimensions for
-    transient flow under a pumping condition
-    in a confined aquifer in Laplace-space.
-    The solutions assumes concentric disks around the pumpingwell,
-    where each disk has its own conductivity and storativity value.
+    transient flow under a pumping condition in a confined aquifer.
+    The solutions assumes concentric annuli around the pumpingwell,
+    where each annulus has its own conductivity and storativity value.
 
     Parameters
     ----------
@@ -59,16 +58,16 @@ def grf_laplace(
         where the function should be evaluated
     rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    dim : :class:`float`
-        Flow dimension. Default: 3
-    lat_ext : :class:`float`
-        The lateral extend of the flow-domain in `L^(3-dim)`. Default: 1
-    R_part : :class:`numpy.ndarray` of length N+1
-        Given radii separating the disks as well as starting- and endpoints
     K_part : :class:`numpy.ndarray` of length N
         Given conductivity values for each disk
     S_part : :class:`numpy.ndarray` of length N
         Given storativity values for each disk
+    R_part : :class:`numpy.ndarray` of length N+1
+        Given radii separating the disks as well as starting- and endpoints
+    dim : :class:`float`
+        Flow dimension. Default: 3
+    lat_ext : :class:`float`
+        The lateral extend of the flow-domain in `L^(3-dim)`. Default: 1
     rate : :class:`float`
         Pumpingrate at the well
     K_well : :class:`float`, optional
@@ -91,9 +90,9 @@ def grf_laplace(
     # ensure that input is treated as arrays
     s = np.squeeze(s).reshape(-1)
     rad = np.squeeze(rad).reshape(-1)
-    R_part = np.squeeze(R_part).reshape(-1)
     S_part = np.squeeze(S_part).reshape(-1)
     K_part = np.squeeze(K_part).reshape(-1)
+    R_part = np.squeeze(R_part).reshape(-1)
     # the dimension is used by nu in the literature (See Barker 88)
     dim = float(dim)
     nu = 1.0 - dim / 2.0
@@ -106,21 +105,23 @@ def grf_laplace(
     K_well = K_part[0] if K_well is None else float(K_well)
 
     # check the input
-    if not len(R_part) - 1 == len(S_part) == len(K_part):
-        raise ValueError("R_part, S_part and K_part need the same length.")
+    if not len(R_part) - 1 == len(S_part) == len(K_part) > 0:
+        raise ValueError("R_part, S_part and K_part need matching lengths.")
     if R_part[0] < 0.0:
         raise ValueError("The wellradius needs to be >= 0.")
-    if not all([r1 < r2 for r1, r2 in zip[R_part[:-1], R_part[1:]]]):
+    if not all([r1 < r2 for r1, r2 in zip(R_part[:-1], R_part[1:])]):
         raise ValueError("The radii values need to be sorted.")
+    if not np.min(rad) > R_part[0] or np.max(rad) > R_part[-1]:
+        raise ValueError("The given radii need to be in the given range.")
     if not all([con > 0 for con in K_part]):
         raise ValueError("The Conductivity needs to be positiv.")
     if not all([stor > 0 for stor in S_part]):
         raise ValueError("The Storage needs to be positiv.")
-    if dim <= 0.0 or dim > 3.0:
+    if not dim > 0.0 or dim > 3.0:
         raise ValueError("The dimension needs to be positiv and <= 3.")
-    if lat_ext <= 0.0:
+    if not lat_ext > 0.0:
         raise ValueError("The lateral extend needs to be positiv.")
-    if K_well <= 0:
+    if not K_well > 0:
         raise ValueError("The well conductivity needs to be positiv.")
 
     # initialize the result

@@ -32,8 +32,8 @@ def ext_grf(
     dim=2,
     lat_ext=1.0,
     rate=-1e-4,
-    K_well=None,
     h_bound=0.0,
+    K_well=None,
     struc_grid=True,
     lap_kwargs=None,
 ):
@@ -58,12 +58,16 @@ def ext_grf(
         Given conductivity values for each disk
     R_part : :class:`numpy.ndarray`
         Given radii separating the disks (including r_well and r_bound).
+    dim : :class:`float`, optional
+        Fractional dimension of the aquifer. Default: ``2.0``
+    lat_ext : :class:`float`, optional
+        Lateral extend of the aquifer. Default: ``1.0``
     rate : :class:`float`, optional
         Pumpingrate at the well. Default: -1e-4
-    K_well : :class:`float`, optional
-        Conductivity at the well. Default: ``K_part[0]``
     h_bound : :class:`float`, optional
         Reference head at the outer boundary `R_part[-1]`. Default: ``0.0``
+    K_well : :class:`float`, optional
+        Conductivity at the well. Default: ``K_part[0]``
     struc_grid : :class:`bool`, optional
         If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
@@ -89,7 +93,6 @@ def ext_grf(
     """
     Input = Shaper(time, rad, struc_grid)
     lap_kwargs = {} if lap_kwargs is None else lap_kwargs
-
     # write the paramters in kwargs to use the stehfest-algorithm
     kwargs = {
         "rad": rad,
@@ -145,9 +148,9 @@ def ext_grf_steady(
         Radius of the reference head.
     conductivity : :class:`float` or :any:`callable`
         Conductivity. Either callable function taking kwargs or float.
-    dim : :class:`float`
+    dim : :class:`float`, optional
         Fractional dimension of the aquifer. Default: ``2.0``
-    lat_ext : :class:`float`
+    lat_ext : :class:`float`, optional
         Lateral extend of the aquifer. Default: ``1.0``
     rate : :class:`float`, optional
         Pumpingrate at the well. Default: -1e-4
@@ -177,9 +180,16 @@ def ext_grf_steady(
     """
     arg_dict = {} if arg_dict is None else arg_dict
     kwargs.update(arg_dict)
-
     Input = Shaper(rad=rad)
     q_fac = rate / (sph_surf(dim) * lat_ext ** (3.0 - dim))  # pumping factor
+    if not r_ref > 0.0:
+        raise ValueError("The reference radius needs to be positive.")
+    if not Input.rad_min > 0.0:
+        raise ValueError("The given radii need to be positive.")
+    if not dim > 0.0 or dim > 3.0:
+        raise ValueError("The dimension needs to be positiv and <= 3.")
+    if not lat_ext > 0.0:
+        raise ValueError("The lateral extend needs to be positiv.")
 
     if callable(conductivity):
         res = np.zeros(Input.rad_no)

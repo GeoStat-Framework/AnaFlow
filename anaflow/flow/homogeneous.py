@@ -95,11 +95,11 @@ def theis(
     rad,
     storage,
     transmissivity,
-    rate,
-    struc_grid=True,
+    rate=-1e-4,
     r_well=0.0,
     r_bound=np.inf,
     h_bound=0.0,
+    struc_grid=True,
     lap_kwargs=None,
 ):
     """
@@ -115,18 +115,19 @@ def theis(
         Array with all time-points where the function should be evaluated
     rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    T : :class:`float`
-        Given transmissivity of the aquifer
-    S : :class:`float`
-        Given storativity of the aquifer
-    rate : :class:`float`
-        Pumpingrate at the well
+    storage : :class:`float`
+        Storage coefficient of the aquifer.
+    conductivity : :class:`float`
+        Conductivity of the aquifer.
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
     r_well : :class:`float`, optional
         Inner radius of the pumping-well. Default: ``0.0``
     r_bound : :class:`float`, optional
         Radius of the outer boundariy of the aquifer. Default: ``np.inf``
     h_bound : :class:`float`, optional
-        Reference head at the outer boundary `r_bound`. Default: ``0.0``
+        Reference head at the outer boundary, as well as initial condition.
+        Default: ``0.0``
     struc_grid : :class:`bool`, optional
         If this is set to ``False``, the `rad` and `time` array will be merged
         and interpreted as single, r-t points. In this case they need to have
@@ -151,7 +152,7 @@ def theis(
        Trans. Am. Geophys. Union, 16, 519-524, 1935
     """
     if np.isclose(r_well, 0) and np.isposinf(r_bound):
-        return well_solution(time, rad, transmissivity, storage, rate)
+        return well_solution(time, rad, storage, transmissivity, rate)
     return ext_grf(
         time=time,
         rad=rad,
@@ -208,7 +209,8 @@ def grf(
     r_bound : :class:`float`, optional
         Radius of the outer boundary of the aquifer. Default: ``np.inf``
     h_bound : :class:`float`, optional
-        Reference head at the outer boundary at infinity. Default: ``0.0``
+        Reference head at the outer boundary, as well as initial condition.
+        Default: ``0.0``
     struc_grid : :class:`bool`, optional
         If this is set to "False", the "rad" and "time" array will be merged
         and interpreted as single, r-t points. In this case they need to have

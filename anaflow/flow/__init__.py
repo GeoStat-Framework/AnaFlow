@@ -10,7 +10,7 @@ Subpackages
 .. autosummary::
     homogeneous
     heterogeneous
-    special
+    ext_grf
     laplace
 
 Solutions
@@ -36,10 +36,10 @@ Heterogeneous
 Solutions for heterogeneous aquifers
 
 .. autosummary::
-   ext_thiem2D
-   ext_theis2D
-   ext_thiem3D
-   ext_theis3D
+   ext_thiem_2d
+   ext_thiem_3d
+   ext_theis_2d
+   ext_theis_3d
    ext_theis_tpl
    neuman2004
    neuman2004_steady
@@ -47,7 +47,7 @@ Solutions for heterogeneous aquifers
 Extended GRF
 ~~~~~~~~~~~~
 
-.. currentmodule:: anaflow.flow.special
+.. currentmodule:: anaflow.flow.ext_grf
 
 The extended general radial flow model.
 
@@ -59,10 +59,10 @@ from __future__ import absolute_import
 
 from anaflow.flow.homogeneous import thiem, theis, grf
 from anaflow.flow.heterogeneous import (
-    ext_thiem2D,
-    ext_theis2D,
-    ext_thiem3D,
-    ext_theis3D,
+    ext_thiem_2d,
+    ext_thiem_3d,
+    ext_theis_2d,
+    ext_theis_3d,
     ext_theis_tpl,
     neuman2004,
     neuman2004_steady,
@@ -73,10 +73,10 @@ __all__ = [
     "thiem",
     "theis",
     "grf_model",
-    "ext_thiem2D",
-    "ext_theis2D",
-    "ext_thiem3D",
-    "ext_theis3D",
+    "ext_thiem_2d",
+    "ext_thiem_3d",
+    "ext_theis_2d",
+    "ext_theis_3d",
     "ext_theis_tpl",
     "neuman2004",
     "neuman2004_steady",
