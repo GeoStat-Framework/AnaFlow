@@ -9,23 +9,23 @@ time = [10, 600, 36000]      # 10s, 10min, 10h
 rad = np.geomspace(0.05, 4)  # radial distance from the pumping well in [0, 4]
 S = 1e-4                     # storage
 KG = 1e-4                    # the geometric mean of the conductivity
-corr = 20.0                  # upper bound for the length scale
+len_scale = 20.0             # upper bound for the length scale
 hurst = 0.5                  # hurst coefficient
 var = 0.5                    # variance of the log-conductivity
-Qw = -1e-4                   # pumping rate
+rate = -1e-4                 # pumping rate
 KH = KG * np.exp(-var / 2)   # the harmonic mean of the conductivity
 
-head_KG = theis(time=time, rad=rad, T=KG, S=S, Qw=Qw)
-head_KH = theis(time=time, rad=rad, T=KH, S=S, Qw=Qw)
+head_KG = theis(time, rad, S, KG, rate)
+head_KH = theis(time, rad, S, KH, rate)
 head_ef = ext_theis_tpl(
     time=time,
     rad=rad,
-    S=S,
-    KG=KG,
-    corr=corr,
+    storage=S,
+    cond_gmean=KG,
+    len_scale=len_scale,
     hurst=hurst,
-    sig2=var,
-    Qw=Qw,
+    var=var,
+    rate=rate,
 )
 for i, step in enumerate(time):
     label_TG = "Theis($K_G$)" if i == 0 else None

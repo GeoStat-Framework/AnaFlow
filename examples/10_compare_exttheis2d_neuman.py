@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import ext_theis2D, neuman2004
+from anaflow import ext_theis_2d, neuman2004
 
 
 time_labels = ["10 s", "10 min", "10 h"]
@@ -13,8 +13,8 @@ len_scale = 10.0             # variance of the log-transmissivity
 S = 1e-4                     # storativity
 rate = -1e-4                 # pumping rate
 
-head1 = ext_theis2D(time=time, rad=rad, TG=TG, sig2=var, corr=len_scale, S=S, Qw=rate)
-head2 = neuman2004(time=time, rad=rad, trans_gmean=TG, var=var, len_scale=len_scale, storage=S, rate=rate)
+head1 = ext_theis_2d(time, rad, S, TG, var, len_scale, rate)
+head2 = neuman2004(time, rad, S, TG, var, len_scale, rate)
 time_ticks=[]
 for i, step in enumerate(time):
     label1 = "extended Theis 2D" if i == 0 else None

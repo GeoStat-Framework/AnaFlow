@@ -27,16 +27,17 @@ Provided Functions
 
 The following functions are provided directly
 
-.. code-block:: python
-
-    anaflow.thiem        # Thiem solution for steady state pumping
-    anaflow.theis        # Theis solution for transient pumping
-    anaflow.ext_thiem2D  # extended Thiem solution in 2D
-    anaflow.ext_theis2D  # extended Theis solution in 2D
-    anaflow.ext_thiem3D  # extended Thiem solution in 3D
-    anaflow.ext_theis3D  # extended Theis solution in 3D
-    anaflow.grf_model    # "General Radial Flow" Model
-    anaflow.grf_dist     # extended "General Radial Flow" Model on disks
+* ``thiem`` Thiem solution for steady state pumping
+* ``theis`` Theis solution for transient pumping
+* ``ext_thiem_2d`` extended Thiem solution in 2D from *Zech 2013*
+* ``ext_theis_2d`` extended Theis solution in 2D from *Mueller 2015*
+* ``ext_thiem_3d`` extended Thiem solution in 3D from *Zech 2013*
+* ``ext_theis_3d`` extended Theis solution in 3D from *Mueller 2015*
+* ``neuman2004`` transient solution from *Neuman 2004*
+* ``neuman2004_steady`` steady solution from *Neuman 2004*
+* ``grf`` "General Radial Flow" Model
+* ``ext_grf`` the transient extended GRF model
+* ``ext_grf_steady`` the steady extended GRF model
 
 
 Laplace Transformation
@@ -45,10 +46,8 @@ Laplace Transformation
 We provide routines to calculate the laplace-transformation as well as the
 inverse laplace-transformation of a given function
 
-.. code-block:: python
-
-    anaflow.get_lap      # Get the laplace transformation of a function
-    anaflow.get_lap_inv  # Get the inverse laplace transformation of a function
+* ``get_lap`` Get the laplace transformation of a function
+* ``get_lap_inv`` Get the inverse laplace transformation of a function
 
 
 Requirements

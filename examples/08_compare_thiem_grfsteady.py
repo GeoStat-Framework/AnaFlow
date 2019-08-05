@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import thiem, grf_steady
+from anaflow import thiem, ext_grf_steady
 
 
 rad = np.geomspace(0.05, 4)  # radius from the pumping well in [0, 4]
@@ -10,7 +10,7 @@ T = 1e-4                     # the transmissivity
 rate = -1e-4                 # pumping rate
 
 head1 = thiem(rad, r_ref, T, rate)
-head2 = grf_steady(rad, r_ref, T, rate=rate)
+head2 = ext_grf_steady(rad, r_ref, T, rate=rate)
 
 plt.plot(rad, head1, label="Thiem")
 plt.plot(rad, head2, label="grf(T)", linestyle="--")

@@ -12,10 +12,10 @@ len_scale = 10.0             # correlation length of the log-transmissivity
 TG = 1e-4                    # the geometric mean of the transmissivity
 TH = TG*np.exp(-var/2.0)     # the harmonic mean of the transmissivity
 S = 1e-4                     # storativity
-Qw = -1e-4                   # pumping rate
+rate = -1e-4                   # pumping rate
 
-head_TG = theis(time=time, rad=rad, T=TG, S=S, Qw=Qw)
-head_TH = theis(time=time, rad=rad, T=TH, S=S, Qw=Qw)
+head_TG = theis(time, rad, S, TG, rate)
+head_TH = theis(time, rad, S, TH, rate)
 head_ef = neuman2004(
     time=time,
     rad=rad,
@@ -23,7 +23,7 @@ head_ef = neuman2004(
     var=var,
     len_scale=len_scale,
     storage=S,
-    rate=Qw,
+    rate=rate,
 )
 time_ticks = []
 for i, step in enumerate(time):
