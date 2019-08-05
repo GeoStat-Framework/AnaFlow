@@ -24,7 +24,7 @@ transmissivity.
     TG = 1e-4                     # the geometric mean of the transmissivity
     TH = TG * np.exp(-var / 2.0)  # the harmonic mean of the transmissivity
     S = 1e-4                      # storativity
-    rate = -1e-4                    # pumping rate
+    rate = -1e-4                  # pumping rate
 
     head_TG = theis(time, rad, S, TG, rate)
     head_TH = theis(time, rad, S, TH, rate)
