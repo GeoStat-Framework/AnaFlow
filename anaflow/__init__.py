@@ -26,7 +26,7 @@ Solutions for homogeneous aquifers
 .. autosummary::
    thiem
    theis
-   grf_model
+   grf
 
 Heterogeneous
 ^^^^^^^^^^^^^
@@ -52,8 +52,8 @@ Extended GRF
 The extended general radial flow model.
 
 .. autosummary::
-   grf_disk
-   grf_steady
+   ext_grf
+   ext_grf_steady
 
 Laplace
 =======

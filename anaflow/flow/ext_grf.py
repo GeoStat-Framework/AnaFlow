@@ -7,8 +7,8 @@ Anaflow subpackage providing the extended GRF Model.
 The following functions are provided
 
 .. autosummary::
-   grf_disk
-   grf_steady
+   ext_grf
+   ext_grf_steady
 """
 # pylint: disable=C0103
 from __future__ import absolute_import, division, print_function

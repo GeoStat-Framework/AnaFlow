@@ -26,7 +26,7 @@ Solutions for homogeneous aquifers
 .. autosummary::
    thiem
    theis
-   grf_model
+   grf
 
 Heterogeneous
 ~~~~~~~~~~~~~

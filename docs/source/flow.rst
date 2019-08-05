@@ -12,5 +12,5 @@ anaflow.flow
 
    flow.homogeneous.rst
    flow.heterogeneous.rst
-   flow.special.rst
+   flow.ext_grf.rst
    flow.laplace.rst
