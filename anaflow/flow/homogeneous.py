@@ -70,18 +70,13 @@ def thiem(rad, r_ref, transmissivity, rate=-1e-4, h_ref=0.0):
     >>> thiem([1,2,3], 10, 0.001, -0.001)
     array([-0.3664678 , -0.25615   , -0.19161822])
     """
-    rad = np.squeeze(rad)
-
     # check the input
-    if r_ref <= 0:
+    if not r_ref > 0:
         raise ValueError("The reference-radius needs to be greater than 0")
-    if np.any(rad <= 0):
-        raise ValueError(
-            "The given radii need to be greater than the wellradius"
-        )
-    if transmissivity <= 0:
+    if not np.min(rad) > 0:
+        raise ValueError("The given radii need positive")
+    if not transmissivity > 0:
         raise ValueError("The Transmissivity needs to be positiv")
-
     return -rate / (2 * np.pi * transmissivity) * np.log(rad / r_ref) + h_ref
 
 
