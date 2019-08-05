@@ -202,6 +202,8 @@ def ext_grf_steady(
             res[ri] = integ(integrand, re, r_ref)[0]
     else:
         con = float(conductivity)
+        if not con > 0:
+            raise ValueError("The Conductivity needs to be positive.")
         if np.isclose(dim, 2):
             res = np.log(r_ref / Input.rad) / con
         else:

@@ -346,9 +346,9 @@ def well_solution(
     Input = Shaper(time, rad, struc_grid)
 
     if not transmissivity > 0.0:
-        raise ValueError("The Transmissivity needs to be positiv")
+        raise ValueError("The Transmissivity needs to be positive.")
     if not storage > 0.0:
-        raise ValueError("The Storage needs to be positiv")
+        raise ValueError("The Storage needs to be positive.")
 
     time_mat = Input.time_mat
     rad_mat = Input.rad_mat
@@ -429,9 +429,9 @@ def grf_solution(
     Input = Shaper(time, rad, struc_grid)
 
     if not conductivity > 0.0:
-        raise ValueError("The Conductivity needs to be positiv")
+        raise ValueError("The Conductivity needs to be positive.")
     if not storage > 0.0:
-        raise ValueError("The Storage needs to be positiv")
+        raise ValueError("The Storage needs to be positive.")
 
     time_mat = Input.time_mat
     rad_mat = Input.rad_mat

@@ -126,15 +126,15 @@ def ext_thiem_2d(
             "The given radii need to be greater than the wellradius"
         )
     if trans_gmean <= 0.0:
-        raise ValueError("The Transmissivity needs to be positiv")
+        raise ValueError("The Transmissivity needs to be positive.")
     if T_well is not None and T_well <= 0.0:
-        raise ValueError("The Transmissivity at the well needs to be positiv")
+        raise ValueError("The well Transmissivity needs to be positive.")
     if var <= 0.0:
-        raise ValueError("The variance needs to be positiv")
+        raise ValueError("The variance needs to be positive.")
     if len_scale <= 0.0:
-        raise ValueError("The correlationlength needs to be positiv")
+        raise ValueError("The correlationlength needs to be positive.")
     if prop <= 0.0:
-        raise ValueError("The proportionalityfactor needs to be positiv")
+        raise ValueError("The proportionalityfactor needs to be positive.")
 
     # define some substitions to shorten the result
     chi = -var / 2.0 if T_well is None else np.log(T_well / trans_gmean)
@@ -240,19 +240,19 @@ def ext_thiem_3d(
             "The well-conductivity should be given as float or 'KA' resp 'KH'"
         )
     if isinstance(K_well, float) and K_well <= 0.0:
-        raise ValueError("The well-conductivity needs to be positiv")
+        raise ValueError("The well-conductivity needs to be positive.")
     if not cond_gmean > 0.0:
-        raise ValueError("The gmean conductivity needs to be positiv")
+        raise ValueError("The gmean conductivity needs to be positive.")
     if var < 0.0:
-        raise ValueError("The variance needs to be positiv")
+        raise ValueError("The variance needs to be positive.")
     if not len_scale > 0.0:
-        raise ValueError("The correlationlength needs to be positiv")
+        raise ValueError("The correlationlength needs to be positive.")
     if not lat_ext > 0.0:
-        raise ValueError("The aquifer-thickness needs to be positiv")
+        raise ValueError("The aquifer-thickness needs to be positive.")
     if not 0.0 < anis <= 1.0:
         raise ValueError("The anisotropy-ratio must be > 0 and <= 1")
     if not prop > 0.0:
-        raise ValueError("The proportionalityfactor needs to be positiv")
+        raise ValueError("The proportionalityfactor needs to be positive.")
 
     # define some substitions to shorten the result
     K_efu = cond_gmean * np.exp(var * (0.5 - aniso(anis)))
@@ -385,17 +385,17 @@ def ext_theis_2d(
     if not r_bound > r_well:
         raise ValueError("The upper boundary needs to be > well radius")
     if not storage > 0.0:
-        raise ValueError("The Storage needs to be positiv")
+        raise ValueError("The Storage needs to be positive.")
     if not trans_gmean > 0.0:
-        raise ValueError("The Transmissivity needs to be positiv")
+        raise ValueError("The Transmissivity needs to be positive.")
     if var < 0.0:
-        raise ValueError("The variance needs to be positiv")
+        raise ValueError("The variance needs to be positive.")
     if not len_scale > 0.0:
-        raise ValueError("The correlationlength needs to be positiv")
+        raise ValueError("The correlationlength needs to be positive.")
     if T_well is not None and not T_well > 0.0:
-        raise ValueError("The Transmissivity at the well needs to be positiv")
+        raise ValueError("The well Transmissivity needs to be positive.")
     if not prop > 0.0:
-        raise ValueError("The proportionality factor needs to be positiv")
+        raise ValueError("The proportionality factor needs to be positive.")
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < far_err < 1.0:
@@ -540,23 +540,23 @@ def ext_theis_3d(
     if not r_bound > r_well:
         raise ValueError("The upper boundary needs to be > well radius")
     if not storage > 0.0:
-        raise ValueError("The storage needs to be positiv")
+        raise ValueError("The storage needs to be positive.")
     if not cond_gmean > 0.0:
-        raise ValueError("The gmean conductivity needs to be positiv")
+        raise ValueError("The gmean conductivity needs to be positive.")
     if var < 0.0:
-        raise ValueError("The variance needs to be positiv")
+        raise ValueError("The variance needs to be positive.")
     if not len_scale > 0.0:
-        raise ValueError("The correlationlength needs to be positiv")
+        raise ValueError("The correlationlength needs to be positive.")
     if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
         raise ValueError(
             "The well-conductivity should be given as float or 'KA' resp 'KH'"
         )
     if isinstance(K_well, float) and not K_well > 0.0:
-        raise ValueError("The well-conductivity needs to be positiv")
+        raise ValueError("The well-conductivity needs to be positive.")
     if not cond_gmean > 0.0:
-        raise ValueError("The conductivity needs to be positiv")
+        raise ValueError("The conductivity needs to be positive.")
     if not prop > 0.0:
-        raise ValueError("The proportionality factor needs to be positiv")
+        raise ValueError("The proportionality factor needs to be positive.")
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < far_err < 1.0:
@@ -723,25 +723,25 @@ def ext_theis_tpl(
     if not r_bound > r_well:
         raise ValueError("The upper boundary needs to be > well radius")
     if not storage > 0.0:
-        raise ValueError("The storage needs to be positiv")
+        raise ValueError("The storage needs to be positive.")
     if not cond_gmean > 0.0:
-        raise ValueError("The gmean conductivity needs to be positiv")
+        raise ValueError("The gmean conductivity needs to be positive.")
     if not len_scale > 0.0:
-        raise ValueError("The correlationlength needs to be positiv")
+        raise ValueError("The correlationlength needs to be positive.")
     if not 0 < hurst < 1:
         raise ValueError("Hurst coefficient needs to be in (0,1)")
     if var is not None and var < 0.0:
-        raise ValueError("The variance needs to be positiv")
+        raise ValueError("The variance needs to be positive.")
     if var is None and not c > 0.0:
-        raise ValueError("The intensity of variation needs to be positiv")
+        raise ValueError("The intensity of variation needs to be positive.")
     if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
         raise ValueError(
             "The well-conductivity should be given as float or 'KA' resp 'KH'"
         )
     if isinstance(K_well, float) and not K_well > 0.0:
-        raise ValueError("The well-conductivity needs to be positiv")
+        raise ValueError("The well-conductivity needs to be positive.")
     if not prop > 0.0:
-        raise ValueError("The proportionality factor needs to be positiv")
+        raise ValueError("The proportionality factor needs to be positive.")
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < far_err < 1.0:
@@ -873,13 +873,13 @@ def neuman2004(
     if not r_bound > r_well:
         raise ValueError("The upper boundary needs to be > well radius")
     if not storage > 0.0:
-        raise ValueError("The Storage needs to be positiv")
+        raise ValueError("The Storage needs to be positive.")
     if not trans_gmean > 0.0:
-        raise ValueError("The Transmissivity needs to be positiv")
+        raise ValueError("The Transmissivity needs to be positive.")
     if var < 0.0:
-        raise ValueError("The variance needs to be positiv")
+        raise ValueError("The variance needs to be positive.")
     if not len_scale > 0.0:
-        raise ValueError("The correlationlength needs to be positiv")
+        raise ValueError("The correlationlength needs to be positive.")
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     # genearte rlast from a given relativ-error to farfield-transmissivity
@@ -954,11 +954,11 @@ def neuman2004_steady(
     """
     # check the input
     if not trans_gmean > 0.0:
-        raise ValueError("The Transmissivity needs to be positiv")
+        raise ValueError("The Transmissivity needs to be positive.")
     if var < 0.0:
-        raise ValueError("The variance needs to be positiv")
+        raise ValueError("The variance needs to be positive.")
     if not len_scale > 0.0:
-        raise ValueError("The correlationlength needs to be positiv")
+        raise ValueError("The correlationlength needs to be positive.")
 
     return ext_grf_steady(
         rad=rad,
