@@ -781,7 +781,7 @@ def ext_theis_tpl(
         S_part=np.full_like(K_part, storage),
         K_part=K_part,
         R_part=R_part,
-        dim=2,
+        dim=dim,
         lat_ext=lat_ext,
         rate=rate,
         h_bound=h_bound,
