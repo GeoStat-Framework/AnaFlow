@@ -35,7 +35,7 @@ The following functions are provided directly
 * :any:`ext_theis_3d` extended Theis solution in 3D from *Mueller 2015*
 * :any:`neuman2004` transient solution from *Neuman 2004*
 * :any:`neuman2004_steady` steady solution from *Neuman 2004*
-* :any:`grf` "General Radial Flow" Model
+* :any:`grf` "General Radial Flow" Model from *Barker 1988*
 * :py:func:`ext_grf` the transient extended GRF model
 * :any:`ext_grf_steady` the steady extended GRF model
 

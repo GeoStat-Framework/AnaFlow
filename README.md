@@ -68,7 +68,7 @@ The following functions are provided directly
 * ``ext_theis_3d`` extended Theis solution in 3D from *Mueller 2015*
 * ``neuman2004`` transient solution from *Neuman 2004*
 * ``neuman2004_steady`` steady solution from *Neuman 2004*
-* ``grf`` "General Radial Flow" Model
+* ``grf`` "General Radial Flow" Model from *Barker 1988*
 * ``ext_grf`` the transient extended GRF model
 * ``ext_grf_steady`` the steady extended GRF model
 
