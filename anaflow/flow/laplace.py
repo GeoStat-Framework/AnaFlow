@@ -22,15 +22,6 @@ from anaflow.tools.special import sph_surf
 __all__ = ["grf_laplace"]
 
 
-def get_bessel(nu):
-    """Get the right bessel functions for the GRF-model."""
-    kv0 = lambda x: kv(nu, x)
-    kv1 = lambda x: kv(nu - 1, x)
-    iv0 = lambda x: iv(nu, x)
-    iv1 = lambda x: iv(nu - 1, x)
-    return kv0, kv1, iv0, iv1
-
-
 def grf_laplace(
     s,
     rad=None,
@@ -58,16 +49,16 @@ def grf_laplace(
         where the function should be evaluated
     rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
-    K_part : :class:`numpy.ndarray` of length N
-        Given conductivity values for each disk
     S_part : :class:`numpy.ndarray` of length N
         Given storativity values for each disk
+    K_part : :class:`numpy.ndarray` of length N
+        Given conductivity values for each disk
     R_part : :class:`numpy.ndarray` of length N+1
         Given radii separating the disks as well as starting- and endpoints
     dim : :class:`float`
         Flow dimension. Default: 3
     lat_ext : :class:`float`
-        The lateral extend of the flow-domain in `L^(3-dim)`. Default: 1
+        The lateral extend of the flow-domain, used in `L^(3-dim)`. Default: 1
     rate : :class:`float`
         Pumpingrate at the well
     K_well : :class:`float`, optional
@@ -83,7 +74,7 @@ def grf_laplace(
 
     Examples
     --------
-    >>> grf_laplace([5,10],[1,2,3], 2, 1, [0,2,10],[1e-3,1e-3],[1e-3,2e-3],-1)
+    >>> grf_laplace([5,10],[1,2,3],[1e-3,1e-3],[1e-3,2e-3],[0,2,10], 2, 1, -1)
     array([[-2.71359196e+00, -1.66671965e-01, -2.82986917e-02],
            [-4.58447458e-01, -1.12056319e-02, -9.85673855e-04]])
     """
@@ -96,6 +87,7 @@ def grf_laplace(
     # the dimension is used by nu in the literature (See Barker 88)
     dim = float(dim)
     nu = 1.0 - dim / 2.0
+    nu1 = nu - 1
     # the lateral extend is a bit subtle in fractured dimension
     lat_ext = float(lat_ext)
     rate = float(rate)
@@ -129,13 +121,9 @@ def grf_laplace(
     diff_sr0 = np.sqrt(S_part[0] / K_part[0])
     # set the general pumping-condtion depending on the well-radius
     if R_part[0] > 0.0:
-        Qs = -s ** (-1.5) / diff_sr0 * R_part[0] ** (nu - 1)
+        Qs = -s ** (-1.5) / diff_sr0 * R_part[0] ** nu1
     else:
         Qs = -(2 / diff_sr0) ** nu * s ** (-nu / 2 - 1)
-
-    # get the right modified bessel-functions according to the dimension
-    # Jv0 = J(v) ; Jv1 = J(v-1) for J in [k, i]
-    kv0, kv1, iv0, iv1 = get_bessel(nu)
 
     # if there is a homgeneouse aquifer, compute the result by hand
     if parts == 1:
@@ -149,9 +137,9 @@ def grf_laplace(
             V[0] = Qs[si]
             # incorporate the boundary-conditions
             if R_part[0] > 0.0:
-                M[0, :] = [-kv1(Cs * R_part[0]), iv1(Cs * R_part[0])]
+                M[0, :] = [-kv(nu1, Cs * R_part[0]), iv(nu1, Cs * R_part[0])]
             if R_part[-1] < np.inf:
-                M[1, :] = [kv0(Cs * R_part[-1]), iv0(Cs * R_part[-1])]
+                M[1, :] = [kv(nu, Cs * R_part[-1]), iv(nu, Cs * R_part[-1])]
             else:
                 M[0, 1] = 0  # Bs is 0 in this case either way
             # solve the equation system
@@ -161,7 +149,7 @@ def grf_laplace(
             for ri, re in enumerate(rad):
                 if re < R_part[-1]:
                     res[si, ri] = re ** nu * (
-                        As * kv0(Cs * re) + Bs * iv0(Cs * re)
+                        As * kv(nu, Cs * re) + Bs * iv(nu, Cs * re)
                     )
 
     # if there is more than one partition, create an equation system
@@ -195,28 +183,28 @@ def grf_laplace(
 
             # generate the equation system as banded matrix
             for i in range(parts - 1):
-                Mb[0, 2 * i + 3] = -iv0(Cs[i + 1] * R_part[i + 1])
+                Mb[0, 2 * i + 3] = -iv(nu, Cs[i + 1] * R_part[i + 1])
                 Mb[1, 2 * i + 2 : 2 * i + 4] = [
-                    -kv0(Cs[i + 1] * R_part[i + 1]),
-                    -iv1(Cs[i + 1] * R_part[i + 1]),
+                    -kv(nu, Cs[i + 1] * R_part[i + 1]),
+                    -iv(nu1, Cs[i + 1] * R_part[i + 1]),
                 ]
                 Mb[2, 2 * i + 1 : 2 * i + 3] = [
-                    iv0(Cs[i] * R_part[i + 1]),
-                    kv1(Cs[i + 1] * R_part[i + 1]),
+                    iv(nu, Cs[i] * R_part[i + 1]),
+                    kv(nu1, Cs[i + 1] * R_part[i + 1]),
                 ]
                 Mb[3, 2 * i : 2 * i + 2] = [
-                    kv0(Cs[i] * R_part[i + 1]),
-                    tmp[i] * iv1(Cs[i] * R_part[i + 1]),
+                    kv(nu, Cs[i] * R_part[i + 1]),
+                    tmp[i] * iv(nu1, Cs[i] * R_part[i + 1]),
                 ]
-                Mb[4, 2 * i] = -tmp[i] * kv1(Cs[i] * R_part[i + 1])
+                Mb[4, 2 * i] = -tmp[i] * kv(nu1, Cs[i] * R_part[i + 1])
 
             # set the boundary-conditions if needed
             if R_part[0] > 0.0:
-                Mb[2, 0] = -kv1(Cs[0] * R_part[0])
-                Mb[1, 1] = iv1(Cs[0] * R_part[0])
+                Mb[2, 0] = -kv(nu1, Cs[0] * R_part[0])
+                Mb[1, 1] = iv(nu1, Cs[0] * R_part[0])
             if R_part[-1] < np.inf:
-                Mb[-2, -2] = kv0(Cs[-1] * R_part[-1])
-                Mb[2, -1] = iv0(Cs[-1] * R_part[-1])
+                Mb[-2, -2] = kv(nu, Cs[-1] * R_part[-1])
+                Mb[2, -1] = iv(nu, Cs[-1] * R_part[-1])
             else:  # erase the last row, since X[-1] will be 0
                 Mb[0, -1] = 0
                 Mb[1, -1] = 0
@@ -258,9 +246,9 @@ def grf_laplace(
             # calculate the head (ignore small values)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
-                k0_sub = X[2 * pos] * kv0(Cs[pos] * rad)
+                k0_sub = X[2 * pos] * kv(nu, Cs[pos] * rad)
                 k0_sub[np.abs(X[2 * pos]) < cut_off_prec] = 0
-                i0_sub = X[2 * pos + 1] * iv0(Cs[pos] * rad)
+                i0_sub = X[2 * pos + 1] * iv(nu, Cs[pos] * rad)
                 i0_sub[np.abs(X[2 * pos + 1]) < cut_off_prec] = 0
                 res[si, :] = rad ** nu * (k0_sub + i0_sub)
 
