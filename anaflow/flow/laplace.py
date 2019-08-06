@@ -103,7 +103,6 @@ def grf_laplace(
     parts = len(K_part)
     # set the conductivity at the well
     K_well = K_part[0] if K_well is None else float(K_well)
-
     # check the input
     if not len(R_part) - 1 == len(S_part) == len(K_part) > 0:
         raise ValueError("R_part, S_part and K_part need matching lengths.")
@@ -132,7 +131,7 @@ def grf_laplace(
     if R_part[0] > 0.0:
         Qs = -s ** (-1.5) / diff_sr0 * R_part[0] ** (nu - 1)
     else:
-        Qs = (2 / diff_sr0) ** nu / gamma(1 - nu) * s ** (-nu / 2 - 1)
+        Qs = -(2 / diff_sr0) ** nu * s ** (-nu / 2 - 1)
 
     # get the right modified bessel-functions according to the dimension
     # Jv0 = J(v) ; Jv1 = J(v-1) for J in [k, i]
@@ -142,7 +141,7 @@ def grf_laplace(
     if parts == 1:
         # initialize the equation system
         V = np.zeros(2, dtype=float)
-        M = np.eye(2, dtype=float)
+        M = np.array([[-gamma(1 - nu), 2.0 / gamma(nu)], [0, 1]])
 
         for si, se in enumerate(s):
             Cs = np.sqrt(se) * diff_sr0
@@ -173,7 +172,8 @@ def grf_laplace(
         Mb = np.zeros((5, 2 * parts))
         X = np.zeros(2 * parts)
         # set the standard boundary conditions for rwell=0.0 and rinf=np.inf
-        Mb[2, 0] = 1.0
+        Mb[2, 0] = -gamma(1 - nu)
+        Mb[1, 1] = 2.0 / gamma(nu)
         Mb[2, -1] = 1.0
 
         # calculate the consecutive fractions of the conductivities
@@ -223,9 +223,9 @@ def grf_laplace(
 
             # find first disk which has no impact
             Mb_cond = np.max(np.abs(Mb), axis=0)
-            Mb_cond = np.logical_or(
-                Mb_cond < cut_off_prec, Mb_cond > 1 / cut_off_prec
-            )
+            Mb_cond_lo = Mb_cond < cut_off_prec
+            Mb_cond_hi = Mb_cond > 1 / cut_off_prec
+            Mb_cond = np.logical_or(Mb_cond_lo, Mb_cond_hi)
             cond = np.where(Mb_cond)[0]
             found = cond.shape[0] > 0
             first = cond[0] // 2 if found else parts
