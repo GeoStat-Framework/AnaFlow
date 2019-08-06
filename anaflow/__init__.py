@@ -38,9 +38,12 @@ Solutions for heterogeneous aquifers
 .. autosummary::
    ext_thiem_2d
    ext_thiem_3d
+   ext_thiem_tpl
+   ext_thiem_tpl_3d
    ext_theis_2d
    ext_theis_3d
    ext_theis_tpl
+   ext_thiem_tpl_3d
    neuman2004
    neuman2004_steady
 
@@ -76,9 +79,12 @@ from anaflow.flow import (
     grf,
     ext_thiem_2d,
     ext_thiem_3d,
+    ext_thiem_tpl,
+    ext_thiem_tpl_3d,
     ext_theis_2d,
     ext_theis_3d,
     ext_theis_tpl,
+    ext_theis_tpl_3d,
     neuman2004,
     neuman2004_steady,
     ext_grf,
@@ -92,9 +98,12 @@ __all__ += [
     "theis",
     "ext_thiem_2d",
     "ext_thiem_3d",
+    "ext_thiem_tpl",
+    "ext_thiem_tpl_3d",
     "ext_theis_2d",
     "ext_theis_3d",
     "ext_theis_tpl",
+    "ext_theis_tpl_3d",
     "neuman2004",
     "neuman2004_steady",
     "grf",

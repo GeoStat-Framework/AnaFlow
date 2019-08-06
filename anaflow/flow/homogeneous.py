@@ -17,7 +17,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 
 from anaflow.tools.special import well_solution, grf_solution
-from anaflow.flow.ext_grf import ext_grf
+from anaflow.flow.ext_grf import ext_grf, ext_grf_steady
 
 __all__ = ["thiem", "theis", "grf"]
 
@@ -70,15 +70,7 @@ def thiem(rad, r_ref, transmissivity, rate=-1e-4, h_ref=0.0):
     >>> thiem([1,2,3], 10, 0.001, -0.001)
     array([-0.3664678 , -0.25615   , -0.19161822])
     """
-    rad = np.array(rad, dtype=float)
-    # check the input
-    if not r_ref > 0:
-        raise ValueError("The reference-radius needs to be greater than 0")
-    if not np.min(rad) > 0:
-        raise ValueError("The given radii need positive")
-    if not transmissivity > 0:
-        raise ValueError("The Transmissivity needs to be positive.")
-    return -rate / (2 * np.pi * transmissivity) * np.log(rad / r_ref) + h_ref
+    return ext_grf_steady(rad, r_ref, transmissivity, 2, 1, rate, h_ref)
 
 
 ###############################################################################

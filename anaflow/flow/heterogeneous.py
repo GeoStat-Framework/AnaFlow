@@ -9,14 +9,19 @@ The following functions are provided
 .. autosummary::
    ext_thiem_2d
    ext_thiem_3d
+   ext_thiem_tpl
+   ext_thiem_tpl_3d
    ext_theis_2d
    ext_theis_3d
    ext_theis_tpl
+   ext_theis_tpl_3d
    neuman2004
    neuman2004_steady
 """
 # pylint: disable=C0103
 from __future__ import absolute_import, division, print_function
+
+import functools as ft
 
 import numpy as np
 from scipy.special import exp1, expi
@@ -36,9 +41,12 @@ from anaflow.flow.ext_grf import ext_grf, ext_grf_steady
 __all__ = [
     "ext_thiem_2d",
     "ext_thiem_3d",
+    "ext_thiem_tpl",
+    "ext_thiem_tpl_3d",
     "ext_theis_2d",
     "ext_theis_3d",
     "ext_theis_tpl",
+    "ext_theis_tpl_3d",
     "neuman2004",
     "neuman2004_steady",
 ]
@@ -160,7 +168,7 @@ def ext_thiem_3d(
     cond_gmean,
     var,
     len_scale,
-    anis,
+    anis=1.0,
     lat_ext=1.0,
     rate=-1e-4,
     h_ref=0.0,
@@ -182,21 +190,22 @@ def ext_thiem_3d(
     rad : :class:`numpy.ndarray`
         Array with all radii where the function should be evaluated
     r_ref : :class:`float`
-        Reference radius with known head (see `href`)
+        Reference radius with known head (see `h_ref`)
     cond_gmean : :class:`float`
         Geometric-mean conductivity.
     var : :class:`float`
         Variance of the log-conductivity.
     len_scale : :class:`float`
         Corralation-length of log-conductivity.
-    anis : :class:`float`
+    anis : :class:`float`, optional
         Anisotropy-ratio of the vertical and horizontal corralation-lengths.
-    lat_ext : :class:`float`
+        Default: 1.0
+    lat_ext : :class:`float`, optional
         Lateral extend of the aquifer (thickness). Default: ``1.0``
     rate : :class:`float`, optional
         Pumpingrate at the well. Default: -1e-4
     h_ref : :class:`float`, optional
-        Reference head at the reference-radius `Rref`. Default: ``0.0``
+        Reference head at the reference-radius `r_ref`. Default: ``0.0``
     K_well : string/float, optional
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
@@ -353,7 +362,7 @@ def ext_theis_2d(
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
     parts : :class:`int`, optional
-        Since the solution is calculated by setting the transmissity to local
+        Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
     lap_kwargs : :class:`dict` or :any:`None` optional
@@ -443,8 +452,8 @@ def ext_theis_3d(
     cond_gmean,
     var,
     len_scale,
-    anis,
-    lat_ext,
+    anis=1.0,
+    lat_ext=1.0,
     rate=-1e-4,
     r_well=0.0,
     r_bound=np.inf,
@@ -480,8 +489,9 @@ def ext_theis_3d(
         Variance of the log-conductivity.
     len_scale : :class:`float`
         Corralation-length of log-conductivity.
-    anis : :class:`float`
+    anis : :class:`float`, optional
         Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        Default: 1.0
     lat_ext : :class:`float`, optional
         Lateral extend of the aquifer (thickness). Default: ``1.0``
     rate : :class:`float`, optional
@@ -509,7 +519,7 @@ def ext_theis_3d(
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
     parts : :class:`int`, optional
-        Since the solution is calculated by setting the transmissity to local
+        Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
     lap_kwargs : :class:`dict` or :any:`None` optional
@@ -614,7 +624,6 @@ def ext_theis_tpl(
     hurst,
     var=None,
     c=1.0,
-    anis=1,
     dim=2.0,
     lat_ext=1.0,
     rate=-1e-4,
@@ -639,8 +648,6 @@ def ext_theis_tpl(
     following a log-normal distribution with a truncated power-law
     correlation function build on superposition of gaussian modes.
 
-    In 3D this model also takes vertical anisotropy into account.
-
     Parameters
     ----------
     time : :class:`numpy.ndarray`
@@ -649,29 +656,31 @@ def ext_theis_tpl(
         Array with all radii where the function should be evaluated
     storage : :class:`float`
         Storage of the aquifer.
-    KG : :class:`float`
-        Geometric-mean conductivity-distribution
-    corr : :class:`float`
-        corralation-length of conductivity-distribution
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+        You can also treat this as transmissivity by leaving 'lat_ext=1'.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
     hurst: :class:`float`
         Hurst coefficient of the TPL model. Should be in (0, 1).
-    var: :class:`float` or :any:`None`
-        Log-normal-variance of the conductivity-distribution.
+    var : :class:`float`
+        Variance of the log-conductivity.
         If var is given, c will be calculated accordingly.
         Default: :any:`None`
     c : :class:`float`, optional
         Intensity of variation in the TPL model.
         Is overwritten if var is given.
         Default: ``1.0``
-    anis : :class:`float`, optional
-        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
-        This is only applied in 3 dimensions.
-        Default: 1.0
     dim: :class:`float`, optional
         Dimension of space.
         Default: ``2.0``
     lat_ext : :class:`float`, optional
-        Thickness of the aquifer (lateral extend).
+        Lateral extend of the aquifer:
+
+            * sqare-root of cross-section in 1D
+            * thickness in 2D
+            * meaningless in 3D
+
         Default: ``1.0``
     rate : :class:`float`, optional
         Pumpingrate at the well. Default: -1e-4
@@ -698,7 +707,7 @@ def ext_theis_tpl(
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
     parts : :class:`int`, optional
-        Since the solution is calculated by setting the transmissity to local
+        Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
     lap_kwargs : :class:`dict` or :any:`None` optional
@@ -750,7 +759,7 @@ def ext_theis_tpl(
         )
     # genearte rlast from a given relativ-error to farfield-conductivity
     r_last = TPL_CG_error(
-        far_err, cond_gmean, len_scale, hurst, var, c, anis, dim, K_well, prop
+        far_err, cond_gmean, len_scale, hurst, var, c, 1, dim, K_well, prop
     )
     # generate the partition points
     if r_last > r_well:
@@ -767,13 +776,13 @@ def ext_theis_tpl(
         hurst=hurst,
         var=var,
         c=c,
-        anis=anis,
+        anis=1,
         dim=dim,
         K_well=K_well,
         prop=prop,
     )
     K_well = TPL_CG(
-        r_well, cond_gmean, len_scale, hurst, var, c, anis, dim, K_well, prop
+        r_well, cond_gmean, len_scale, hurst, var, c, 1, dim, K_well, prop
     )
     return ext_grf(
         time=time,
@@ -791,8 +800,449 @@ def ext_theis_tpl(
     )
 
 
+def ext_theis_tpl_3d(
+    time,
+    rad,
+    storage,
+    cond_gmean,
+    len_scale,
+    hurst,
+    var=None,
+    c=1.0,
+    anis=1,
+    lat_ext=1.0,
+    rate=-1e-4,
+    r_well=0.0,
+    r_bound=np.inf,
+    h_bound=0.0,
+    K_well="KH",
+    prop=1.6,
+    far_err=0.01,
+    struc_grid=True,
+    parts=30,
+    lap_kwargs=None,
+):
+    """
+    The extended Theis solution for truncated power-law fields in 3D.
+
+    The extended Theis solution for transient flow under
+    a pumping condition in a confined aquifer with anisotropy in 3D.
+    The type curve is describing the effective drawdown
+    in a 3-dimensional statistical framework,
+    where the conductivity distribution is
+    following a log-normal distribution with a truncated power-law
+    correlation function build on superposition of gaussian modes.
+
+    Parameters
+    ----------
+    time : :class:`numpy.ndarray`
+        Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    storage : :class:`float`
+        Storage of the aquifer.
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    hurst: :class:`float`
+        Hurst coefficient of the TPL model. Should be in (0, 1).
+    var : :class:`float`
+        Variance of the log-conductivity.
+        If var is given, c will be calculated accordingly.
+        Default: :any:`None`
+    c : :class:`float`, optional
+        Intensity of variation in the TPL model.
+        Is overwritten if var is given.
+        Default: ``1.0``
+    anis : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        Default: 1.0
+    lat_ext : :class:`float`, optional
+        Lateral extend of the aquifer (thickness).
+        Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    r_well : :class:`float`, optional
+        Radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary as well as initial condition.
+        Default: ``0.0``
+    K_well : :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+    far_err : :class:`float`, optional
+        Relative error for the farfield transmissivity for calculating the
+        cutoff-point of the solution. Default: ``0.01``
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured r-t grid is created.
+        Default: ``True``
+    parts : :class:`int`, optional
+        Since the solution is calculated by setting the transmissivity to local
+        constant values, one needs to specify the number of partitions of the
+        transmissivity. Default: ``30``
+    lap_kwargs : :class:`dict` or :any:`None` optional
+        Dictionary for :any:`get_lap_inv` containing `method` and
+        `method_dict`. The default is equivalent to
+        ``lap_kwargs = {"method": "stehfest", "method_dict": None}``.
+        Default: :any:`None`
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Notes
+    -----
+    If you want to use cartesian coordiantes, just use the formula
+    ``r = sqrt(x**2 + y**2)``
+    """
+    # check the input
+    if r_well < 0.0:
+        raise ValueError("The wellradius needs to be >= 0")
+    if not r_bound > r_well:
+        raise ValueError("The upper boundary needs to be > well radius")
+    if not storage > 0.0:
+        raise ValueError("The storage needs to be positive.")
+    if not cond_gmean > 0.0:
+        raise ValueError("The gmean conductivity needs to be positive.")
+    if not len_scale > 0.0:
+        raise ValueError("The correlationlength needs to be positive.")
+    if not 0 < hurst < 1:
+        raise ValueError("Hurst coefficient needs to be in (0,1)")
+    if var is not None and var < 0.0:
+        raise ValueError("The variance needs to be positive.")
+    if var is None and not c > 0.0:
+        raise ValueError("The intensity of variation needs to be positive.")
+    if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'"
+        )
+    if isinstance(K_well, float) and not K_well > 0.0:
+        raise ValueError("The well-conductivity needs to be positive.")
+    if not prop > 0.0:
+        raise ValueError("The proportionality factor needs to be positive.")
+    if parts <= 1:
+        raise ValueError("The numbor of partitions needs to be at least 2")
+    if not 0.0 < far_err < 1.0:
+        raise ValueError(
+            "The relative error of Conductivity needs to be within (0,1)"
+        )
+    # genearte rlast from a given relativ-error to farfield-conductivity
+    r_last = TPL_CG_error(
+        far_err, cond_gmean, len_scale, hurst, var, c, anis, 3, K_well, prop
+    )
+    # generate the partition points
+    if r_last > r_well:
+        R_part = specialrange_cut(r_well, r_bound, parts + 1, r_last)
+    else:
+        R_part = np.array([r_well, r_bound])
+    # calculate the harmonic mean conductivity values within each partition
+    K_part = annular_hmean(
+        TPL_CG,
+        R_part,
+        ann_dim=2,
+        cond_gmean=cond_gmean,
+        len_scale=len_scale,
+        hurst=hurst,
+        var=var,
+        c=c,
+        anis=anis,
+        dim=3,
+        K_well=K_well,
+        prop=prop,
+    )
+    K_well = TPL_CG(
+        r_well, cond_gmean, len_scale, hurst, var, c, anis, 3, K_well, prop
+    )
+    return ext_grf(
+        time=time,
+        rad=rad,
+        S_part=np.full_like(K_part, storage),
+        K_part=K_part,
+        R_part=R_part,
+        dim=2,
+        lat_ext=lat_ext,
+        rate=rate,
+        h_bound=h_bound,
+        K_well=K_well,
+        struc_grid=struc_grid,
+        lap_kwargs=lap_kwargs,
+    )
+
+
+def ext_thiem_tpl(
+    rad,
+    r_ref,
+    cond_gmean,
+    len_scale,
+    hurst,
+    var=None,
+    c=1.0,
+    dim=2.0,
+    lat_ext=1.0,
+    rate=-1e-4,
+    h_ref=0.0,
+    K_well="KH",
+    prop=1.6,
+):
+    """
+    The extended Thiem solution for truncated power-law fields.
+
+    The extended Theis solution for steady flow under
+    a pumping condition in a confined aquifer.
+    The type curve is describing the effective drawdown
+    in a d-dimensional statistical framework,
+    where the conductivity distribution is
+    following a log-normal distribution with a truncated power-law
+    correlation function build on superposition of gaussian modes.
+
+    Parameters
+    ----------
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    r_ref : :class:`float`
+        Reference radius with known head (see `h_ref`)
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+        You can also treat this as transmissivity by leaving 'lat_ext=1'.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    hurst: :class:`float`
+        Hurst coefficient of the TPL model. Should be in (0, 1).
+    var : :class:`float`
+        Variance of the log-conductivity.
+        If var is given, c will be calculated accordingly.
+        Default: :any:`None`
+    c : :class:`float`, optional
+        Intensity of variation in the TPL model.
+        Is overwritten if var is given.
+        Default: ``1.0``
+    dim: :class:`float`, optional
+        Dimension of space.
+        Default: ``2.0``
+    lat_ext : :class:`float`, optional
+        Lateral extend of the aquifer:
+
+            * sqare-root of cross-section in 1D
+            * thickness in 2D
+            * meaningless in 3D
+
+        Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    h_ref : :class:`float`, optional
+        Reference head at the reference-radius `r_ref`. Default: ``0.0``
+    K_well : :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Notes
+    -----
+    If you want to use cartesian coordiantes, just use the formula
+    ``r = sqrt(x**2 + y**2)``
+    """
+    # check the input
+    if not cond_gmean > 0.0:
+        raise ValueError("The gmean conductivity needs to be positive.")
+    if not len_scale > 0.0:
+        raise ValueError("The correlationlength needs to be positive.")
+    if not 0 < hurst < 1:
+        raise ValueError("Hurst coefficient needs to be in (0,1)")
+    if var is not None and var < 0.0:
+        raise ValueError("The variance needs to be positive.")
+    if var is None and not c > 0.0:
+        raise ValueError("The intensity of variation needs to be positive.")
+    if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'"
+        )
+    if isinstance(K_well, float) and not K_well > 0.0:
+        raise ValueError("The well-conductivity needs to be positive.")
+    if not prop > 0.0:
+        raise ValueError("The proportionality factor needs to be positive.")
+    cond = ft.partial(
+        TPL_CG,
+        cond_gmean=cond_gmean,
+        len_scale=len_scale,
+        hurst=hurst,
+        var=var,
+        c=c,
+        anis=1,
+        dim=dim,
+        K_well=K_well,
+        prop=prop,
+    )
+    return ext_grf_steady(
+        rad=rad,
+        r_ref=r_ref,
+        conductivity=cond,
+        dim=dim,
+        lat_ext=lat_ext,
+        rate=rate,
+        h_ref=h_ref,
+    )
+
+
+def ext_thiem_tpl_3d(
+    rad,
+    r_ref,
+    cond_gmean,
+    len_scale,
+    hurst,
+    var=None,
+    c=1.0,
+    anis=1,
+    lat_ext=1.0,
+    rate=-1e-4,
+    h_ref=0.0,
+    K_well="KH",
+    prop=1.6,
+):
+    """
+    The extended Theis solution for truncated power-law fields in 3D.
+
+    The extended Theis solution for transient flow under
+    a pumping condition in a confined aquifer with anisotropy in 3D.
+    The type curve is describing the effective drawdown
+    in a 3-dimensional statistical framework,
+    where the conductivity distribution is
+    following a log-normal distribution with a truncated power-law
+    correlation function build on superposition of gaussian modes.
+
+    Parameters
+    ----------
+    time : :class:`numpy.ndarray`
+        Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    storage : :class:`float`
+        Storage of the aquifer.
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    hurst: :class:`float`
+        Hurst coefficient of the TPL model. Should be in (0, 1).
+    var : :class:`float`
+        Variance of the log-conductivity.
+        If var is given, c will be calculated accordingly.
+        Default: :any:`None`
+    c : :class:`float`, optional
+        Intensity of variation in the TPL model.
+        Is overwritten if var is given.
+        Default: ``1.0``
+    anis : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        Default: 1.0
+    lat_ext : :class:`float`, optional
+        Lateral extend of the aquifer (thickness).
+        Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    r_well : :class:`float`, optional
+        Radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary as well as initial condition.
+        Default: ``0.0``
+    K_well : :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+    far_err : :class:`float`, optional
+        Relative error for the farfield transmissivity for calculating the
+        cutoff-point of the solution. Default: ``0.01``
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured r-t grid is created.
+        Default: ``True``
+    parts : :class:`int`, optional
+        Since the solution is calculated by setting the transmissivity to local
+        constant values, one needs to specify the number of partitions of the
+        transmissivity. Default: ``30``
+    lap_kwargs : :class:`dict` or :any:`None` optional
+        Dictionary for :any:`get_lap_inv` containing `method` and
+        `method_dict`. The default is equivalent to
+        ``lap_kwargs = {"method": "stehfest", "method_dict": None}``.
+        Default: :any:`None`
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Notes
+    -----
+    If you want to use cartesian coordiantes, just use the formula
+    ``r = sqrt(x**2 + y**2)``
+    """
+    # check the input
+    if not cond_gmean > 0.0:
+        raise ValueError("The gmean conductivity needs to be positive.")
+    if not len_scale > 0.0:
+        raise ValueError("The correlationlength needs to be positive.")
+    if not 0 < hurst < 1:
+        raise ValueError("Hurst coefficient needs to be in (0,1)")
+    if var is not None and var < 0.0:
+        raise ValueError("The variance needs to be positive.")
+    if var is None and not c > 0.0:
+        raise ValueError("The intensity of variation needs to be positive.")
+    if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'"
+        )
+    if isinstance(K_well, float) and not K_well > 0.0:
+        raise ValueError("The well-conductivity needs to be positive.")
+    if not prop > 0.0:
+        raise ValueError("The proportionality factor needs to be positive.")
+    cond = ft.partial(
+        TPL_CG,
+        cond_gmean=cond_gmean,
+        len_scale=len_scale,
+        hurst=hurst,
+        var=var,
+        c=c,
+        anis=anis,
+        dim=3,
+        K_well=K_well,
+        prop=prop,
+    )
+    return ext_grf_steady(
+        rad=rad,
+        r_ref=r_ref,
+        conductivity=cond,
+        dim=2,
+        lat_ext=lat_ext,
+        rate=rate,
+        h_ref=h_ref,
+    )
+
+
 ###############################################################################
-# solution for apparent transmissity from Neuman 2004
+# solution for apparent transmissivity from Neuman 2004
 ###############################################################################
 
 
@@ -847,7 +1297,7 @@ def neuman2004(
         the same shapes. Otherwise a structured r-t grid is created.
         Default: ``True``
     parts : :class:`int`, optional
-        Since the solution is calculated by setting the transmissity to local
+        Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
     lap_kwargs : :class:`dict` or :any:`None` optional
