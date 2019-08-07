@@ -71,6 +71,10 @@ The following functions are provided directly
 * ``grf`` "General Radial Flow" Model from *Barker 1988*
 * ``ext_grf`` the transient extended GRF model
 * ``ext_grf_steady`` the steady extended GRF model
+* ``ext_thiem_tpl`` extended Thiem solution for truncated power laws
+* ``ext_theis_tpl`` extended Theis solution for truncated power laws
+* ``ext_thiem_tpl_3d`` extended Thiem solution in 3D for truncated power laws
+* ``ext_theis_tpl_3d`` extended Theis solution in 3D for truncated power laws
 
 
 ### Laplace Transformation
@@ -84,8 +88,8 @@ inverse laplace-transformation of a given function
 
 ## Requirements
 
-- [NumPy >= 1.13.0](https://www.numpy.org)
-- [SciPy >= 0.19.1](https://www.scipy.org)
+- [NumPy >= 1.14.5](https://www.numpy.org)
+- [SciPy >= 1.1.0](https://www.scipy.org)
 - [pentapy](https://github.com/GeoStat-Framework/pentapy)
 
 
@@ -96,8 +100,8 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[GPL][gpl_link] © 2019
+[MIT][mit_link] © 2019
 
-[gpl_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE
+[mit_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE
 [ogs5_link]: https://www.opengeosys.org/ogs-5/
 [doc_link]: https://geostat-framework.readthedocs.io/projects/anaflow/en/latest/

@@ -7,7 +7,7 @@ from anaflow import theis
 time = [10, 100, 1000]
 rad = np.geomspace(0.1, 10)
 
-head = theis(time=time, rad=rad, transmissivity=1e-4, storage=1e-4, rate=-1e-4)
+head = theis(time=time, rad=rad, storage=1e-4, transmissivity=1e-4, rate=-1e-4)
 
 for i, step in enumerate(time):
     plt.plot(rad, head[i], label="Theis(t={})".format(step))
