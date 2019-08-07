@@ -2,7 +2,7 @@
 """
 Anaflow subpackage providing the extended GRF Model.
 
-.. currentmodule:: anaflow.flow.ext_grf
+.. currentmodule:: anaflow.flow.ext_grf_model
 
 The following functions are provided
 

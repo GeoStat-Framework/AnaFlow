@@ -10,7 +10,7 @@ Subpackages
 .. autosummary::
     homogeneous
     heterogeneous
-    ext_grf
+    ext_grf_model
     laplace
 
 Solutions
@@ -50,7 +50,7 @@ Solutions for heterogeneous aquifers
 Extended GRF
 ~~~~~~~~~~~~
 
-.. currentmodule:: anaflow.flow.ext_grf
+.. currentmodule:: anaflow.flow.ext_grf_model
 
 The extended general radial flow model.
 
@@ -73,7 +73,7 @@ from anaflow.flow.heterogeneous import (
     neuman2004,
     neuman2004_steady,
 )
-from anaflow.flow.ext_grf import ext_grf, ext_grf_steady
+from anaflow.flow.ext_grf_model import ext_grf, ext_grf_steady
 
 __all__ = [
     "thiem",

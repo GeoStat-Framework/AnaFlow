@@ -50,7 +50,7 @@ Solutions for heterogeneous aquifers
 Extended GRF
 ^^^^^^^^^^^^
 
-.. currentmodule:: anaflow.flow.ext_grf
+.. currentmodule:: anaflow.flow.ext_grf_model
 
 The extended general radial flow model.
 

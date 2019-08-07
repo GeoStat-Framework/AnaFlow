@@ -36,7 +36,7 @@ from anaflow.tools.coarse_graining import (
     TPL_CG,
     TPL_CG_error,
 )
-from anaflow.flow.ext_grf import ext_grf, ext_grf_steady
+from anaflow.flow.ext_grf_model import ext_grf, ext_grf_steady
 
 __all__ = [
     "ext_thiem_2d",

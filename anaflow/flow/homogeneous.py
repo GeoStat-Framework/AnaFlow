@@ -17,7 +17,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 
 from anaflow.tools.special import well_solution, grf_solution
-from anaflow.flow.ext_grf import ext_grf, ext_grf_steady
+from anaflow.flow.ext_grf_model import ext_grf, ext_grf_steady
 
 __all__ = ["thiem", "theis", "grf"]
 

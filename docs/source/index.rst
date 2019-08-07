@@ -36,7 +36,7 @@ The following functions are provided directly
 * :any:`neuman2004` transient solution from *Neuman 2004*
 * :any:`neuman2004_steady` steady solution from *Neuman 2004*
 * :any:`grf` "General Radial Flow" Model from *Barker 1988*
-* :py:func:`ext_grf` the transient extended GRF model
+* :any:`ext_grf` the transient extended GRF model
 * :any:`ext_grf_steady` the steady extended GRF model
 * :any:`ext_thiem_tpl` extended Thiem solution for truncated power laws
 * :any:`ext_theis_tpl` extended Theis solution for truncated power laws
