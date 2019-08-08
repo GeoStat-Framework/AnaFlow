@@ -6,12 +6,12 @@ from anaflow import theis, thiem
 
 time = [10, 100, 1000]
 rad = np.geomspace(0.1, 10)
-r_ref = np.full_like(rad, 10.0)
+r_ref = 10.0
 
-head_ref = theis(time, r_ref, storage=1e-3, transmissivity=1e-4, rate=-1e-4)
+head_ref = theis(time, np.full_like(rad, r_ref), storage=1e-3, transmissivity=1e-4, rate=-1e-4)
 head1 = theis(time, rad, storage=1e-3, transmissivity=1e-4, rate=-1e-4) - head_ref
-head2 = theis(time, rad, storage=1e-3, transmissivity=1e-4, rate=-1e-4, r_bound=r_ref[0])
-head3 = thiem(rad, r_ref[0], transmissivity=1e-4, rate=-1e-4)
+head2 = theis(time, rad, storage=1e-3, transmissivity=1e-4, rate=-1e-4, r_bound=r_ref)
+head3 = thiem(rad, r_ref, transmissivity=1e-4, rate=-1e-4)
 
 for i, step in enumerate(time):
     label_1 = "Theis quasi steady" if i == 0 else None
