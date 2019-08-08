@@ -103,5 +103,4 @@ You can contact us via <info@geostat-framework.org>.
 [MIT][mit_link] © 2019
 
 [mit_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE
-[ogs5_link]: https://www.opengeosys.org/ogs-5/
 [doc_link]: https://geostat-framework.readthedocs.io/projects/anaflow/en/latest/
