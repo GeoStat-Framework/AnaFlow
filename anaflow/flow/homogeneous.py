@@ -139,7 +139,7 @@ def theis(
        rate and duration of discharge of a well using groundwater storage'',
        Trans. Am. Geophys. Union, 16, 519-524, 1935
     """
-    if np.isclose(r_well, 0) and np.isposinf(r_bound):
+    if np.isclose(r_well, 0) and np.isposinf(r_bound) and lap_kwargs is None:
         return well_solution(time, rad, storage, transmissivity, rate)
     return ext_grf(
         time=time,
@@ -222,7 +222,7 @@ def grf(
        in fractured rock.'',
        Water Resources Research 24.10, 1796-1804, 1988
     """
-    if np.isclose(r_well, 0) and np.isposinf(r_bound):
+    if np.isclose(r_well, 0) and np.isposinf(r_bound) and lap_kwargs is None:
         return grf_solution(
             time=time,
             rad=rad,
