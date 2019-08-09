@@ -22,6 +22,37 @@ from anaflow.tools.special import sph_surf
 __all__ = ["grf_laplace"]
 
 
+def constant(s):
+    """Constant pumping."""
+    return 1.0 / s
+
+
+def periodic(s, w=0):
+    """
+    Periodic pumping.
+
+    Q(t) = Q * cos(w * t)
+    """
+    if np.isclose(w, 0):
+        return constant(s)
+    return 1.0 / (s + w / s)
+
+
+def slug(s):
+    """Slug test."""
+    return np.ones_like(s)
+
+
+def interval(s, t=np.inf):
+    """Interval pumping in [0, t]."""
+    if np.isposinf(t):
+        return constant(s)
+    return (1.0 - np.exp(-s * t)) / s
+
+
+PUMP_COND = {0: constant, 1: periodic, 2: slug, 3: interval}
+
+
 def grf_laplace(
     s,
     rad=None,
@@ -33,6 +64,8 @@ def grf_laplace(
     rate=None,
     K_well=None,
     cut_off_prec=1e-20,
+    cond=0,
+    cond_kw=None,
 ):
     """
     The extended GRF-model for transient flow in Laplace-space.
@@ -66,6 +99,18 @@ def grf_laplace(
     cut_off_prec : :class:`float`, optional
         Define a cut-off precision for the calculation to select the disks
         included in the calculation. Default ``1e-20``
+    cond : :class:`int`, optional
+        Type of the pumping condition:
+
+            * 0 : constant
+            * 1 : periodic (needs "w" as cond_kw)
+            * 2 : slug (rate will be interpreted as slug-volume)
+            * 3 : interval (needs "t" as cond_kw)
+            * callable: laplace-transformation of the transient pumping-rate
+
+        Default: 0
+    cond_kw : :class:`dict` optional
+        Keyword args for the pumping condition. Default: None
 
     Returns
     -------
@@ -78,6 +123,8 @@ def grf_laplace(
     array([[-2.71359196e+00, -1.66671965e-01, -2.82986917e-02],
            [-4.58447458e-01, -1.12056319e-02, -9.85673855e-04]])
     """
+    cond_kw = {} if cond_kw is None else cond_kw
+    cond = cond if callable(cond) else PUMP_COND[cond]
     # ensure that input is treated as arrays
     s = np.squeeze(s).reshape(-1)
     rad = np.squeeze(rad).reshape(-1)
@@ -121,9 +168,9 @@ def grf_laplace(
     diff_sr0 = np.sqrt(S_part[0] / K_part[0])
     # set the general pumping-condtion depending on the well-radius
     if R_part[0] > 0.0:
-        Qs = -s ** (-1.5) / diff_sr0 * R_part[0] ** nu1
+        Qs = -s ** (-0.5) / diff_sr0 * R_part[0] ** nu1 * cond(s, **cond_kw)
     else:
-        Qs = -(2 / diff_sr0) ** nu * s ** (-nu / 2 - 1)
+        Qs = -(2 / diff_sr0) ** nu * s ** (-nu / 2) * cond(s, **cond_kw)
 
     # if there is a homgeneouse aquifer, compute the result by hand
     if parts == 1:
