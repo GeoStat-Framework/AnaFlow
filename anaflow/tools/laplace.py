@@ -318,7 +318,7 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
     # sumation of c*f
     res = np.einsum("ij...,j->i...", lap_val, c_fac)
     # multiply with ln(2)/t
-    res = np.einsum("ij...,i->ij...", res, t_fac)
+    res = np.einsum("i...,i->i...", res, t_fac)
 
     return res
 
