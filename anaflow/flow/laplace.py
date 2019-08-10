@@ -15,7 +15,7 @@ from __future__ import absolute_import, division, print_function
 import warnings
 
 import numpy as np
-from scipy.special import kv, iv, gamma
+from scipy.special import kv, iv, gamma, erfcx
 from pentapy import solve
 from anaflow.tools.special import sph_surf
 
@@ -27,15 +27,15 @@ def constant(s):
     return 1.0 / s
 
 
-def periodic(s, w=0):
+def periodic(s, a=0):
     """
     Periodic pumping.
 
-    Q(t) = Q * cos(w * t)
+    Q(t) = Q * cos(a * t)
     """
-    if np.isclose(w, 0):
+    if np.isclose(a, 0):
         return constant(s)
-    return 1.0 / (s + w / s)
+    return 1.0 / (s + a ** 2 / s)
 
 
 def slug(s):
@@ -43,14 +43,19 @@ def slug(s):
     return np.ones_like(s)
 
 
-def interval(s, t=np.inf):
+def interval(s, a=np.inf):
     """Interval pumping in [0, t]."""
-    if np.isposinf(t):
+    if np.isposinf(a):
         return constant(s)
-    return (1.0 - np.exp(-s * t)) / s
+    return (1.0 - np.exp(-s * a)) / s
 
 
-PUMP_COND = {0: constant, 1: periodic, 2: slug, 3: interval}
+def accruing(s, a=0):
+    """Accruing pumping with time scale t."""
+    return erfcx((s * a) / 2.0) / s
+
+
+PUMP_COND = {0: constant, 1: periodic, 2: slug, 3: interval, 4: accruing}
 
 
 def grf_laplace(
