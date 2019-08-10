@@ -111,10 +111,6 @@ def ext_grf(
     lap_inv = get_lap_inv(grf_laplace, **kwargs)
     res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
     res = Input.reshape(res)
-    if rate > 0:
-        res = np.maximum(res, 0)
-    else:
-        res = np.minimum(res, 0)
     # add the reference head
     res += h_bound
     return res
