@@ -45,16 +45,27 @@ Effective Coarse Graining conductivity/transmissivity solutions.
 Special
 ~~~~~~~
 
-.. currentmodule:: anaflow.tools.coarse_graining
+.. currentmodule:: anaflow.tools.special
 
 Special functions.
 
 .. autosummary::
+   step_f
    specialrange
    specialrange_cut
    neuman2004_trans
    aniso
 
+Laplace
+~~~~~~~
+
+.. currentmodule:: anaflow.tools.laplace
+
+Helping functions related to the laplace-transformation
+
+.. autosummary::
+   get_lap
+   get_lap_inv
 """
 from __future__ import absolute_import
 
@@ -66,19 +77,24 @@ from anaflow.tools.mean import (
     annular_pmean,
 )
 from anaflow.tools.special import (
+    step_f,
     specialrange,
     specialrange_cut,
     neuman2004_trans,
     aniso,
 )
 from anaflow.tools.coarse_graining import T_CG, K_CG, TPL_CG
+from anaflow.tools.laplace import get_lap, get_lap_inv
 
 __all__ = [
+    "get_lap",
+    "get_lap_inv",
     "annular_fmean",
     "annular_amean",
     "annular_gmean",
     "annular_hmean",
     "annular_pmean",
+    "step_f",
     "specialrange",
     "specialrange_cut",
     "neuman2004_trans",

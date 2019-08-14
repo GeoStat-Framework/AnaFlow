@@ -9,6 +9,7 @@ The following functions are provided
 .. autosummary::
 
    Shaper
+   step_f
    sph_surf
    specialrange
    specialrange_cut
@@ -27,6 +28,7 @@ from scipy.special import gamma, gammaincc, exp1, expn, hyp2f1
 
 __all__ = [
     "Shaper",
+    "step_f",
     "sph_surf",
     "specialrange",
     "specialrange_cut",
@@ -101,6 +103,18 @@ class Shaper(object):
         if self.time_scalar and self.rad_scalar:
             result = np.asscalar(result)
         return result
+
+
+def step_f(rad, r_part, f_part):
+    """Callalbe step function."""
+    return np.piecewise(
+        np.array(rad),
+        [
+            np.logical_and(r1 <= rad, rad < r2)
+            for r1, r2 in zip(r_part[:-1], r_part[1:])
+        ],
+        f_part,
+    )
 
 
 def sph_surf(dim):

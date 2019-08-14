@@ -68,6 +68,20 @@ Helping functions related to the laplace-transformation
 .. autosummary::
    get_lap
    get_lap_inv
+
+Tools
+=====
+
+.. currentmodule:: anaflow.tools.special
+
+Helping functions.
+
+.. autosummary::
+   step_f
+   specialrange
+   specialrange_cut
+
+
 """
 from __future__ import absolute_import
 
@@ -90,7 +104,13 @@ from anaflow.flow import (
     ext_grf,
     ext_grf_steady,
 )
-from anaflow.tools.laplace import get_lap_inv, get_lap
+from anaflow.tools import (
+    get_lap_inv,
+    get_lap,
+    step_f,
+    specialrange,
+    specialrange_cut,
+)
 
 __all__ = ["__version__"]
 __all__ += [
@@ -111,4 +131,7 @@ __all__ += [
     "ext_grf_steady",
     "get_lap_inv",
     "get_lap",
+    "step_f",
+    "specialrange",
+    "specialrange_cut",
 ]
