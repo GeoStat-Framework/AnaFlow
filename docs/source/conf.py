@@ -203,15 +203,13 @@ latex_documents = [
         "manual",
     )
 ]
-#latex_use_parts = True
+# latex_use_parts = True
 
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, "AnaFlow", "AnaFlow Documentation", [author], 1)
-]
+man_pages = [(master_doc, "AnaFlow", "AnaFlow Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------

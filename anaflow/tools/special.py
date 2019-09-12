@@ -122,7 +122,7 @@ def sph_surf(dim):
     return 2.0 * np.sqrt(np.pi) ** dim / gamma(dim / 2.0)
 
 
-def specialrange(val_min, val_max, steps, typ="log"):
+def specialrange(val_min, val_max, steps, typ="exp"):
     """
     Calculation of special point ranges.
 
@@ -137,14 +137,16 @@ def specialrange(val_min, val_max, steps, typ="log"):
     typ : :class:`str` or :class:`float`, optional
         Setting the kind of range-distribution. One can choose between
 
+        * ``"exp"``: for exponential behavior
         * ``"log"``: for logarithmic behavior
+        * ``"geo"``: for geometric behavior
         * ``"lin"``: for linear behavior
         * ``"quad"``: for quadratic behavior
         * ``"cub"``: for cubic behavior
         * :class:`float`: here you can specifi any exponent ("quad" would be
           equivalent to 2)
 
-        Default: ``"log"``
+        Default: ``"exp"``
 
     Returns
     -------
@@ -156,10 +158,14 @@ def specialrange(val_min, val_max, steps, typ="log"):
     >>> specialrange(1,10,4)
     array([ 1.        ,  2.53034834,  5.23167968, 10.        ])
     """
-    if typ in ["logarithmic", "log"]:
+    if typ in ["exponential", "exp"]:
         rng = np.expm1(
             np.linspace(np.log1p(val_min), np.log1p(val_max), steps)
         )
+    elif typ in ["logarithmic", "log"]:
+        rng = np.log(np.linspace(np.exp(val_min), np.exp(val_max), steps))
+    elif typ in ["geometric", "geo", "geom"]:
+        rng = np.geomspace(val_min, val_max, steps)
     elif typ in ["linear", "lin"]:
         rng = np.linspace(val_min, val_max, steps)
     elif typ in ["quadratic", "quad"]:
@@ -179,12 +185,13 @@ def specialrange(val_min, val_max, steps, typ="log"):
             )
         ) ** typ
     else:
+        print("specialrange: unknown typ '{}'. Using linear range".format(typ))
         rng = np.linspace(val_min, val_max, steps)
 
     return rng
 
 
-def specialrange_cut(val_min, val_max, steps, val_cut=None, typ="log"):
+def specialrange_cut(val_min, val_max, steps, val_cut=None, typ="exp"):
     """
     Calculation of special point ranges.
 
@@ -205,14 +212,16 @@ def specialrange_cut(val_min, val_max, steps, val_cut=None, typ="log"):
     typ : :class:`str` or :class:`float`, optional
         Setting the kind of range-distribution. One can choose between
 
+        * ``"exp"``: for exponential behavior
         * ``"log"``: for logarithmic behavior
+        * ``"geo"``: for geometric behavior
         * ``"lin"``: for linear behavior
         * ``"quad"``: for quadratic behavior
         * ``"cub"``: for cubic behavior
         * :class:`float`: here you can specifi any exponent ("quad" would be
           equivalent to 2)
 
-        Default: ``"log"``
+        Default: ``"exp"``
 
     Returns
     -------

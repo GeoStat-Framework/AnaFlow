@@ -58,7 +58,7 @@ CLASSIFIERS = [
 VERSION = find_version("anaflow", "_version.py")
 
 setup(
-    name='anaflow',
+    name="anaflow",
     version=VERSION,
     maintainer="Sebastian Mueller",
     maintainer_email="sebastian.mueller@ufz.de",
@@ -67,15 +67,11 @@ setup(
     long_description_content_type="text/markdown",
     author="Sebastian Mueller",
     author_email="sebastian.mueller@ufz.de",
-    url='https://github.com/GeoStat-Framework/AnaFlow',
+    url="https://github.com/GeoStat-Framework/AnaFlow",
     license="MIT",
     classifiers=CLASSIFIERS,
     platforms=["Windows", "Linux", "Mac OS-X"],
     include_package_data=True,
-    install_requires=[
-        "numpy>=1.14.5",
-        "scipy>=1.1.0",
-        'pentapy',
-    ],
-    packages=find_packages(exclude=['tests*', 'docs*']),
+    install_requires=["numpy>=1.14.5", "scipy>=1.1.0", "pentapy"],
+    packages=find_packages(exclude=["tests*", "docs*"]),
 )
