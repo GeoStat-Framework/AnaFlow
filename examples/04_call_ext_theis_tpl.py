@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 from matplotlib import pyplot as plt
 from anaflow import theis, ext_theis_tpl
