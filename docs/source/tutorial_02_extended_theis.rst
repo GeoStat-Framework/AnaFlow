@@ -1,5 +1,5 @@
-Tutorial 2: The extended Theis solution
-=======================================
+Tutorial 2: The extended Theis solution in 2D
+=============================================
 
 We provide an extended theis solution, that incorporates the effectes of a
 heterogeneous transmissivity field on a pumping test.
@@ -8,6 +8,8 @@ In the following this extended solution is compared to the standard theis
 solution for well flow. You can nicely see, that the extended solution represents
 a transition between the theis solutions for the geometric- and harmonic-mean
 transmissivity.
+
+Reference: `Zech et. al. 2016 <http://dx.doi.org/10.1002/2015WR018509>`__
 
 .. code-block:: python
 
