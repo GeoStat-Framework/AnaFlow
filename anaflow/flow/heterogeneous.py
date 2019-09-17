@@ -1264,7 +1264,7 @@ def neuman2004(
     """
     The transient solution for the apparent transmissivity from [Neuman2004].
 
-    This solution is build on the apparent transmissivity from Neuman 1994,
+    This solution is build on the apparent transmissivity from Neuman 2004,
     which represents a mean drawdown in an ensemble of pumping tests in
     heterogeneous transmissivity fields following an exponential covariance.
 
