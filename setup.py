@@ -8,6 +8,9 @@ import re
 from setuptools import setup, find_packages
 
 
+HERE = os.path.abspath(os.path.dirname(__file__))
+
+
 # find __version__ ############################################################
 
 
@@ -31,9 +34,12 @@ def find_version(*file_paths):
 
 ###############################################################################
 
+with open(os.path.join(HERE, "README.md"), encoding="utf-8") as f:
+    README = f.read()
+with open(os.path.join(HERE, "requirements.txt"), encoding="utf-8") as f:
+    REQ = f.read().splitlines()
 
 DOCLINES = __doc__.split("\n")
-README = open("README.md").read()
 CLASSIFIERS = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -72,6 +78,6 @@ setup(
     classifiers=CLASSIFIERS,
     platforms=["Windows", "Linux", "Mac OS-X"],
     include_package_data=True,
-    install_requires=["numpy>=1.14.5", "scipy>=1.1.0", "pentapy"],
+    install_requires=REQ,
     packages=find_packages(exclude=["tests*", "docs*"]),
 )
