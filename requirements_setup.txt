@@ -1,0 +1,2 @@
+setuptools>=41.0.1
+setuptools_scm>=3.5.0

@@ -2,44 +2,27 @@
 """AnaFlow - analytical solutions for the groundwater-flow equation."""
 
 import os
-import codecs
-import re
-
 from setuptools import setup, find_packages
 
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
-
-# find __version__ ############################################################
-
-
-def read(*parts):
-    """Read file data."""
-    here = os.path.abspath(os.path.dirname(__file__))
-    with codecs.open(os.path.join(here, *parts), "r") as fp:
-        return fp.read()
-
-
-def find_version(*file_paths):
-    """Find version without importing module."""
-    version_file = read(*file_paths)
-    version_match = re.search(
-        r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M
-    )
-    if version_match:
-        return version_match.group(1)
-    raise RuntimeError("Unable to find version string.")
-
-
-###############################################################################
-
 with open(os.path.join(HERE, "README.md"), encoding="utf-8") as f:
     README = f.read()
 with open(os.path.join(HERE, "requirements.txt"), encoding="utf-8") as f:
     REQ = f.read().splitlines()
+with open(os.path.join(HERE, "requirements_setup.txt"), encoding="utf-8") as f:
+    REQ_SETUP = f.read().splitlines()
+with open(os.path.join(HERE, "requirements_test.txt"), encoding="utf-8") as f:
+    REQ_TEST = f.read().splitlines()
+with open(
+    os.path.join(HERE, "docs", "requirements_doc.txt"), encoding="utf-8"
+) as f:
+    REQ_DOC = f.read().splitlines()
 
-DOCLINES = __doc__.split("\n")
+REQ_DEV = REQ_SETUP + REQ_TEST + REQ_DOC
+
+DOCLINE = __doc__.split("\n")[0]
 CLASSIFIERS = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -61,16 +44,13 @@ CLASSIFIERS = [
     "Topic :: Utilities",
 ]
 
-VERSION = find_version("anaflow", "_version.py")
-
 setup(
     name="anaflow",
-    version=VERSION,
-    maintainer="Sebastian Mueller",
-    maintainer_email="sebastian.mueller@ufz.de",
-    description=DOCLINES[0],
+    description=DOCLINE,
     long_description=README,
     long_description_content_type="text/markdown",
+    maintainer="Sebastian Mueller",
+    maintainer_email="sebastian.mueller@ufz.de",
     author="Sebastian Mueller",
     author_email="sebastian.mueller@ufz.de",
     url="https://github.com/GeoStat-Framework/AnaFlow",
@@ -78,6 +58,20 @@ setup(
     classifiers=CLASSIFIERS,
     platforms=["Windows", "Linux", "Mac OS-X"],
     include_package_data=True,
+    python_requires=">=3.5",
+    use_scm_version={
+        "relative_to": __file__,
+        "write_to": "gstools/_version.py",
+        "write_to_template": "__version__ = '{version}'",
+        "local_scheme": "no-local-version",
+        "fallback_version": "0.0.0.dev0",
+    },
     install_requires=REQ,
+    setup_requires=REQ_SETUP,
+    extras_require={
+        "doc": REQ_DOC,
+        "test": REQ_TEST,
+        "dev": REQ_DEV,
+    },
     packages=find_packages(exclude=["tests*", "docs*"]),
 )
