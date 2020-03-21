@@ -61,7 +61,7 @@ setup(
     python_requires=">=3.5",
     use_scm_version={
         "relative_to": __file__,
-        "write_to": "gstools/_version.py",
+        "write_to": "anaflow/_version.py",
         "write_to_template": "__version__ = '{version}'",
         "local_scheme": "no-local-version",
         "fallback_version": "0.0.0.dev0",
