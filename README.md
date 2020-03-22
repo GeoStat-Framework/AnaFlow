@@ -2,8 +2,8 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1135723.svg)](https://doi.org/10.5281/zenodo.1135723)
 [![PyPI version](https://badge.fury.io/py/anaflow.svg)](https://badge.fury.io/py/anaflow)
-[![Build Status](https://travis-ci.org/GeoStat-Framework/AnaFlow.svg?branch=master)](https://travis-ci.org/GeoStat-Framework/AnaFlow)
-[![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=latest)](https://anaflow.readthedocs.io/en/latest/)
+[![Build Status](https://travis-ci.com/GeoStat-Framework/AnaFlow.svg?branch=master)](https://travis-ci.com/GeoStat-Framework/AnaFlow)
+[![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=stable)](https://anaflow.readthedocs.io/en/stable/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 <p align="center">
@@ -90,7 +90,7 @@ inverse laplace-transformation of a given function
 
 - [NumPy >= 1.14.5](https://www.numpy.org)
 - [SciPy >= 1.1.0](https://www.scipy.org)
-- [pentapy](https://github.com/GeoStat-Framework/pentapy)
+- [pentapy >= 1.1.0](https://github.com/GeoStat-Framework/pentapy)
 
 
 ## Contact
@@ -100,7 +100,7 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[MIT][mit_link] © 2019
+[MIT][mit_link] © 2019 - 2020
 
 [mit_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE
-[doc_link]: https://geostat-framework.readthedocs.io/projects/anaflow/en/latest/
+[doc_link]: https://anaflow.readthedocs.io

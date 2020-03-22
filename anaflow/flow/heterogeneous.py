@@ -19,8 +19,6 @@ The following functions are provided
    neuman2004_steady
 """
 # pylint: disable=C0103
-from __future__ import absolute_import, division, print_function
-
 import functools as ft
 
 import numpy as np
@@ -287,7 +285,7 @@ def ext_thiem_3d(
     # derive the result
     res = np.exp(-chi) * (np.log(rad) - np.log(r_ref))
     res += sub21 * np.sinh(chi) + sub22 * (1.0 - np.cosh(chi))
-    res *= -rate / (2.0 * np.pi * K_efu)
+    res *= -rate / (2.0 * np.pi * K_efu * lat_ext)
     res += h_ref
 
     return res

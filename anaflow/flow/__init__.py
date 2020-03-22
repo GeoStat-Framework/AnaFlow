@@ -58,8 +58,6 @@ The extended general radial flow model.
    ext_grf
    ext_grf_steady
 """
-from __future__ import absolute_import
-
 from anaflow.flow.homogeneous import thiem, theis, grf
 from anaflow.flow.heterogeneous import (
     ext_thiem_2d,

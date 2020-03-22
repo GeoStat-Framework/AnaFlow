@@ -20,6 +20,7 @@
 # NOTE:
 # pip install sphinx_rtd_theme
 # is needed in order to build the documentation
+import datetime
 import os
 import sys
 
@@ -95,8 +96,9 @@ source_suffix = ".rst"
 master_doc = "contents"
 
 # General information about the project.
+curr_year = datetime.datetime.now().year
 project = "AnaFlow"
-copyright = "2019, Sebastian Mueller"
+copyright = "2019 - {}, Sebastian Mueller".format(curr_year)
 author = "Sebastian Mueller"
 
 # The version info for the project you're documenting, acts as replacement for

@@ -83,10 +83,6 @@ Helping functions.
 
 
 """
-from __future__ import absolute_import
-
-from anaflow._version import __version__
-
 from anaflow.flow import (
     thiem,
     theis,
@@ -111,6 +107,12 @@ from anaflow.tools import (
     specialrange,
     specialrange_cut,
 )
+
+try:
+    from anaflow._version import __version__
+except ModuleNotFoundError:  # pragma: nocover
+    # package is not installed
+    __version__ = "0.0.0.dev0"
 
 __all__ = ["__version__"]
 __all__ += [

@@ -67,8 +67,6 @@ Helping functions related to the laplace-transformation
    get_lap
    get_lap_inv
 """
-from __future__ import absolute_import
-
 from anaflow.tools.mean import (
     annular_fmean,
     annular_amean,

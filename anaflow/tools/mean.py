@@ -15,8 +15,6 @@ The following functions are provided
    annular_pmean
 """
 # pylint: disable=E1137, C0103
-from __future__ import absolute_import, division, print_function
-
 import numpy as np
 
 from scipy.integrate import quad as integ

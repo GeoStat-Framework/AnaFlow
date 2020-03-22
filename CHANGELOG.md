@@ -3,15 +3,21 @@
 All notable changes to **AnaFlow** will be documented in this file.
 
 
-## [Unreleased]
+## [1.0.0] - 2020-03-22
 
 ### Enhancements
 - new TPL Solution
-- new tools module
+- new tools sub-module
 - using pentapy to solve LES in laplace space
 - solution for aparent transmissivity from neuman 2004
 - added extended GRF model
 - convenient functions for (inverse-)laplace transformation
+
+### Bugfixes
+- `lat_ext` was ignored by ext_theis_3d
+
+### Changes
+- py2.7 support dropped
 
 
 ## [0.4.0] - 2019-03-07
@@ -63,7 +69,7 @@ Containing:
 - lap_transgwflow_cyl - Solution for a diskmodel in laplace inversion
 
 
-[Unreleased]: https://github.com/GeoStat-Framework/gstools/compare/v0.4.0...HEAD
+[1.0.0]: https://github.com/GeoStat-Framework/gstools/compare/v0.4.0...v1.0.0
 [0.4.0]: https://github.com/GeoStat-Framework/gstools/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/GeoStat-Framework/gstools/compare/v0.2.4...v0.3.0
 [0.2.4]: https://github.com/GeoStat-Framework/gstools/compare/v0.1...v0.2.4
