@@ -1,5 +1,5 @@
 [run]
-source = gstools
+source = anaflow
 omit = *docs*, *examples*, *tests*
 
 [report]
