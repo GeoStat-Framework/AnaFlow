@@ -24,7 +24,7 @@ REQ_DEV = REQ_SETUP + REQ_TEST + REQ_DOC
 
 DOCLINE = __doc__.split("\n")[0]
 CLASSIFIERS = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Science/Research",
