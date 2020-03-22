@@ -1,6 +1,9 @@
+include README.md
 include MANIFEST.in
 include setup.py
+include setup.cfg
 recursive-include anaflow *.py
+recursive-include tests *.py
 recursive-include docs/source *
 include docs/Makefile docs/requirements.txt
 include LICENSE

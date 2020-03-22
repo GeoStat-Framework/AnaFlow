@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This is the unittest of SRF class.
+This is the unittest of AnaFlow.
 """
 
 import unittest
@@ -146,7 +145,7 @@ class TestAnaFlow(unittest.TestCase):
             rate=self.rate,
             h_ref=self.h_ref,
         )
-        transient = af.ext_theis_2d(
+        transient = af.neuman2004(
             time=self.time,
             rad=self.rad,
             storage=self.storage,
@@ -165,7 +164,7 @@ class TestAnaFlow(unittest.TestCase):
         self.assertAlmostEqual(
             np.abs(np.max(steady - transient[-1, :])),
             0.0,
-            places=2,
+            places=4,
         )
 
     def test_tpl(self):
