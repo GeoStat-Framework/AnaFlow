@@ -19,8 +19,6 @@ The following functions are provided
    neuman2004_steady
 """
 # pylint: disable=C0103
-from __future__ import absolute_import, division, print_function
-
 import functools as ft
 
 import numpy as np

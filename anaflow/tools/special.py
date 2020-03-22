@@ -21,8 +21,6 @@ The following functions are provided
    neuman2004_trans
 """
 
-from __future__ import absolute_import, division, print_function
-
 import numpy as np
 from scipy.special import gamma, gammaincc, exp1, expn, hyp2f1
 

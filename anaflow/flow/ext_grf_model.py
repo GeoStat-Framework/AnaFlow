@@ -11,8 +11,6 @@ The following functions are provided
    ext_grf_steady
 """
 # pylint: disable=C0103
-from __future__ import absolute_import, division, print_function
-
 import numpy as np
 from scipy.integrate import quad as integ
 

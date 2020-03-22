@@ -13,9 +13,6 @@ The following functions are provided
    lap_trans
    stehfest
 """
-
-from __future__ import absolute_import, division, print_function
-
 from math import floor, factorial
 import numpy as np
 from scipy.integrate import quad

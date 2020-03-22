@@ -10,8 +10,6 @@ The following functions are provided
    grf_laplace
 """
 # pylint: disable=C0103
-from __future__ import absolute_import, division, print_function
-
 import warnings
 
 import numpy as np

@@ -18,8 +18,6 @@ The following functions are provided
    TPL_CG_error
 """
 # pylint: disable=C0103
-from __future__ import absolute_import, division, print_function
-
 import numpy as np
 from scipy.optimize import root
 

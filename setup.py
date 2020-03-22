@@ -68,10 +68,6 @@ setup(
     },
     install_requires=REQ,
     setup_requires=REQ_SETUP,
-    extras_require={
-        "doc": REQ_DOC,
-        "test": REQ_TEST,
-        "dev": REQ_DEV,
-    },
+    extras_require={"doc": REQ_DOC, "test": REQ_TEST, "dev": REQ_DEV},
     packages=find_packages(exclude=["tests*", "docs*"]),
 )

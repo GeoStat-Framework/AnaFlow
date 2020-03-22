@@ -9,7 +9,6 @@ env:
   global:
     # Note: TWINE_PASSWORD is set in Travis settings
     - TWINE_USERNAME=geostatframework
-    # skip py27 (EOL)
     - CIBW_BUILD="cp35-* cp36-* cp37-* cp38-*"
     # update setuptools to latest version
     - CIBW_BEFORE_BUILD="pip install -U setuptools"

@@ -6,6 +6,7 @@ This is the unittest of AnaFlow.
 import unittest
 import numpy as np
 import anaflow as af
+
 # import matplotlib.pyplot as plt
 
 
@@ -62,9 +63,7 @@ class TestAnaFlow(unittest.TestCase):
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
         self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])),
-            0.0,
-            places=4,
+            np.abs(np.max(steady - transient[-1, :])), 0.0, places=4
         )
 
     def test_ext_2d(self):
@@ -94,9 +93,7 @@ class TestAnaFlow(unittest.TestCase):
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
         self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])),
-            0.0,
-            places=4,
+            np.abs(np.max(steady - transient[-1, :])), 0.0, places=4
         )
 
     def test_ext_3d(self):
@@ -130,9 +127,7 @@ class TestAnaFlow(unittest.TestCase):
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
         self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])),
-            0.0,
-            places=4,
+            np.abs(np.max(steady - transient[-1, :])), 0.0, places=4
         )
 
     def test_neuman(self):
@@ -162,9 +157,7 @@ class TestAnaFlow(unittest.TestCase):
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
         self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])),
-            0.0,
-            places=4,
+            np.abs(np.max(steady - transient[-1, :])), 0.0, places=4
         )
 
     def test_tpl(self):
@@ -200,9 +193,7 @@ class TestAnaFlow(unittest.TestCase):
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
         self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])),
-            0.0,
-            places=3,
+            np.abs(np.max(steady - transient[-1, :])), 0.0, places=3
         )
 
     def test_tpl_3d(self):
@@ -238,9 +229,7 @@ class TestAnaFlow(unittest.TestCase):
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
         self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])),
-            0.0,
-            places=2,
+            np.abs(np.max(steady - transient[-1, :])), 0.0, places=2
         )
 
         # plt.plot(self.rad, steady)

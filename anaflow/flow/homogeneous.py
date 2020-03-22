@@ -12,8 +12,6 @@ The following functions are provided
    grf
 """
 # pylint: disable=C0103
-from __future__ import absolute_import, division, print_function
-
 import numpy as np
 
 from anaflow.tools.special import well_solution, grf_solution
