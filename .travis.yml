@@ -79,4 +79,4 @@ jobs:
       if: tag IS present
       install: python3 -m pip install -U setuptools wheel twine
       script: python3 setup.py sdist --formats=gztar bdist_wheel
-      after_success: python3 -m twine upload --skip-existing dist/*
+      after_success: python3 -m twine upload --verbose --skip-existing dist/*
