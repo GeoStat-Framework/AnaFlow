@@ -3,6 +3,14 @@
 All notable changes to **AnaFlow** will be documented in this file.
 
 
+## [1.0.1] - 2020-04-02
+
+### Bugfixes
+- `ModuleNotFoundError` not present in py35
+- `np.asscalar` deprecated, use `array.item()`
+- `CHANGELOG.md` links updated
+
+
 ## [1.0.0] - 2020-03-22
 
 ### Enhancements
@@ -69,8 +77,9 @@ Containing:
 - lap_transgwflow_cyl - Solution for a diskmodel in laplace inversion
 
 
-[1.0.0]: https://github.com/GeoStat-Framework/gstools/compare/v0.4.0...v1.0.0
-[0.4.0]: https://github.com/GeoStat-Framework/gstools/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/GeoStat-Framework/gstools/compare/v0.2.4...v0.3.0
-[0.2.4]: https://github.com/GeoStat-Framework/gstools/compare/v0.1...v0.2.4
-[0.1.0]: https://github.com/GeoStat-Framework/gstools/releases/tag/v0.1
+[1.0.1]: https://github.com/GeoStat-Framework/AnaFlow/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/GeoStat-Framework/AnaFlow/compare/v0.4.0...v1.0.0
+[0.4.0]: https://github.com/GeoStat-Framework/AnaFlow/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/GeoStat-Framework/AnaFlow/compare/v0.2.4...v0.3.0
+[0.2.4]: https://github.com/GeoStat-Framework/AnaFlow/compare/v0.1...v0.2.4
+[0.1.0]: https://github.com/GeoStat-Framework/AnaFlow/releases/tag/v0.1
