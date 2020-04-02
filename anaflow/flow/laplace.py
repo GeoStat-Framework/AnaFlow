@@ -171,9 +171,9 @@ def grf_laplace(
     diff_sr0 = np.sqrt(S_part[0] / K_part[0])
     # set the general pumping-condtion depending on the well-radius
     if R_part[0] > 0.0:
-        Qs = -s ** (-0.5) / diff_sr0 * R_part[0] ** nu1 * cond(s, **cond_kw)
+        Qs = -(s ** (-0.5)) / diff_sr0 * R_part[0] ** nu1 * cond(s, **cond_kw)
     else:
-        Qs = -(2 / diff_sr0) ** nu * s ** (-nu / 2) * cond(s, **cond_kw)
+        Qs = -((2 / diff_sr0) ** nu) * s ** (-nu / 2) * cond(s, **cond_kw)
 
     # if there is a homgeneouse aquifer, compute the result by hand
     if parts == 1:
