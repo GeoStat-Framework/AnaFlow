@@ -99,7 +99,7 @@ class Shaper(object):
         elif self.rad_shape:
             result = np.diag(result).reshape(self.rad_shape)
         if self.time_scalar and self.rad_scalar:
-            result = np.asscalar(result)
+            result = result.item()
         return result
 
 

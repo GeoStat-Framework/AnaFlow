@@ -21,10 +21,6 @@
 # pip install sphinx_rtd_theme
 # is needed in order to build the documentation
 import datetime
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath("../../"))
 from anaflow import __version__ as ver
 
 
@@ -173,6 +169,9 @@ html_sidebars = {
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "AnaFlowdoc"
+# logos for the page
+html_logo = "pics/Anaflow_150.png"
+html_favicon = "pics/Anaflow.ico"
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -233,7 +232,7 @@ texinfo_documents = [
 
 suppress_warnings = [
     "image.nonlocal_uri",
-    #    'app.add_directive',  # this evtl. suppresses the numpydoc induced warning
+    # 'app.add_directive',  # this evtl. suppresses the numpydoc induced warning
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.

@@ -126,7 +126,7 @@ def lap_trans(func, phase, arg_dict=None, **kwargs):
         result[phase_i] = quad(integ, 0, np.inf)[0]
 
     if is_scal:
-        result = np.asscalar(result)
+        result = result.item()
 
     return result
 
