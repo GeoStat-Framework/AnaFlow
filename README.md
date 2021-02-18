@@ -2,8 +2,8 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1135723.svg)](https://doi.org/10.5281/zenodo.1135723)
 [![PyPI version](https://badge.fury.io/py/anaflow.svg)](https://badge.fury.io/py/anaflow)
-[![Build Status](https://travis-ci.com/GeoStat-Framework/AnaFlow.svg?branch=master)](https://travis-ci.com/GeoStat-Framework/AnaFlow)
-[![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=stable)](https://anaflow.readthedocs.io/en/stable/)
+[![Build Status](https://github.com/GeoStat-Framework/AnaFlow/workflows/Continuous%20Integration/badge.svg?branch=develop)](https://github.com/GeoStat-Framework/AnaFlow/actions)
+[![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=latest)](https://anaflow.readthedocs.io/en/latest/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 <p align="center">
@@ -25,7 +25,7 @@ You can install the latest version with the following command:
 
 ## Documentation for AnaFlow
 
-You can find the documentation under [geostat-framework.readthedocs.io][doc_link].
+You can find the documentation under [https://anaflow.readthedocs.io][doc_link].
 
 
 ### Example
@@ -100,7 +100,7 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[MIT][mit_link] © 2019 - 2020
+[MIT][mit_link] © 2019 - 2021
 
 [mit_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE
 [doc_link]: https://anaflow.readthedocs.io
