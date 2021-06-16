@@ -1,9 +1,6 @@
-include README.md
-include MANIFEST.in
-include setup.py
-include setup.cfg
-recursive-include anaflow *.py
-recursive-include tests *.py
-recursive-include docs/source *
-include docs/Makefile docs/requirements.txt
-include LICENSE
+prune *
+graft anaflow
+graft tests
+
+include LICENSE README.md pyproject.toml setup.cfg
+global-exclude __pycache__ *.py[cod] .*
