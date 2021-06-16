@@ -123,7 +123,7 @@ def ext_grf_steady(
     rate=-1e-4,
     h_ref=0.0,
     arg_dict=None,
-    **kwargs
+    **kwargs,
 ):
     """
     The extended "General radial flow" model for steady flow.

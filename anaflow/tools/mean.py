@@ -192,7 +192,7 @@ def annular_amean(func, val_arr, ann_dim=2, arg_dict=None, **kwargs):
         f_inv=lambda x: x,
         ann_dim=ann_dim,
         arg_dict=arg_dict,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -260,7 +260,7 @@ def annular_gmean(func, val_arr, ann_dim=2, arg_dict=None, **kwargs):
         f_inv=np.exp,
         ann_dim=ann_dim,
         arg_dict=arg_dict,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -322,7 +322,7 @@ def annular_hmean(func, val_arr, ann_dim=2, arg_dict=None, **kwargs):
         f_inv=lambda x: 1.0 / x,
         ann_dim=ann_dim,
         arg_dict=arg_dict,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -392,5 +392,5 @@ def annular_pmean(func, val_arr, p=2.0, ann_dim=2, arg_dict=None, **kwargs):
         f_inv=lambda x: np.power(x, 1.0 / p),
         ann_dim=ann_dim,
         arg_dict=arg_dict,
-        **kwargs
+        **kwargs,
     )
