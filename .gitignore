@@ -4,6 +4,8 @@
 .spyproject/
 __pycache__/
 docs/build/
+docs/source/generated/
+docs/source/examples/
 info/
 #_build
 #_static

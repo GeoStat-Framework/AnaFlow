@@ -1,4 +1,12 @@
-# -*- coding: utf-8 -*-
+r"""
+Accruing pumping rate
+=====================
+
+AnaFlow provides different representations for the pumping condition.
+One is an accruing pumping rate represented by the error function.
+This could be interpreted as that the water pump needs a certain time to
+reach its constant rate state.
+"""
 import numpy as np
 from scipy.special import erf
 from matplotlib import pyplot as plt
@@ -12,6 +20,7 @@ rad = [1, 5]
 # Q(t) = Q * erf(t / a)
 a = 120
 lap_kwargs = {"cond": 4, "cond_kw": {"a": a}}
+
 head1 = theis(
     time=time,
     rad=rad,
@@ -43,7 +52,7 @@ for i, step in enumerate(rad):
         head2[:, i],
         color="C" + str(i),
         label="constant Theis(r={})".format(step),
-        linestyle="--"
+        linestyle="--",
     )
 ax1.plot(time, 1e-4 * erf(time / a), label="accruing Q")
 ax2.set_xlabel("t in [s]")

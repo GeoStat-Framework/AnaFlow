@@ -54,6 +54,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",  # parameters look better than with numpydoc only
     "numpydoc",
+    "sphinx_gallery.gen_gallery",
 ]
 
 # autosummaries from source-files
@@ -241,4 +242,31 @@ intersphinx_mapping = {
     "Python": ("https://docs.python.org/", None),
     "NumPy": ("http://docs.scipy.org/doc/numpy/", None),
     "SciPy": ("http://docs.scipy.org/doc/scipy/reference", None),
+}
+
+# -- Sphinx Gallery Options
+from sphinx_gallery.sorting import FileNameSortKey
+
+sphinx_gallery_conf = {
+    # only show "print" output as output
+    "capture_repr": (),
+    # path to your examples scripts
+    "examples_dirs": ["../../examples"],
+    # path where to save gallery generated examples
+    "gallery_dirs": ["examples"],
+    # Pattern to search for example files
+    "filename_pattern": "/.*.py",
+    # "ignore_pattern": "",
+    # Remove the "Download all examples" button from the top level gallery
+    "download_all_examples": False,
+    # Sort gallery example by file name instead of number of lines (default)
+    "within_subsection_order": FileNameSortKey,
+    # directory where function granular galleries are stored
+    "backreferences_dir": None,
+    # Modules for which function level galleries are created.  In
+    "doc_module": "AnaFlow",
+    # "image_scrapers": ('pyvista', 'matplotlib'),
+    # "first_notebook_cell": ("%matplotlib inline\n"
+    #                         "from pyvista import set_plot_theme\n"
+    #                         "set_plot_theme('document')"),
 }
