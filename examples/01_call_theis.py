@@ -1,4 +1,12 @@
-# -*- coding: utf-8 -*-
+r"""
+The Theis solution
+==================
+
+In the following the well known Theis function is called an plotted for three
+different time-steps.
+
+Reference: `Theis 1935 <https://doi.org/10.1029/TR016i002p00519>`__
+"""
 import numpy as np
 from matplotlib import pyplot as plt
 from anaflow import theis

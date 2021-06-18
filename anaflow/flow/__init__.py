@@ -8,9 +8,6 @@ Subpackages
 .. currentmodule:: anaflow.flow
 
 .. autosummary::
-    homogeneous
-    heterogeneous
-    ext_grf_model
     laplace
 
 Solutions
@@ -19,11 +16,11 @@ Solutions
 Homogeneous
 ~~~~~~~~~~~
 
-.. currentmodule:: anaflow.flow.homogeneous
-
 Solutions for homogeneous aquifers
 
 .. autosummary::
+   :toctree: generated
+
    thiem
    theis
    grf
@@ -31,11 +28,11 @@ Solutions for homogeneous aquifers
 Heterogeneous
 ~~~~~~~~~~~~~
 
-.. currentmodule:: anaflow.flow.heterogeneous
-
 Solutions for heterogeneous aquifers
 
 .. autosummary::
+   :toctree: generated
+
    ext_thiem_2d
    ext_thiem_3d
    ext_thiem_tpl
@@ -43,18 +40,18 @@ Solutions for heterogeneous aquifers
    ext_theis_2d
    ext_theis_3d
    ext_theis_tpl
-   ext_thiem_tpl_3d
+   ext_theis_tpl_3d
    neuman2004
    neuman2004_steady
 
 Extended GRF
 ~~~~~~~~~~~~
 
-.. currentmodule:: anaflow.flow.ext_grf_model
-
 The extended general radial flow model.
 
 .. autosummary::
+   :toctree: generated
+
    ext_grf
    ext_grf_steady
 """

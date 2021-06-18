@@ -13,9 +13,7 @@ local_scheme = "no-local-version"
 fallback_version = "0.0.0.dev0"
 
 [tool.black]
-exclude = """
-^/( ( examples ) /| anaflow/_version.py )
-"""
+exclude = "_version.py"
 line-length = 79
 target-version = [
     "py36",

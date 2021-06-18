@@ -19,7 +19,7 @@ Solutions
 Homogeneous
 ^^^^^^^^^^^
 
-.. currentmodule:: anaflow.flow.homogeneous
+.. currentmodule:: anaflow.flow
 
 Solutions for homogeneous aquifers
 
@@ -30,8 +30,6 @@ Solutions for homogeneous aquifers
 
 Heterogeneous
 ^^^^^^^^^^^^^
-
-.. currentmodule:: anaflow.flow.heterogeneous
 
 Solutions for heterogeneous aquifers
 
@@ -49,8 +47,6 @@ Solutions for heterogeneous aquifers
 
 Extended GRF
 ^^^^^^^^^^^^
-
-.. currentmodule:: anaflow.flow.ext_grf_model
 
 The extended general radial flow model.
 
