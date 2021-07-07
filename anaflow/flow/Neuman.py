@@ -16,8 +16,30 @@ from scipy.special import k0
 from anaflow.tools.laplace import get_lap_inv
 from anaflow.tools.special import Shaper
 from scipy.optimize import fsolve
+from scipy import optimize
 
 __all__ = []
+
+
+def eps_func(eps,value=0):
+    return eps * np.tan(eps) - value
+
+
+def interval_of_nth_root(n, v):
+    """Correct interval."""
+    a, b = n * np.pi, (n + 0.5) * np.pi - 0.001
+    if v < 0:  # just for completeness (shift to negative branch)
+        a += 0.5 * np.pi
+        b += 0.5 * np.pi
+    return a, b
+
+
+def nth_root(n, v):
+    """Get nth root of x*tan(x) = v."""
+    a, b = interval_of_nth_root(n, v)
+    if abs(v) > 100:
+        return (n+0.5) * np.pi
+    return optimize.bisect(eps_func, a, b, (v,))
 
 
 def neuman_unconfined_laplace(
@@ -31,7 +53,7 @@ def neuman_unconfined_laplace(
     well_depth=12.6,
     kd=0.61,
     specific_yield=0.26,
-    n_numbers=10,
+    n_numbers=300,
 ):
     """
         The Neuman solution.
@@ -74,46 +96,14 @@ def neuman_unconfined_laplace(
             if re < np.inf:
                 rd = re / sat_thickness
                 betaw = kd * (rd ** 2)
-                righthand = se / (
-                    ((storage / specific_yield) * betaw) + se / 1e9
-                )
-                if righthand > 10:
-                    epsilon_n = np.arange(
-                        np.pi / 2, (n_numbers + 3) * np.pi, np.pi
-                    )
-                else:
-                    f = lambda eps: eps * np.tan(eps) - righthand
-                    eps_0 = fsolve(
-                        f, np.arange(np.pi / 2, (n_numbers + 3) * np.pi, np.pi)
-                    )
-                    epsilon_n = eps_0[0:n_numbers]
-                    print(epsilon_n)
-                for n in range(min(n_numbers, len(epsilon_n))):
-                    xn = (betaw * (epsilon_n[n] ** 2) + se) ** 0.5
-                    if epsilon_n[n] == 0:
-                        continue
-                    else:
-                        res[si, ri] = (
-                            2
-                            * k0(xn)
-                            * (
-                                np.sin(
-                                    epsilon_n[n] * (1 - (d / sat_thickness))
-                                )
-                                - np.sin(
-                                    epsilon_n[n]
-                                    * (1 - (well_depth / sat_thickness))
-                                )
-                            )
-                            * np.cos(epsilon_n[n] * (z / sat_thickness))
-                        ) / (
-                            se
-                            * ((well_depth - d) / sat_thickness)
-                            * (
-                                0.5 * epsilon_n[n]
-                                + 0.25 * np.sin(2 * epsilon_n[n])
-                            )
-                        )
+                righthand = se / (((storage/specific_yield) * betaw) + se / 1e9)
+                roots = [nth_root(n, righthand) for n in range(n_numbers)]
+                for i_n in range(len(roots)):
+                    epsilon_n = roots[i_n]
+                    xn = (betaw * (epsilon_n ** 2) + se) ** 0.5
+                    res[si, ri] = (2 * k0(xn) * (np.sin(epsilon_n * (1 - (d / sat_thickness))) - np.sin(epsilon_n *
+                                    (1 - (well_depth / sat_thickness)))) * np.cos(epsilon_n * (z / sat_thickness))) / \
+                                  (se * ((well_depth - d) / sat_thickness) * (0.5 * epsilon_n + 0.25 * np.sin(2 * epsilon_n)))
     res *= rate / (2 * np.pi * transmissivity)
     return res
 
