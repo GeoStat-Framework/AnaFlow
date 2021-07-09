@@ -15,52 +15,53 @@ import numpy as np
 from scipy.special import k0
 from anaflow.tools.laplace import get_lap_inv
 from anaflow.tools.special import Shaper
-from scipy.optimize import fsolve
-from scipy import optimize
+from scipy.optimize import root
 
 __all__ = []
 
 
-def eps_func(eps,value=0):
-    return eps * np.tan(eps) - value
+def get_f_df(value=0):
+    """Get target function and its derivative."""
+    if value < 0:
+        raise ValueError("Neuman: epsilon for root finding needs to be >0.")
 
+    def _f_df(x):
+        return (
+            np.subtract(np.multiply(x, np.tan(x)), value),
+            np.tan(x) + np.divide(x, np.cos(x) ** 2),
+        )
 
-def interval_of_nth_root(n, v):
-    """Correct interval."""
-    a, b = n * np.pi, (n + 0.5) * np.pi - 0.001
-    if v < 0:  # just for completeness (shift to negative branch)
-        a += 0.5 * np.pi
-        b += 0.5 * np.pi
-    return a, b
+    return _f_df
 
 
 def nth_root(n, v):
     """Get nth root of x*tan(x) = v."""
-    a, b = interval_of_nth_root(n, v)
-    if abs(v) > 100:
-        return (n+0.5) * np.pi
-    return optimize.bisect(eps_func, a, b, (v,))
+    f_df = get_f_df(v)
+    x0 = np.arctan(v) + n * np.pi
+    sol = root(f_df, x0, jac=True)
+    if not sol.success:
+        raise ValueError(f"Neuman: couldn't find {n}-th root for eps={v}")
+    return sol.x[0]
 
 
-def neuman_unconfined_laplace(
+def neuman_unconfined_partially_penetrating_laplace(
     s,
     rad,
     storage,
     transmissivity,
     rate,
-    sat_thickness=52.0,
+    sat_thickness=49,
     screen_size=11.88,
     well_depth=12.6,
     kd=0.61,
     specific_yield=0.26,
-    n_numbers=300,
+    n_numbers=25,
 ):
     """
-        The Neuman solution.
+    Neuman solution for unconfined aquifers in Laplace space.
 
-
-        Parameters
-        ----------
+    Parameters
+    ----------
     s : :class:`numpy.ndarray`
         Array with all "Laplace-space-points" where the function should
         be evaluated in the Laplace space.
@@ -93,19 +94,81 @@ def neuman_unconfined_laplace(
 
     for si, se in enumerate(s):
         for ri, re in enumerate(rad):
-            if re < np.inf:
-                rd = re / sat_thickness
-                betaw = kd * (rd ** 2)
-                righthand = se / (((storage/specific_yield) * betaw) + se / 1e9)
-                roots = [nth_root(n, righthand) for n in range(n_numbers)]
-                for i_n in range(len(roots)):
-                    epsilon_n = roots[i_n]
-                    xn = (betaw * (epsilon_n ** 2) + se) ** 0.5
-                    res[si, ri] = (2 * k0(xn) * (np.sin(epsilon_n * (1 - (d / sat_thickness))) - np.sin(epsilon_n *
-                                    (1 - (well_depth / sat_thickness)))) * np.cos(epsilon_n * (z / sat_thickness))) / \
-                                  (se * ((well_depth - d) / sat_thickness) * (0.5 * epsilon_n + 0.25 * np.sin(2 * epsilon_n)))
-    res *= rate / (2 * np.pi * transmissivity)
-    return res
+            if re == np.inf:
+                continue
+            rd = re / sat_thickness
+            beta = kd * (rd ** 2)
+            rhs = se / (((storage / specific_yield) * beta) + se / 1e9)
+            roots = [nth_root(n, rhs) for n in range(n_numbers)]
+            for eps in roots:
+                xn = (beta * (eps ** 2) + se) ** 0.5
+                res[si, ri] += (
+                    2
+                    * k0(xn)
+                    * (
+                        np.sin(eps * (1 - (d / sat_thickness)))
+                        - np.sin(eps * (1 - (well_depth / sat_thickness)))
+                    )
+                    * np.cos(eps * (z / sat_thickness))
+                ) / (
+                    se
+                    * ((well_depth - d) / sat_thickness)
+                    * (0.5 * eps + 0.25 * np.sin(2 * eps))
+                )
+    return res * rate / (2 * np.pi * transmissivity)
+
+def neuman_unconfined_fully_penetrating_laplace(
+    s,
+    rad,
+    storage,
+    transmissivity,
+    rate,
+    sat_thickness=49,
+    specific_yield=0.26,
+    n_numbers=25,
+):
+    """
+    Neuman solution for unconfined aquifers in Laplace space.
+
+    Parameters
+    ----------
+    s : :class:`numpy.ndarray`
+        Array with all "Laplace-space-points" where the function should
+        be evaluated in the Laplace space.
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated.
+    storage : :class:`float`
+        Storage of the aquifer.
+    transmissivity : :class:`float`
+        Geometric-mean transmissivity.
+    rate : :class:`float`, optional
+        Pumpingrate at the well.
+    sat_thickness : :class:`float`, optional
+        Saturated thickness of the aquifer.
+    kd : :class:`float`, optional
+        Dimensionless parameter for the conductivity.
+        Kz/Kr : vertical conductivity divided by horizontal conductivity
+    specific_yield: :class:`float`, optional
+        specific yield
+    """
+    kr = transmissivity/sat_thickness
+    kz = kr * 0.001
+    s = np.squeeze(s).reshape(-1)
+    rad = np.squeeze(rad).reshape(-1)
+    res = np.zeros(s.shape + rad.shape)
+
+    for si, se in enumerate(s):
+        for ri, re in enumerate(rad):
+            if re == np.inf:
+                continue
+            rd = re / sat_thickness
+            beta = kz * (rd ** 2) / kr
+            rhs = se / (((storage / specific_yield) * beta) + se / ((1e9 * sat_thickness * specific_yield)/kz))
+            roots = [nth_root(n, rhs) for n in range(n_numbers)]
+            for eps in roots:
+                xn = (beta * (eps ** 2) + se) ** 0.5
+                res[si, ri] += (2*k0(xn) * (np.sin(eps)**2)) / (se * eps * (0.5 * eps + 0.25 * np.sin(2 * eps)))
+    return res * rate / (2 * np.pi * transmissivity)
 
 
 def neuman_unconfined(
@@ -134,7 +197,7 @@ def neuman_unconfined(
     }
     kwargs.update(lap_kwargs)
     res = np.zeros((Input.time_no, Input.rad_no))
-    lap_inv = get_lap_inv(neuman_unconfined_laplace, **kwargs)
+    lap_inv = get_lap_inv(neuman_unconfined_partially_penetrating_laplace, **kwargs)
     # call the laplace inverse function (only at time points > 0)
     res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
     # reshaping results
@@ -142,3 +205,4 @@ def neuman_unconfined(
     # add the reference head
     res += h_bound
     return res
+
