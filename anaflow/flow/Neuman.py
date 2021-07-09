@@ -117,6 +117,7 @@ def neuman_unconfined_partially_penetrating_laplace(
                 )
     return res * rate / (2 * np.pi * transmissivity)
 
+
 def neuman_unconfined_fully_penetrating_laplace(
     s,
     rad,
@@ -151,7 +152,7 @@ def neuman_unconfined_fully_penetrating_laplace(
     specific_yield: :class:`float`, optional
         specific yield
     """
-    kr = transmissivity/sat_thickness
+    kr = transmissivity / sat_thickness
     kz = kr * 0.001
     s = np.squeeze(s).reshape(-1)
     rad = np.squeeze(rad).reshape(-1)
@@ -163,11 +164,16 @@ def neuman_unconfined_fully_penetrating_laplace(
                 continue
             rd = re / sat_thickness
             beta = kz * (rd ** 2) / kr
-            rhs = se / (((storage / specific_yield) * beta) + se / ((1e9 * sat_thickness * specific_yield)/kz))
+            rhs = se / (
+                ((storage / specific_yield) * beta)
+                + se / ((1e9 * sat_thickness * specific_yield) / kz)
+            )
             roots = [nth_root(n, rhs) for n in range(n_numbers)]
             for eps in roots:
                 xn = (beta * (eps ** 2) + se) ** 0.5
-                res[si, ri] += (2*k0(xn) * (np.sin(eps)**2)) / (se * eps * (0.5 * eps + 0.25 * np.sin(2 * eps)))
+                res[si, ri] += (2 * k0(xn) * (np.sin(eps) ** 2)) / (
+                    se * eps * (0.5 * eps + 0.25 * np.sin(2 * eps))
+                )
     return res * rate / (2 * np.pi * transmissivity)
 
 
@@ -197,7 +203,9 @@ def neuman_unconfined(
     }
     kwargs.update(lap_kwargs)
     res = np.zeros((Input.time_no, Input.rad_no))
-    lap_inv = get_lap_inv(neuman_unconfined_partially_penetrating_laplace, **kwargs)
+    lap_inv = get_lap_inv(
+        neuman_unconfined_partially_penetrating_laplace, **kwargs
+    )
     # call the laplace inverse function (only at time points > 0)
     res[Input.time_gz, :] = lap_inv(Input.time[Input.time_gz])
     # reshaping results
@@ -205,4 +213,3 @@ def neuman_unconfined(
     # add the reference head
     res += h_bound
     return res
-
