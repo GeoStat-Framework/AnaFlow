@@ -18,7 +18,6 @@ import numpy as np
 from scipy.special import k0
 from anaflow.tools.laplace import get_lap_inv
 from anaflow.tools.special import Shaper
-from scipy.optimize import root
 from scipy.optimize import root_scalar
 
 __all__ = []

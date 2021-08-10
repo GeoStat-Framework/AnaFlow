@@ -99,8 +99,7 @@ from anaflow.flow import (
     neuman2004_steady,
     ext_grf,
     ext_grf_steady,
-    neuman_unconfined_partially_penetrating_laplace,
-    neuman_unconfined_fully_penetrating_laplace,
+    neuman_unconfined,
 )
 from anaflow.tools import (
     get_lap_inv,
@@ -138,6 +137,5 @@ __all__ += [
     "step_f",
     "specialrange",
     "specialrange_cut",
-    "neuman_unconfined_partially_penetrating_laplace",
-    "neuman_unconfined_fully_penetrating_laplace",
+    "neuman_unconfined",
 ]
