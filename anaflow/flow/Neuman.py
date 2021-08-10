@@ -7,8 +7,11 @@ Anaflow subpackage providing the Neuman equation for homogeneous aquifer.
 The following functions are provided
 
 .. autosummary::
-   neuman_unconfined_laplace
-   neuman_unconfined
+    get_f_df
+    nth_root
+    neuman_unconfined_partially_penetrating_laplace
+    neuman_unconfined_fully_penetrating_laplace
+    neuman_unconfined
 """
 # pylint: disable=C0103
 import numpy as np
@@ -16,33 +19,32 @@ from scipy.special import k0
 from anaflow.tools.laplace import get_lap_inv
 from anaflow.tools.special import Shaper
 from scipy.optimize import root
+from scipy.optimize import root_scalar
 
 __all__ = []
 
-
-def get_f_df(value=0):
-    """Get target function and its derivative."""
+def get_f_df_df2(value=0):
+    """Get target function and its first two derivatives."""
     if value < 0:
         raise ValueError("Neuman: epsilon for root finding needs to be >0.")
 
-    def _f_df(x):
+    def _f_df_df2(x):
         return (
             np.subtract(np.multiply(x, np.tan(x)), value),
             np.tan(x) + np.divide(x, np.cos(x) ** 2),
+            2 * (np.multiply(x, np.tan(x)) + 1.0) * np.cos(x) ** -2,
         )
 
-    return _f_df
-
+    return _f_df_df2
 
 def nth_root(n, v):
-    """Get nth root of x*tan(x) = v."""
-    f_df = get_f_df(v)
-    x0 = np.arctan(v) + n * np.pi
-    sol = root(f_df, x0, jac=True)
-    if not sol.success:
+    """Get n-th root of x*tan(x) = v."""
+    x0 = np.sqrt(v) if (v < 1 and n < 1) else np.arctan(v) + n * np.pi
+    f = get_f_df_df2(v)
+    sol = root_scalar(f, x0=x0, fprime=True, fprime2=True)
+    if not sol.converged:
         raise ValueError(f"Neuman: couldn't find {n}-th root for eps={v}")
-    return sol.x[0]
-
+    return sol.root
 
 def neuman_unconfined_partially_penetrating_laplace(
     s,
@@ -84,7 +86,7 @@ def neuman_unconfined_partially_penetrating_laplace(
         Dimensionless parameter for the conductivity.
         Kz/Kr : vertical conductivity divided by horizontal conductivity
     specific_yield: :class:`float`, optional
-        specific yield
+        Specific yield
     """
     z = sat_thickness - well_depth
     d = well_depth - screen_size
@@ -150,7 +152,7 @@ def neuman_unconfined_fully_penetrating_laplace(
         Dimensionless parameter for the conductivity.
         Kz/Kr : vertical conductivity divided by horizontal conductivity
     specific_yield: :class:`float`, optional
-        specific yield
+        Specific yield
     """
     kr = transmissivity / sat_thickness
     kz = kr * 0.001

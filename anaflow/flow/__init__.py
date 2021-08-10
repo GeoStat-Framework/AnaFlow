@@ -72,11 +72,15 @@ from anaflow.flow.heterogeneous import (
     neuman2004_steady,
 )
 from anaflow.flow.ext_grf_model import ext_grf, ext_grf_steady
+from anaflow.flow.Neuman import (
+    neuman_unconfined_partially_penetrating_laplace,
+    neuman_unconfined_fully_penetrating_laplace,
+)
 
 __all__ = [
     "thiem",
     "theis",
-    "grf_model",
+    "grf",
     "ext_thiem_2d",
     "ext_thiem_3d",
     "ext_thiem_tpl",
@@ -90,4 +94,6 @@ __all__ = [
     "grf",
     "ext_grf",
     "ext_grf_steady",
+    "neuman_unconfined_partially_penetrating_laplace",
+    "neuman_unconfined_fully_penetrating_laplace",
 ]
