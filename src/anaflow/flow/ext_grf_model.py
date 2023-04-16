@@ -175,13 +175,13 @@ def ext_grf_steady(
     kwargs.update(arg_dict)
     Input = Shaper(rad=rad)
     q_fac = rate / (sph_surf(dim) * lat_ext ** (3.0 - dim))  # pumping factor
-    if not r_ref > 0.0:
+    if r_ref <= 0.0:
         raise ValueError("The reference radius needs to be positive.")
-    if not Input.rad_min > 0.0:
+    if Input.rad_min <= 0.0:
         raise ValueError("The given radii need to be positive.")
-    if not dim > 0.0 or dim > 3.0:
+    if dim <= 0.0 or dim > 3.0:
         raise ValueError("The dimension needs to be positiv and <= 3.")
-    if not lat_ext > 0.0:
+    if lat_ext <= 0.0:
         raise ValueError("The lateral extend needs to be positiv.")
 
     if callable(conductivity):
@@ -195,7 +195,7 @@ def ext_grf_steady(
             res[ri] = integ(integrand, re, r_ref)[0]
     else:
         con = float(conductivity)
-        if not con > 0:
+        if con <= 0:
             raise ValueError("The Conductivity needs to be positive.")
         if np.isclose(dim, 2):
             res = np.log(r_ref / Input.rad) / con

@@ -10,7 +10,7 @@ The following functions are provided
 
    grf_laplace
 """
-# pylint: disable=C0103
+# pylint: disable=C0103,R0915
 import warnings
 
 import numpy as np
@@ -152,19 +152,19 @@ def grf_laplace(
         raise ValueError("R_part, S_part and K_part need matching lengths.")
     if R_part[0] < 0.0:
         raise ValueError("The wellradius needs to be >= 0.")
-    if not all([r1 < r2 for r1, r2 in zip(R_part[:-1], R_part[1:])]):
+    if not all(r1 < r2 for r1, r2 in zip(R_part[:-1], R_part[1:])):
         raise ValueError("The radii values need to be sorted.")
     if not np.min(rad) > R_part[0] or np.max(rad) > R_part[-1]:
         raise ValueError("The given radii need to be in the given range.")
-    if not all([con > 0 for con in K_part]):
+    if not all(con > 0 for con in K_part):
         raise ValueError("The Conductivity needs to be positiv.")
-    if not all([stor > 0 for stor in S_part]):
+    if not all(stor > 0 for stor in S_part):
         raise ValueError("The Storage needs to be positiv.")
-    if not dim > 0.0 or dim > 3.0:
+    if dim <= 0.0 or dim > 3.0:
         raise ValueError("The dimension needs to be positiv and <= 3.")
-    if not lat_ext > 0.0:
+    if lat_ext <= 0.0:
         raise ValueError("The lateral extend needs to be positiv.")
-    if not K_well > 0:
+    if K_well <= 0:
         raise ValueError("The well conductivity needs to be positiv.")
 
     # initialize the result

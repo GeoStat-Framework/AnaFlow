@@ -20,7 +20,7 @@ The following functions are provided
    tpl_hyp
    neuman2004_trans
 """
-
+# pylint: disable=C0103,R0903
 import numpy as np
 from scipy.special import exp1, expn, gamma, gammaincc, hyp2f1
 
@@ -39,7 +39,7 @@ __all__ = [
 ]
 
 
-class Shaper(object):
+class Shaper:
     """
     A class to reshape radius-time input-output in a good way.
 
@@ -84,7 +84,7 @@ class Shaper(object):
             np.ones_like(self.time[self.time_gz]), self.rad
         )
 
-        if not self.struc_grid and not self.rad_shape == self.time_shape:
+        if not self.struc_grid and self.rad_shape != self.time_shape:
             raise ValueError("No struc_grid: shape of time & radius differ")
         if np.any(self.time < 0.0):
             raise ValueError("The given times need to be positive.")
@@ -183,7 +183,7 @@ def specialrange(val_min, val_max, steps, typ="exp"):
             )
         ) ** typ
     else:
-        print("specialrange: unknown typ '{}'. Using linear range".format(typ))
+        print(f"specialrange: unknown typ '{typ}'. Using linear range")
         rng = np.linspace(val_min, val_max, steps)
 
     return rng

@@ -74,7 +74,6 @@ from anaflow.flow.homogeneous import grf, theis, thiem
 __all__ = [
     "thiem",
     "theis",
-    "grf_model",
     "ext_thiem_2d",
     "ext_thiem_3d",
     "ext_thiem_tpl",
