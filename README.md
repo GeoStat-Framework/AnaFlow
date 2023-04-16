@@ -2,12 +2,12 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1135723.svg)](https://doi.org/10.5281/zenodo.1135723)
 [![PyPI version](https://badge.fury.io/py/anaflow.svg)](https://badge.fury.io/py/anaflow)
-[![Build Status](https://github.com/GeoStat-Framework/AnaFlow/workflows/Continuous%20Integration/badge.svg?branch=develop)](https://github.com/GeoStat-Framework/AnaFlow/actions)
+[![Build Status](https://github.com/GeoStat-Framework/AnaFlow/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/GeoStat-Framework/AnaFlow/actions)
 [![Documentation Status](https://readthedocs.org/projects/docs/badge/?version=latest)](https://anaflow.readthedocs.io/en/latest/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/GeoStat-Framework/AnaFlow/master/docs/source/pics/Anaflow.png" alt="AnaFlow-LOGO" width="251px"/>
+<img src="https://raw.githubusercontent.com/GeoStat-Framework/AnaFlow/main/docs/source/pics/Anaflow.png" alt="AnaFlow-LOGO" width="251px"/>
 </p>
 
 ## Purpose
@@ -52,7 +52,7 @@ plt.show()
 ```
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/GeoStat-Framework/AnaFlow/master/docs/source/pics/01_call_theis.png" alt="Theis" width="600px"/>
+<img src="https://raw.githubusercontent.com/GeoStat-Framework/AnaFlow/main/docs/source/pics/01_call_theis.png" alt="Theis" width="600px"/>
 </p>
 
 
@@ -102,5 +102,5 @@ You can contact us via <info@geostat-framework.org>.
 
 [MIT][mit_link] © 2019 - 2021
 
-[mit_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE
+[mit_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/main/LICENSE
 [doc_link]: https://anaflow.readthedocs.io

@@ -65,4 +65,4 @@ Requirements
 License
 =======
 
-`MIT <https://github.com/GeoStat-Framework/AnaFlow/blob/master/LICENSE>`_
+`MIT <https://github.com/GeoStat-Framework/AnaFlow/blob/main/LICENSE>`_
