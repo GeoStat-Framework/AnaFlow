@@ -100,7 +100,7 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[MIT][mit_link] © 2019 - 2021
+[MIT][mit_link] © 2019 - 2023
 
 [mit_link]: https://github.com/GeoStat-Framework/AnaFlow/blob/main/LICENSE
 [doc_link]: https://anaflow.readthedocs.io
