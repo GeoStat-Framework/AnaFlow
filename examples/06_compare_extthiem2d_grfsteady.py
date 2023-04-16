@@ -13,9 +13,9 @@ References:
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import ext_thiem_2d, ext_grf_steady
-from anaflow.tools.coarse_graining import T_CG
 
+from anaflow import ext_grf_steady, ext_thiem_2d
+from anaflow.tools.coarse_graining import T_CG
 
 rad = np.geomspace(0.05, 4)  # radius from the pumping well in [0, 4]
 r_ref = 2.0  # reference radius

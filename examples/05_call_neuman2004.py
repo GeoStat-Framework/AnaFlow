@@ -16,7 +16,8 @@ Reference: `Neuman 2004 <https://doi.org/10.1029/2003WR002405>`__
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import theis, neuman2004
+
+from anaflow import neuman2004, theis
 
 ###############################################################################
 # We use three time steps: 10s, 10min, 10h

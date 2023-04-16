@@ -14,7 +14,8 @@ Reference: `Zech et. al. 2016 <http://dx.doi.org/10.1002/2015WR018509>`__
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import theis, ext_theis_2d
+
+from anaflow import ext_theis_2d, theis
 
 ###############################################################################
 # We use three time steps: 10s, 10min, 10h

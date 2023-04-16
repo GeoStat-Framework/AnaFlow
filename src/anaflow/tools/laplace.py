@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing functions concerning the laplace transformation.
 
@@ -7,13 +6,15 @@ Anaflow subpackage providing functions concerning the laplace transformation.
 The following functions are provided
 
 .. autosummary::
+   :toctree:
 
    get_lap
    get_lap_inv
    lap_trans
    stehfest
 """
-from math import floor, factorial
+from math import factorial, floor
+
 import numpy as np
 from scipy.integrate import quad
 
@@ -121,7 +122,6 @@ def lap_trans(func, phase, arg_dict=None, **kwargs):
         return integrand
 
     for phase_i, phase_e in np.ndenumerate(phase):
-
         integ = make_integrand(phase_e)
         result[phase_i] = quad(integ, 0, np.inf)[0]
 

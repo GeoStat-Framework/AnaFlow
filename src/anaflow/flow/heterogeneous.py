@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing flow solutions in heterogeneous aquifers.
 
@@ -24,17 +23,17 @@ import functools as ft
 import numpy as np
 from scipy.special import exp1, expi
 
-from anaflow.tools.special import aniso, specialrange_cut, neuman2004_trans
-from anaflow.tools.mean import annular_hmean
+from anaflow.flow.ext_grf_model import ext_grf, ext_grf_steady
 from anaflow.tools.coarse_graining import (
-    T_CG,
-    T_CG_error,
     K_CG,
-    K_CG_error,
+    T_CG,
     TPL_CG,
+    K_CG_error,
+    T_CG_error,
     TPL_CG_error,
 )
-from anaflow.flow.ext_grf_model import ext_grf, ext_grf_steady
+from anaflow.tools.mean import annular_hmean
+from anaflow.tools.special import aniso, neuman2004_trans, specialrange_cut
 
 __all__ = [
     "ext_thiem_2d",
@@ -74,6 +73,7 @@ def ext_thiem_2d(
     The type curve is describing the effective drawdown
     in a 2D statistical framework, where the transmissivity distribution is
     following a log-normal distribution with a gaussian correlation function.
+    Presented in [Zech2013]_.
 
     Parameters
     ----------
@@ -146,10 +146,10 @@ def ext_thiem_2d(
     chi = -var / 2.0 if T_well is None else np.log(T_well / trans_gmean)
     C = (prop / len_scale) ** 2
     # derive the result
-    res = -expi(-chi / (1.0 + C * rad ** 2))
-    res -= np.exp(-chi) * exp1(chi / (1.0 + C * rad ** 2) - chi)
-    res += expi(-chi / (1.0 + C * r_ref ** 2))
-    res += np.exp(-chi) * exp1(chi / (1.0 + C * r_ref ** 2) - chi)
+    res = -expi(-chi / (1.0 + C * rad**2))
+    res -= np.exp(-chi) * exp1(chi / (1.0 + C * rad**2) - chi)
+    res += expi(-chi / (1.0 + C * r_ref**2))
+    res += np.exp(-chi) * exp1(chi / (1.0 + C * r_ref**2) - chi)
     res *= -rate / (4.0 * np.pi * trans_gmean)
     res += h_ref
     return res
@@ -182,6 +182,7 @@ def ext_thiem_3d(
     in a 3D statistical framework, where the conductivity distribution is
     following a log-normal distribution with a gaussian correlation function
     and taking vertical anisotropy into account.
+    Presented in [Zech2013]_.
 
     Parameters
     ----------
@@ -272,15 +273,15 @@ def ext_thiem_3d(
 
     C = (prop / len_scale / anis ** (1.0 / 3.0)) ** 2
 
-    sub11 = np.sqrt(1.0 + C * r_ref ** 2)
-    sub12 = np.sqrt(1.0 + C * rad ** 2)
+    sub11 = np.sqrt(1.0 + C * r_ref**2)
+    sub12 = np.sqrt(1.0 + C * rad**2)
 
     sub21 = np.log(sub12 + 1.0) - np.log(sub11 + 1.0)
     sub21 -= 1.0 / sub12 - 1.0 / sub11
 
     sub22 = np.log(sub12) - np.log(sub11)
-    sub22 -= 0.50 / sub12 ** 2 - 0.50 / sub11 ** 2
-    sub22 -= 0.25 / sub12 ** 4 - 0.25 / sub11 ** 4
+    sub22 -= 0.50 / sub12**2 - 0.50 / sub11**2
+    sub22 -= 0.25 / sub12**4 - 0.25 / sub11**4
 
     # derive the result
     res = np.exp(-chi) * (np.log(rad) - np.log(r_ref))
@@ -1265,6 +1266,7 @@ def neuman2004(
     This solution is build on the apparent transmissivity from Neuman 2004,
     which represents a mean drawdown in an ensemble of pumping tests in
     heterogeneous transmissivity fields following an exponential covariance.
+    Presented in [Neuman2004]_.
 
     Parameters
     ----------
@@ -1371,6 +1373,7 @@ def neuman2004_steady(
     This solution is build on the apparent transmissivity from Neuman 1994,
     which represents a mean drawdown in an ensemble of pumping tests in
     heterogeneous transmissivity fields following an exponential covariance.
+    Presented in [Neuman2004]_.
 
     Parameters
     ----------

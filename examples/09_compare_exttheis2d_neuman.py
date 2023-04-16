@@ -15,8 +15,8 @@ References:
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import ext_theis_2d, neuman2004
 
+from anaflow import ext_theis_2d, neuman2004
 
 time_labels = ["10 s", "10 min", "10 h"]
 time = [10, 600, 36000]  # 10s, 10min, 10h

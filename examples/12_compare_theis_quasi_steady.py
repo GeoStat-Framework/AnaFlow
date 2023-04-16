@@ -7,8 +7,8 @@ changing anymore.
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import theis, thiem
 
+from anaflow import theis, thiem
 
 time = [10, 100, 1000]
 rad = np.geomspace(0.1, 10)

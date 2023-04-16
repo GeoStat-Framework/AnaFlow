@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing helper functions related to coarse graining.
 
@@ -7,6 +6,7 @@ Anaflow subpackage providing helper functions related to coarse graining.
 The following functions are provided
 
 .. autosummary::
+   :toctree:
 
    T_CG
    T_CG_inverse

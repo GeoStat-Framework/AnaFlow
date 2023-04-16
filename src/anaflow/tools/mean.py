@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing several mean calculating routines.
 
@@ -7,6 +6,7 @@ Anaflow subpackage providing several mean calculating routines.
 The following functions are provided
 
 .. autosummary::
+   :toctree:
 
    annular_fmean
    annular_amean
@@ -16,7 +16,6 @@ The following functions are provided
 """
 # pylint: disable=E1137, C0103
 import numpy as np
-
 from scipy.integrate import quad as integ
 
 __all__ = [

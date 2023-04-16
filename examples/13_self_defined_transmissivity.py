@@ -15,11 +15,12 @@ different annular regions of transmissivity.
 
 Reference: (not yet published)
 """
+import matplotlib.gridspec as gridspec
 import numpy as np
 from matplotlib import pyplot as plt
-import matplotlib.gridspec as gridspec
+
 from anaflow import ext_grf, ext_grf_steady
-from anaflow.tools import specialrange_cut, annular_hmean, step_f
+from anaflow.tools import annular_hmean, specialrange_cut, step_f
 
 
 def cond(rad, K_far, K_well, len_scale):

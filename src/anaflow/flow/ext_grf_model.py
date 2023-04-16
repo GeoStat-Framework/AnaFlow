@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing the extended GRF Model.
 
@@ -14,8 +13,8 @@ The following functions are provided
 import numpy as np
 from scipy.integrate import quad as integ
 
-from anaflow.tools.laplace import get_lap_inv
 from anaflow.flow.laplace import grf_laplace
+from anaflow.tools.laplace import get_lap_inv
 from anaflow.tools.special import Shaper, sph_surf
 
 __all__ = ["ext_grf", "ext_grf_steady"]
