@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Purpose
 =======
@@ -10,8 +9,10 @@ Subpackages
 ===========
 
 .. autosummary::
-    flow
-    tools
+   :toctree: api
+
+   flow
+   tools
 
 Solutions
 =========
@@ -76,32 +77,30 @@ Helping functions.
    step_f
    specialrange
    specialrange_cut
-
-
 """
 from anaflow.flow import (
-    thiem,
-    theis,
-    grf,
-    ext_thiem_2d,
-    ext_thiem_3d,
-    ext_thiem_tpl,
-    ext_thiem_tpl_3d,
+    ext_grf,
+    ext_grf_steady,
     ext_theis_2d,
     ext_theis_3d,
     ext_theis_tpl,
     ext_theis_tpl_3d,
+    ext_thiem_2d,
+    ext_thiem_3d,
+    ext_thiem_tpl,
+    ext_thiem_tpl_3d,
+    grf,
     neuman2004,
     neuman2004_steady,
-    ext_grf,
-    ext_grf_steady,
+    theis,
+    thiem,
 )
 from anaflow.tools import (
-    get_lap_inv,
     get_lap,
-    step_f,
+    get_lap_inv,
     specialrange,
     specialrange_cut,
+    step_f,
 )
 
 try:

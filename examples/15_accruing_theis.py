@@ -7,12 +7,12 @@ One is an accruing pumping rate represented by the error function.
 This could be interpreted as that the water pump needs a certain time to
 reach its constant rate state.
 """
-import numpy as np
-from scipy.special import erf
-from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
-from anaflow import theis
+import numpy as np
+from matplotlib import pyplot as plt
+from scipy.special import erf
 
+from anaflow import theis
 
 time = np.geomspace(1, 600)
 rad = [1, 5]

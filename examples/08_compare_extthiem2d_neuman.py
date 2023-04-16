@@ -15,8 +15,8 @@ References:
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import ext_thiem_2d, neuman2004_steady
 
+from anaflow import ext_thiem_2d, neuman2004_steady
 
 rad = np.geomspace(0.05, 4)  # radius from the pumping well in [0, 4]
 r_ref = 30.0  # reference radius

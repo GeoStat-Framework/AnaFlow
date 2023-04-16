@@ -10,8 +10,8 @@ which is demonstrated in the following script.
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import theis
 
+from anaflow import theis
 
 time = np.linspace(10, 200)
 rad = [1, 5]

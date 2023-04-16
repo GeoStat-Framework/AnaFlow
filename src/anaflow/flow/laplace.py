@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing flow solutions in laplace space.
 
@@ -7,14 +6,17 @@ Anaflow subpackage providing flow solutions in laplace space.
 The following functions are provided
 
 .. autosummary::
+   :toctree:
+
    grf_laplace
 """
-# pylint: disable=C0103
+# pylint: disable=C0103,R0915
 import warnings
 
 import numpy as np
-from scipy.special import kv, iv, gamma, erfcx
 from pentapy import solve
+from scipy.special import erfcx, gamma, iv, kv
+
 from anaflow.tools.special import sph_surf
 
 __all__ = ["grf_laplace"]
@@ -33,7 +35,7 @@ def periodic(s, a=0):
     """
     if np.isclose(a, 0):
         return constant(s)
-    return 1.0 / (s + a ** 2 / s)
+    return 1.0 / (s + a**2 / s)
 
 
 def slug(s):
@@ -150,19 +152,19 @@ def grf_laplace(
         raise ValueError("R_part, S_part and K_part need matching lengths.")
     if R_part[0] < 0.0:
         raise ValueError("The wellradius needs to be >= 0.")
-    if not all([r1 < r2 for r1, r2 in zip(R_part[:-1], R_part[1:])]):
+    if not all(r1 < r2 for r1, r2 in zip(R_part[:-1], R_part[1:])):
         raise ValueError("The radii values need to be sorted.")
     if not np.min(rad) > R_part[0] or np.max(rad) > R_part[-1]:
         raise ValueError("The given radii need to be in the given range.")
-    if not all([con > 0 for con in K_part]):
+    if not all(con > 0 for con in K_part):
         raise ValueError("The Conductivity needs to be positiv.")
-    if not all([stor > 0 for stor in S_part]):
+    if not all(stor > 0 for stor in S_part):
         raise ValueError("The Storage needs to be positiv.")
-    if not dim > 0.0 or dim > 3.0:
+    if dim <= 0.0 or dim > 3.0:
         raise ValueError("The dimension needs to be positiv and <= 3.")
-    if not lat_ext > 0.0:
+    if lat_ext <= 0.0:
         raise ValueError("The lateral extend needs to be positiv.")
-    if not K_well > 0:
+    if K_well <= 0:
         raise ValueError("The well conductivity needs to be positiv.")
 
     # initialize the result
@@ -198,7 +200,7 @@ def grf_laplace(
             # calculate the head
             for ri, re in enumerate(rad):
                 if re < R_part[-1]:
-                    res[si, ri] = re ** nu * (
+                    res[si, ri] = re**nu * (
                         As * kv(nu, Cs * re) + Bs * iv(nu, Cs * re)
                     )
 
@@ -300,7 +302,7 @@ def grf_laplace(
                 k0_sub[np.abs(X[2 * pos]) < cut_off_prec] = 0
                 i0_sub = X[2 * pos + 1] * iv(nu, Cs[pos] * rad)
                 i0_sub[np.abs(X[2 * pos + 1]) < cut_off_prec] = 0
-                res[si, :] = rad ** nu * (k0_sub + i0_sub)
+                res[si, :] = rad**nu * (k0_sub + i0_sub)
 
     # set problematic values to 0
     # --> the algorithm tends to violate small values,

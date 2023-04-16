@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing special functions.
 
@@ -7,6 +6,7 @@ Anaflow subpackage providing special functions.
 The following functions are provided
 
 .. autosummary::
+   :toctree:
 
    Shaper
    step_f
@@ -20,9 +20,9 @@ The following functions are provided
    tpl_hyp
    neuman2004_trans
 """
-
+# pylint: disable=C0103,R0903
 import numpy as np
-from scipy.special import gamma, gammaincc, exp1, expn, hyp2f1
+from scipy.special import exp1, expn, gamma, gammaincc, hyp2f1
 
 __all__ = [
     "Shaper",
@@ -39,7 +39,7 @@ __all__ = [
 ]
 
 
-class Shaper(object):
+class Shaper:
     """
     A class to reshape radius-time input-output in a good way.
 
@@ -84,7 +84,7 @@ class Shaper(object):
             np.ones_like(self.time[self.time_gz]), self.rad
         )
 
-        if not self.struc_grid and not self.rad_shape == self.time_shape:
+        if not self.struc_grid and self.rad_shape != self.time_shape:
             raise ValueError("No struc_grid: shape of time & radius differ")
         if np.any(self.time < 0.0):
             raise ValueError("The given times need to be positive.")
@@ -183,7 +183,7 @@ def specialrange(val_min, val_max, steps, typ="exp"):
             )
         ) ** typ
     else:
-        print("specialrange: unknown typ '{}'. Using linear range".format(typ))
+        print(f"specialrange: unknown typ '{typ}'. Using linear range")
         rng = np.linspace(val_min, val_max, steps)
 
     return rng
@@ -278,11 +278,11 @@ def aniso(e):
     elif np.isclose(e, 0):
         res = 0.0
     else:
-        res = e / (2 * (1.0 - e ** 2))
+        res = e / (2 * (1.0 - e**2))
         res *= (
             1.0
-            / np.sqrt(1.0 - e ** 2)
-            * np.arctan(np.sqrt(1.0 / e ** 2 - 1.0))
+            / np.sqrt(1.0 - e**2)
+            * np.arctan(np.sqrt(1.0 / e**2 - 1.0))
             - e
         )
 
@@ -378,7 +378,7 @@ def well_solution(
     res[Input.time_gz, :] = (
         rate
         / (4.0 * np.pi * transmissivity)
-        * exp1(rad_mat ** 2 * storage / (4 * transmissivity * time_mat))
+        * exp1(rad_mat**2 * storage / (4 * transmissivity * time_mat))
     )
     res = Input.reshape(res)
     if rate > 0:
@@ -456,7 +456,7 @@ def grf_solution(
 
     time_mat = Input.time_mat
     rad_mat = Input.rad_mat
-    u = storage * rad_mat ** 2 / (4 * conductivity * time_mat)
+    u = storage * rad_mat**2 / (4 * conductivity * time_mat)
     nu = 1.0 - dim / 2.0
 
     res = np.zeros((Input.time_no, Input.rad_no))
@@ -493,7 +493,7 @@ def inc_gamma(s, x):
     if np.isclose(s, np.around(s)) and s < -0.5:
         return x ** (s - 1) * expn(int(1 - np.around(s)), x)
     if s < 0:
-        return (inc_gamma(s + 1, x) - x ** s * np.exp(-x)) / s
+        return (inc_gamma(s + 1, x) - x**s * np.exp(-x)) / s
     return gamma(s) * gammaincc(s, x)
 
 

@@ -3,6 +3,17 @@
 All notable changes to **AnaFlow** will be documented in this file.
 
 
+## [1.1.0] - 2023-04
+
+See [#11](https://github.com/GeoStat-Framework/AnaFlow/pull/11)
+
+### Enhancements
+- move to `src/` base package structure
+- drop py36 support
+- added archive support
+- simplify documentation
+
+
 ## [1.0.1] - 2020-04-02
 
 ### Bugfixes
@@ -77,6 +88,7 @@ Containing:
 - lap_transgwflow_cyl - Solution for a diskmodel in laplace inversion
 
 
+[1.0.1]: https://github.com/GeoStat-Framework/AnaFlow/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/GeoStat-Framework/AnaFlow/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/GeoStat-Framework/AnaFlow/compare/v0.4.0...v1.0.0
 [0.4.0]: https://github.com/GeoStat-Framework/AnaFlow/compare/v0.3.0...v0.4.0

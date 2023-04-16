@@ -16,9 +16,9 @@ Reference: `Müller 2015 <http://dx.doi.org/10.13140/RG.2.2.34074.24002>`__
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import theis, ext_theis_3d
-from anaflow.tools.special import aniso
 
+from anaflow import ext_theis_3d, theis
+from anaflow.tools.special import aniso
 
 ###############################################################################
 # We use three time steps: 10s, 10min, 10h

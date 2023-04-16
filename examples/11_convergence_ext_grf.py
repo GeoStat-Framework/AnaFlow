@@ -11,6 +11,7 @@ Reference: `Barker 1988 <https://doi.org/10.1029/WR024i010p01796>`__
 """
 import numpy as np
 from matplotlib import pyplot as plt
+
 from anaflow import ext_grf, ext_grf_steady, grf
 
 time = 1e4  # time point for steady state

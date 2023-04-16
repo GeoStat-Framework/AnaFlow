@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing flow solutions in homogeneous aquifers.
 
@@ -14,8 +13,8 @@ The following functions are provided
 # pylint: disable=C0103
 import numpy as np
 
-from anaflow.tools.special import well_solution, grf_solution
 from anaflow.flow.ext_grf_model import ext_grf, ext_grf_steady
+from anaflow.tools.special import grf_solution, well_solution
 
 __all__ = ["thiem", "theis", "grf"]
 

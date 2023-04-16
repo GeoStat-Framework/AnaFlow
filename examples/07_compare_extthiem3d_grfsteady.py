@@ -10,9 +10,9 @@ Reference: `Zech et. al. 2012 <https://doi.org/10.1029/2012WR011852>`__
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import ext_thiem_3d, ext_grf_steady
-from anaflow.tools.coarse_graining import K_CG
 
+from anaflow import ext_grf_steady, ext_thiem_3d
+from anaflow.tools.coarse_graining import K_CG
 
 rad = np.geomspace(0.05, 4)  # radius from the pumping well in [0, 4]
 r_ref = 2.0  # reference radius

@@ -9,8 +9,8 @@ Reference: `Theis 1935 <https://doi.org/10.1029/TR016i002p00519>`__
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from anaflow import theis
 
+from anaflow import theis
 
 time = [10, 100, 1000]
 rad = np.geomspace(0.1, 10)

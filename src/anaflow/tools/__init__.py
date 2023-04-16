@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Anaflow subpackage providing miscellaneous tools.
 
@@ -8,10 +7,12 @@ Subpackages
 .. currentmodule:: anaflow.tools
 
 .. autosummary::
-    laplace
-    mean
-    special
-    coarse_graining
+   :toctree:
+
+   laplace
+   mean
+   special
+   coarse_graining
 
 Functions
 ^^^^^^^^^
@@ -67,22 +68,22 @@ Helping functions related to the laplace-transformation
    get_lap
    get_lap_inv
 """
+from anaflow.tools.coarse_graining import K_CG, T_CG, TPL_CG
+from anaflow.tools.laplace import get_lap, get_lap_inv
 from anaflow.tools.mean import (
-    annular_fmean,
     annular_amean,
+    annular_fmean,
     annular_gmean,
     annular_hmean,
     annular_pmean,
 )
 from anaflow.tools.special import (
-    step_f,
+    aniso,
+    neuman2004_trans,
     specialrange,
     specialrange_cut,
-    neuman2004_trans,
-    aniso,
+    step_f,
 )
-from anaflow.tools.coarse_graining import T_CG, K_CG, TPL_CG
-from anaflow.tools.laplace import get_lap, get_lap_inv
 
 __all__ = [
     "get_lap",

@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
 """
 This is the unittest of AnaFlow.
 """
 
 import unittest
+
 import numpy as np
+
 import anaflow as af
 
 # import matplotlib.pyplot as plt

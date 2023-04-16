@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # anaflow documentation build configuration file, created by
 # sphinx-quickstart on Fri Jan  5 14:20:43 2018.
@@ -21,6 +20,7 @@
 # pip install sphinx_rtd_theme
 # is needed in order to build the documentation
 import datetime
+
 from anaflow import __version__ as ver
 
 
@@ -48,13 +48,14 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.coverage",
-    "sphinx.ext.imgmath",
+    "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",  # parameters look better than with numpydoc only
     "numpydoc",
     "sphinx_gallery.gen_gallery",
+    "m2r2",
 ]
 
 # autosummaries from source-files
@@ -71,7 +72,10 @@ add_module_names = False
 # Notes in boxes
 napoleon_use_admonition_for_notes = True
 # Attributes like parameters
-# napoleon_use_ivar = True
+napoleon_use_ivar = True
+# keep "Other Parameters" section
+# https://github.com/sphinx-doc/sphinx/issues/10330
+napoleon_use_param = False
 # this is a nice class-doc layout
 numpydoc_show_class_members = True
 # class members have no separate file, so they are not in a toctree
@@ -112,7 +116,7 @@ release = ver
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -144,14 +148,18 @@ html_theme_options = {
     # Toc options
     "collapse_navigation": False,
     "sticky_navigation": True,
-    "navigation_depth": 4,
+    "navigation_depth": 6,
     "includehidden": True,
     "titles_only": False,
 }
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
+html_static_path = ["_static"]
+
+# These paths are either relative to html_static_path
+# or fully qualified paths (eg. https://...)
+html_css_files = ["custom.css"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -238,7 +246,6 @@ suppress_warnings = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    "Python 3.6": ("https://docs.python.org/3.6", None),
     "Python": ("https://docs.python.org/", None),
     "NumPy": ("http://docs.scipy.org/doc/numpy/", None),
     "SciPy": ("http://docs.scipy.org/doc/scipy/reference", None),
