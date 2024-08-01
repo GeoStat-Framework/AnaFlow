@@ -54,9 +54,9 @@ doc = [
 ]
 test = ["pytest-cov>=3"]
 check = [
-  "black>=23,<24",
+  "black>=24,<25",
   "isort[colors]<6",
-  "pylint<3",
+  "pylint",
 ]
 
 [project.urls]
