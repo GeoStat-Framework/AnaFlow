@@ -13,6 +13,7 @@ a transition between the theis solutions for the well- and farfield-conductivity
 
 Reference: (not yet published)
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -62,12 +63,8 @@ for i, step in enumerate(time):
     label_TG = "Theis($K_G$)" if i == 0 else None
     label_TH = "Theis($K_H$)" if i == 0 else None
     label_ef = "extended Theis TPL 2D" if i == 0 else None
-    plt.plot(
-        rad, head_KG[i], label=label_TG, color="C" + str(i), linestyle="--"
-    )
-    plt.plot(
-        rad, head_KH[i], label=label_TH, color="C" + str(i), linestyle=":"
-    )
+    plt.plot(rad, head_KG[i], label=label_TG, color="C" + str(i), linestyle="--")
+    plt.plot(rad, head_KH[i], label=label_TH, color="C" + str(i), linestyle=":")
     plt.plot(rad, head_ef[i], label=label_ef, color="C" + str(i))
     time_ticks.append(head_ef[i][-1])
 

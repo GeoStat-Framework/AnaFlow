@@ -10,6 +10,7 @@ The following functions are provided
 
    grf_laplace
 """
+
 # pylint: disable=C0103,R0915
 import warnings
 
@@ -200,9 +201,7 @@ def grf_laplace(
             # calculate the head
             for ri, re in enumerate(rad):
                 if re < R_part[-1]:
-                    res[si, ri] = re**nu * (
-                        As * kv(nu, Cs * re) + Bs * iv(nu, Cs * re)
-                    )
+                    res[si, ri] = re**nu * (As * kv(nu, Cs * re) + Bs * iv(nu, Cs * re))
 
     # if there is more than one partition, create an equation system
     else:

@@ -20,6 +20,7 @@ The following functions are provided
    tpl_hyp
    neuman2004_trans
 """
+
 # pylint: disable=C0103,R0903
 import numpy as np
 from scipy.special import exp1, expn, gamma, gammaincc, hyp2f1
@@ -77,12 +78,8 @@ class Shaper:
         self.rad_max = np.max(self.rad)
 
         self.time_gz = self.time > 0
-        self.time_mat = np.outer(
-            self.time[self.time_gz], np.ones_like(self.rad)
-        )
-        self.rad_mat = np.outer(
-            np.ones_like(self.time[self.time_gz]), self.rad
-        )
+        self.time_mat = np.outer(self.time[self.time_gz], np.ones_like(self.rad))
+        self.rad_mat = np.outer(np.ones_like(self.time[self.time_gz]), self.rad)
 
         if not self.struc_grid and self.rad_shape != self.time_shape:
             raise ValueError("No struc_grid: shape of time & radius differ")
@@ -157,9 +154,7 @@ def specialrange(val_min, val_max, steps, typ="exp"):
     array([ 1.        ,  2.53034834,  5.23167968, 10.        ])
     """
     if typ in ["exponential", "exp"]:
-        rng = np.expm1(
-            np.linspace(np.log1p(val_min), np.log1p(val_max), steps)
-        )
+        rng = np.expm1(np.linspace(np.log1p(val_min), np.log1p(val_max), steps))
     elif typ in ["logarithmic", "log"]:
         rng = np.log(np.linspace(np.exp(val_min), np.exp(val_max), steps))
     elif typ in ["geometric", "geo", "geom"]:
@@ -170,9 +165,7 @@ def specialrange(val_min, val_max, steps, typ="exp"):
         rng = (np.linspace(np.sqrt(val_min), np.sqrt(val_max), steps)) ** 2
     elif typ in ["cubic", "cub"]:
         rng = (
-            np.linspace(
-                np.power(val_min, 1 / 3.0), np.power(val_max, 1 / 3.0), steps
-            )
+            np.linspace(np.power(val_min, 1 / 3.0), np.power(val_max, 1 / 3.0), steps)
         ) ** 3
     elif isinstance(typ, (float, int)):
         rng = (
@@ -279,12 +272,7 @@ def aniso(e):
         res = 0.0
     else:
         res = e / (2 * (1.0 - e**2))
-        res *= (
-            1.0
-            / np.sqrt(1.0 - e**2)
-            * np.arctan(np.sqrt(1.0 / e**2 - 1.0))
-            - e
-        )
+        res *= 1.0 / np.sqrt(1.0 - e**2) * np.arctan(np.sqrt(1.0 / e**2 - 1.0)) - e
 
     return res
 
@@ -500,7 +488,7 @@ def inc_gamma(s, x):
 def tpl_hyp(rad, dim, hurst, corr, prop):
     """Hyp_2F1 for the TPL CG model."""
     x, d = 1 / (1 + (prop * rad / corr) ** 2), dim / 2
-    return x ** d * hyp2f1(d, 1, d + 1 + hurst, x)
+    return x**d * hyp2f1(d, 1, d + 1 + hurst, x)
 
 
 def neuman2004_trans(rad, trans_gmean, var, len_scale):

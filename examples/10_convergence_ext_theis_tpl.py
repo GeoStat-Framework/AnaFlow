@@ -7,6 +7,7 @@ coincides with the references head of the steady solution.
 
 Reference: (not yet published)
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -25,9 +26,7 @@ dim = 1.5  # using a fractional dimension
 S = 1e-4  # storativity
 rate = -1e-4  # pumping rate
 
-head1 = ext_thiem_tpl(
-    rad, r_ref, KG, len_scale, hurst, var, dim=dim, rate=rate
-)
+head1 = ext_thiem_tpl(rad, r_ref, KG, len_scale, hurst, var, dim=dim, rate=rate)
 head2 = ext_theis_tpl(
     time, rad, S, KG, len_scale, hurst, var, dim=dim, rate=rate, r_bound=r_ref
 )

@@ -16,7 +16,10 @@ The following functions are provided
    K_CG_error
    TPL_CG
    TPL_CG_error
+   Int_CG
+   Int_CG_error
 """
+
 # pylint: disable=C0103
 import numpy as np
 from scipy.optimize import root
@@ -32,6 +35,8 @@ __all__ = [
     "K_CG_error",
     "TPL_CG",
     "TPL_CG_error",
+    "Int_CG",
+    "Int_CG_error",
 ]
 
 
@@ -225,9 +230,7 @@ def K_CG(rad, cond_gmean, var, len_scale, anis, K_well="KH", prop=1.6):
         chi = np.log(K_well / K_efu)
 
     return K_efu * np.exp(
-        chi
-        / np.sqrt(1.0 + (prop * rad / (len_scale * anis ** (1.0 / 3.0))) ** 2)
-        ** 3
+        chi / np.sqrt(1.0 + (prop * rad / (len_scale * anis ** (1.0 / 3.0))) ** 2) ** 3
     )
 
 
@@ -334,9 +337,7 @@ def K_CG_error(err, cond_gmean, var, len_scale, anis, K_well="KH", prop=1.6):
 
     if chi > 0.0:
         if chi / np.log(1.0 + err) >= 1.0:
-            return coef * np.sqrt(
-                (chi / np.log(1.0 + err)) ** (2.0 / 3.0) - 1.0
-            )
+            return coef * np.sqrt((chi / np.log(1.0 + err)) ** (2.0 / 3.0) - 1.0)
         # standard value if the error is less then the variation
         return 0
 

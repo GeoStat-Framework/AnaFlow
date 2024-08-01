@@ -8,6 +8,7 @@ Therefore the results should coincide.
 
 Reference: `Zech et. al. 2012 <https://doi.org/10.1029/2012WR011852>`__
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 

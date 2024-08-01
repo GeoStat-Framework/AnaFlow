@@ -15,6 +15,7 @@ different annular regions of transmissivity.
 
 Reference: (not yet published)
 """
+
 import matplotlib.gridspec as gridspec
 import numpy as np
 from matplotlib import pyplot as plt
@@ -78,9 +79,7 @@ ax2.plot(rad, head2, label="Steady", color="k", linestyle=":")
 
 rad_lin = np.linspace(rad[0], rad[-1], 1000)
 ax1.plot(rad_lin, step_f(rad_lin, R_part, K_part), label="step Conductivity")
-ax1.plot(
-    rad_lin, cond(rad_lin, K_far, K_well, len_scale), label="Conductivity"
-)
+ax1.plot(rad_lin, cond(rad_lin, K_far, K_well, len_scale), label="Conductivity")
 ax1.set_yticks([K_well, K_far])
 ax1.set_ylabel(r"$K$ in $[\frac{m}{s}]$")
 plt.setp(ax1.get_xticklabels(), visible=False)

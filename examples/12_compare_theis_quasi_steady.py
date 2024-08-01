@@ -5,6 +5,7 @@ Quasi steady convergence
 The quasi steady is reached, when the radial shape of the drawdown in not
 changing anymore.
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -21,12 +22,8 @@ head_ref = theis(
     transmissivity=1e-4,
     rate=-1e-4,
 )
-head1 = (
-    theis(time, rad, storage=1e-3, transmissivity=1e-4, rate=-1e-4) - head_ref
-)
-head2 = theis(
-    time, rad, storage=1e-3, transmissivity=1e-4, rate=-1e-4, r_bound=r_ref
-)
+head1 = theis(time, rad, storage=1e-3, transmissivity=1e-4, rate=-1e-4) - head_ref
+head2 = theis(time, rad, storage=1e-3, transmissivity=1e-4, rate=-1e-4, r_bound=r_ref)
 head3 = thiem(rad, r_ref, transmissivity=1e-4, rate=-1e-4)
 
 for i, step in enumerate(time):

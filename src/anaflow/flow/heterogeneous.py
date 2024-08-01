@@ -21,6 +21,7 @@ The following functions are provided
    neuman2004
    neuman2004_steady
 """
+
 # pylint: disable=C0103,C0302
 import functools as ft
 
@@ -33,10 +34,10 @@ from anaflow.tools.coarse_graining import (
     T_CG,
     TPL_CG,
     Int_CG,
+    Int_CG_error,
     K_CG_error,
     T_CG_error,
     TPL_CG_error,
-    Int_CG_error,
 )
 from anaflow.tools.mean import annular_hmean
 from anaflow.tools.special import aniso, neuman2004_trans, specialrange_cut
@@ -134,13 +135,9 @@ def ext_thiem_2d(
     rad = np.array(rad, dtype=float)
     # check the input
     if r_ref <= 0.0:
-        raise ValueError(
-            "The upper boundary needs to be greater than the wellradius"
-        )
+        raise ValueError("The upper boundary needs to be greater than the wellradius")
     if np.any(rad <= 0.0):
-        raise ValueError(
-            "The given radii need to be greater than the wellradius"
-        )
+        raise ValueError("The given radii need to be greater than the wellradius")
     if trans_gmean <= 0.0:
         raise ValueError("The Transmissivity needs to be positive.")
     if T_well is not None and T_well <= 0.0:
@@ -579,13 +576,9 @@ def ext_theis_3d(
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < far_err < 1.0:
-        raise ValueError(
-            "The relative error of Conductivity needs to be within (0,1)"
-        )
+        raise ValueError("The relative error of Conductivity needs to be within (0,1)")
     # genearte rlast from a given relativ-error to farfield-conductivity
-    r_last = K_CG_error(
-        far_err, cond_gmean, var, len_scale, anis, K_well, prop
-    )
+    r_last = K_CG_error(far_err, cond_gmean, var, len_scale, anis, K_well, prop)
     # generate the partition points
     if r_last > r_well:
         R_part = specialrange_cut(r_well, r_bound, parts + 1, r_last)
@@ -763,9 +756,7 @@ def ext_theis_tpl(
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < far_err < 1.0:
-        raise ValueError(
-            "The relative error of Conductivity needs to be within (0,1)"
-        )
+        raise ValueError("The relative error of Conductivity needs to be within (0,1)")
     # genearte rlast from a given relativ-error to farfield-conductivity
     r_last = TPL_CG_error(
         far_err, cond_gmean, len_scale, hurst, var, c, 1, dim, K_well, prop
@@ -790,9 +781,7 @@ def ext_theis_tpl(
         K_well=K_well,
         prop=prop,
     )
-    K_well = TPL_CG(
-        r_well, cond_gmean, len_scale, hurst, var, c, 1, dim, K_well, prop
-    )
+    K_well = TPL_CG(r_well, cond_gmean, len_scale, hurst, var, c, 1, dim, K_well, prop)
     return ext_grf(
         time=time,
         rad=rad,
@@ -942,9 +931,7 @@ def ext_theis_tpl_3d(
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < far_err < 1.0:
-        raise ValueError(
-            "The relative error of Conductivity needs to be within (0,1)"
-        )
+        raise ValueError("The relative error of Conductivity needs to be within (0,1)")
     # genearte rlast from a given relativ-error to farfield-conductivity
     r_last = TPL_CG_error(
         far_err, cond_gmean, len_scale, hurst, var, c, anis, 3, K_well, prop
@@ -969,9 +956,7 @@ def ext_theis_tpl_3d(
         K_well=K_well,
         prop=prop,
     )
-    K_well = TPL_CG(
-        r_well, cond_gmean, len_scale, hurst, var, c, anis, 3, K_well, prop
-    )
+    K_well = TPL_CG(r_well, cond_gmean, len_scale, hurst, var, c, anis, 3, K_well, prop)
     return ext_grf(
         time=time,
         rad=rad,
@@ -1390,9 +1375,7 @@ def ext_theis_int(
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < far_err < 1.0:
-        raise ValueError(
-            "The relative error of Conductivity needs to be within (0,1)"
-        )
+        raise ValueError("The relative error of Conductivity needs to be within (0,1)")
     # genearte rlast from a given relativ-error to farfield-conductivity
     r_last = Int_CG_error(
         far_err, cond_gmean, var, len_scale, roughness, 1, dim, K_well, prop
@@ -1416,9 +1399,7 @@ def ext_theis_int(
         K_well=K_well,
         prop=prop,
     )
-    K_well = Int_CG(
-        r_well, cond_gmean, var, len_scale, roughness, 1, dim, K_well, prop
-    )
+    K_well = Int_CG(r_well, cond_gmean, var, len_scale, roughness, 1, dim, K_well, prop)
     return ext_grf(
         time=time,
         rad=rad,
@@ -1564,9 +1545,7 @@ def ext_theis_int_3d(
     if parts <= 1:
         raise ValueError("The numbor of partitions needs to be at least 2")
     if not 0.0 < far_err < 1.0:
-        raise ValueError(
-            "The relative error of Conductivity needs to be within (0,1)"
-        )
+        raise ValueError("The relative error of Conductivity needs to be within (0,1)")
     # genearte rlast from a given relativ-error to farfield-conductivity
     r_last = Int_CG_error(
         far_err, cond_gmean, var, len_scale, roughness, anis, 3, K_well, prop
@@ -1985,9 +1964,7 @@ def neuman2004(
     )
 
 
-def neuman2004_steady(
-    rad, r_ref, trans_gmean, var, len_scale, rate=-1e-4, h_ref=0.0
-):
+def neuman2004_steady(rad, r_ref, trans_gmean, var, len_scale, rate=-1e-4, h_ref=0.0):
     """
     The steady solution for the apparent transmissivity from [Neuman2004].
 

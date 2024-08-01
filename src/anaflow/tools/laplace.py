@@ -13,6 +13,7 @@ The following functions are provided
    lap_trans
    stehfest
 """
+
 from math import factorial, floor
 
 import numpy as np
@@ -131,9 +132,7 @@ def lap_trans(func, phase, arg_dict=None, **kwargs):
     return result
 
 
-def get_lap_inv(
-    func, method="stehfest", method_dict=None, arg_dict=None, **kwargs
-):
+def get_lap_inv(func, method="stehfest", method_dict=None, arg_dict=None, **kwargs):
     """
     Callable Laplace inversion.
 
@@ -295,13 +294,9 @@ def stehfest(func, time, bound=12, arg_dict=None, **kwargs):
             "The time-values need to be positiv for the stehfest-algorithm"
         )
     if bound <= 1:
-        raise ValueError(
-            "The boundary needs to be >1 for the stehfest-algorithm"
-        )
+        raise ValueError("The boundary needs to be >1 for the stehfest-algorithm")
     if bound % 2 != 0:
-        raise ValueError(
-            "The boundary needs to be even for the stehfest-algorithm"
-        )
+        raise ValueError("The boundary needs to be even for the stehfest-algorithm")
 
     # get all coefficient factors at once
     c_fac = c_array(bound)
@@ -457,11 +452,7 @@ def _c(i, bound):
 
 def _d(k, i, bound):
     res = ((float(k)) ** (bound / 2 + 1)) * (factorial(2 * k))
-    res /= (
-        (factorial(bound / 2 - k))
-        * (factorial(i - k))
-        * (factorial(2 * k - i))
-    )
+    res /= (factorial(bound / 2 - k)) * (factorial(i - k)) * (factorial(2 * k - i))
     res /= factorial(k) ** 2
     return res
 
