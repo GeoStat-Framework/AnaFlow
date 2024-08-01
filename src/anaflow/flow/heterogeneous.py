@@ -10,10 +10,14 @@ The following functions are provided
    ext_thiem_3d
    ext_thiem_tpl
    ext_thiem_tpl_3d
+   ext_thiem_int
+   ext_thiem_int_3d
    ext_theis_2d
    ext_theis_3d
    ext_theis_tpl
    ext_theis_tpl_3d
+   ext_theis_int
+   ext_theis_int_3d
    neuman2004
    neuman2004_steady
 """
@@ -28,9 +32,11 @@ from anaflow.tools.coarse_graining import (
     K_CG,
     T_CG,
     TPL_CG,
+    Int_CG,
     K_CG_error,
     T_CG_error,
     TPL_CG_error,
+    Int_CG_error,
 )
 from anaflow.tools.mean import annular_hmean
 from anaflow.tools.special import aniso, neuman2004_trans, specialrange_cut
@@ -40,10 +46,14 @@ __all__ = [
     "ext_thiem_3d",
     "ext_thiem_tpl",
     "ext_thiem_tpl_3d",
+    "ext_thiem_int",
+    "ext_thiem_int_3d",
     "ext_theis_2d",
     "ext_theis_3d",
     "ext_theis_tpl",
     "ext_theis_tpl_3d",
+    "ext_theis_int",
+    "ext_theis_int_3d",
     "neuman2004",
     "neuman2004_steady",
 ]
@@ -1224,6 +1234,617 @@ def ext_thiem_tpl_3d(
         hurst=hurst,
         var=var,
         c=c,
+        anis=anis,
+        dim=3,
+        K_well=K_well,
+        prop=prop,
+    )
+    return ext_grf_steady(
+        rad=rad,
+        r_ref=r_ref,
+        conductivity=cond,
+        dim=2,
+        lat_ext=lat_ext,
+        rate=rate,
+        h_ref=h_ref,
+    )
+
+
+###############################################################################
+# extended Thiem/Theis solutions for the Integral model
+###############################################################################
+
+
+def ext_theis_int(
+    time,
+    rad,
+    storage,
+    cond_gmean,
+    var,
+    len_scale,
+    roughness=1.0,
+    dim=2.0,
+    lat_ext=1.0,
+    rate=-1e-4,
+    r_well=0.0,
+    r_bound=np.inf,
+    h_bound=0.0,
+    K_well="KH",
+    prop=1.6,
+    far_err=0.01,
+    struc_grid=True,
+    parts=30,
+    lap_kwargs=None,
+):
+    """
+    The extended Theis solution for the integral variogram model.
+
+    The extended Theis solution for transient flow under
+    a pumping condition in a confined aquifer.
+    The type curve is describing the effective drawdown
+    in a d-dimensional statistical framework,
+    where the conductivity distribution is
+    following a log-normal distribution with an integral
+    correlation incorporating a roughness parameter.
+
+    The roughness parameter controls the field roughness of
+    log-transmissivity. It's limits are a pure nugget model for
+    r -> 0 and the gaussian model for r -> infinity.
+
+    Parameters
+    ----------
+    time : :class:`numpy.ndarray`
+        Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    storage : :class:`float`
+        Storage of the aquifer.
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+        You can also treat this as transmissivity by leaving 'lat_ext=1'.
+    var : :class:`float`
+        Variance of the log-conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    roughness: :class:`float`, optional
+        Roughness of the model. Should be positive.
+        Default: ``1``
+    dim: :class:`float`, optional
+        Dimension of space.
+        Default: ``2.0``
+    lat_ext : :class:`float`, optional
+        Lateral extend of the aquifer:
+
+            * sqare-root of cross-section in 1D
+            * thickness in 2D
+            * meaningless in 3D
+
+        Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    r_well : :class:`float`, optional
+        Radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary as well as initial condition.
+        Default: ``0.0``
+    K_well : :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+    far_err : :class:`float`, optional
+        Relative error for the farfield transmissivity for calculating the
+        cutoff-point of the solution. Default: ``0.01``
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured r-t grid is created.
+        Default: ``True``
+    parts : :class:`int`, optional
+        Since the solution is calculated by setting the transmissivity to local
+        constant values, one needs to specify the number of partitions of the
+        transmissivity. Default: ``30``
+    lap_kwargs : :class:`dict` or :any:`None` optional
+        Dictionary for :any:`get_lap_inv` containing `method` and
+        `method_dict`. The default is equivalent to
+        ``lap_kwargs = {"method": "stehfest", "method_dict": None}``.
+        Default: :any:`None`
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Notes
+    -----
+    If you want to use cartesian coordiantes, just use the formula
+    ``r = sqrt(x**2 + y**2)``
+    """
+    # check the input
+    if r_well < 0.0:
+        raise ValueError("The wellradius needs to be >= 0")
+    if r_bound <= r_well:
+        raise ValueError("The upper boundary needs to be > well radius")
+    if storage <= 0.0:
+        raise ValueError("The storage needs to be positive.")
+    if cond_gmean <= 0.0:
+        raise ValueError("The gmean conductivity needs to be positive.")
+    if len_scale <= 0.0:
+        raise ValueError("The correlationlength needs to be positive.")
+    if roughness <= 0.0:
+        raise ValueError("Roughness needs to be positive.")
+    if var < 0.0:
+        raise ValueError("The variance needs to be positive.")
+    if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'"
+        )
+    if isinstance(K_well, float) and K_well <= 0.0:
+        raise ValueError("The well-conductivity needs to be positive.")
+    if prop <= 0.0:
+        raise ValueError("The proportionality factor needs to be positive.")
+    if parts <= 1:
+        raise ValueError("The numbor of partitions needs to be at least 2")
+    if not 0.0 < far_err < 1.0:
+        raise ValueError(
+            "The relative error of Conductivity needs to be within (0,1)"
+        )
+    # genearte rlast from a given relativ-error to farfield-conductivity
+    r_last = Int_CG_error(
+        far_err, cond_gmean, var, len_scale, roughness, 1, dim, K_well, prop
+    )
+    # generate the partition points
+    if r_last > r_well:
+        R_part = specialrange_cut(r_well, r_bound, parts + 1, r_last)
+    else:
+        R_part = np.array([r_well, r_bound])
+    # calculate the harmonic mean conductivity values within each partition
+    K_part = annular_hmean(
+        Int_CG,
+        R_part,
+        ann_dim=dim,
+        cond_gmean=cond_gmean,
+        var=var,
+        len_scale=len_scale,
+        roughness=roughness,
+        anis=1,
+        dim=dim,
+        K_well=K_well,
+        prop=prop,
+    )
+    K_well = Int_CG(
+        r_well, cond_gmean, var, len_scale, roughness, 1, dim, K_well, prop
+    )
+    return ext_grf(
+        time=time,
+        rad=rad,
+        S_part=np.full_like(K_part, storage),
+        K_part=K_part,
+        R_part=R_part,
+        dim=dim,
+        lat_ext=lat_ext,
+        rate=rate,
+        h_bound=h_bound,
+        K_well=K_well,
+        struc_grid=struc_grid,
+        lap_kwargs=lap_kwargs,
+    )
+
+
+def ext_theis_int_3d(
+    time,
+    rad,
+    storage,
+    cond_gmean,
+    var,
+    len_scale,
+    roughness=1.0,
+    anis=1,
+    lat_ext=1.0,
+    rate=-1e-4,
+    r_well=0.0,
+    r_bound=np.inf,
+    h_bound=0.0,
+    K_well="KH",
+    prop=1.6,
+    far_err=0.01,
+    struc_grid=True,
+    parts=30,
+    lap_kwargs=None,
+):
+    """
+    The extended Theis solution for the integral variogram in 3D.
+
+    The extended Theis solution for transient flow under
+    a pumping condition in a confined aquifer with anisotropy in 3D.
+    The type curve is describing the effective drawdown
+    in a 3-dimensional statistical framework,
+    where the conductivity distribution is
+    following a log-normal distribution with an Integral
+    correlation function incorporating a roughness parameter.
+
+    The roughness parameter controls the field roughness of
+    log-transmissivity. It's limits are a pure nugget model for
+    r -> 0 and the gaussian model for r -> infinity.
+
+    Parameters
+    ----------
+    time : :class:`numpy.ndarray`
+        Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    storage : :class:`float`
+        Storage of the aquifer.
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+    var : :class:`float`
+        Variance of the log-conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    roughness: :class:`float`, optional
+        Roughness of the model. Should be positive.
+        Default: ``1``
+    anis : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        Default: 1.0
+    lat_ext : :class:`float`, optional
+        Lateral extend of the aquifer (thickness).
+        Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    r_well : :class:`float`, optional
+        Radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary as well as initial condition.
+        Default: ``0.0``
+    K_well : :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+    far_err : :class:`float`, optional
+        Relative error for the farfield transmissivity for calculating the
+        cutoff-point of the solution. Default: ``0.01``
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured r-t grid is created.
+        Default: ``True``
+    parts : :class:`int`, optional
+        Since the solution is calculated by setting the transmissivity to local
+        constant values, one needs to specify the number of partitions of the
+        transmissivity. Default: ``30``
+    lap_kwargs : :class:`dict` or :any:`None` optional
+        Dictionary for :any:`get_lap_inv` containing `method` and
+        `method_dict`. The default is equivalent to
+        ``lap_kwargs = {"method": "stehfest", "method_dict": None}``.
+        Default: :any:`None`
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Notes
+    -----
+    If you want to use cartesian coordiantes, just use the formula
+    ``r = sqrt(x**2 + y**2)``
+    """
+    # check the input
+    if r_well < 0.0:
+        raise ValueError("The wellradius needs to be >= 0")
+    if r_bound <= r_well:
+        raise ValueError("The upper boundary needs to be > well radius")
+    if storage <= 0.0:
+        raise ValueError("The storage needs to be positive.")
+    if cond_gmean <= 0.0:
+        raise ValueError("The gmean conductivity needs to be positive.")
+    if len_scale <= 0.0:
+        raise ValueError("The correlationlength needs to be positive.")
+    if roughness <= 0.0:
+        raise ValueError("Roughness needs to be positive.")
+    if var < 0.0:
+        raise ValueError("The variance needs to be positive.")
+    if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'"
+        )
+    if isinstance(K_well, float) and K_well <= 0.0:
+        raise ValueError("The well-conductivity needs to be positive.")
+    if prop <= 0.0:
+        raise ValueError("The proportionality factor needs to be positive.")
+    if parts <= 1:
+        raise ValueError("The numbor of partitions needs to be at least 2")
+    if not 0.0 < far_err < 1.0:
+        raise ValueError(
+            "The relative error of Conductivity needs to be within (0,1)"
+        )
+    # genearte rlast from a given relativ-error to farfield-conductivity
+    r_last = Int_CG_error(
+        far_err, cond_gmean, var, len_scale, roughness, anis, 3, K_well, prop
+    )
+    # generate the partition points
+    if r_last > r_well:
+        R_part = specialrange_cut(r_well, r_bound, parts + 1, r_last)
+    else:
+        R_part = np.array([r_well, r_bound])
+    # calculate the harmonic mean conductivity values within each partition
+    K_part = annular_hmean(
+        Int_CG,
+        R_part,
+        ann_dim=2,
+        cond_gmean=cond_gmean,
+        var=var,
+        len_scale=len_scale,
+        roughness=roughness,
+        anis=anis,
+        dim=3,
+        K_well=K_well,
+        prop=prop,
+    )
+    K_well = Int_CG(
+        r_well, cond_gmean, var, len_scale, roughness, anis, 3, K_well, prop
+    )
+    return ext_grf(
+        time=time,
+        rad=rad,
+        S_part=np.full_like(K_part, storage),
+        K_part=K_part,
+        R_part=R_part,
+        dim=2,
+        lat_ext=lat_ext,
+        rate=rate,
+        h_bound=h_bound,
+        K_well=K_well,
+        struc_grid=struc_grid,
+        lap_kwargs=lap_kwargs,
+    )
+
+
+def ext_thiem_int(
+    rad,
+    r_ref,
+    cond_gmean,
+    var,
+    len_scale,
+    roughness=1.0,
+    dim=2.0,
+    lat_ext=1.0,
+    rate=-1e-4,
+    h_ref=0.0,
+    K_well="KH",
+    prop=1.6,
+):
+    """
+    The extended Thiem solution for the intgeral variogram.
+
+    The extended Theis solution for steady flow under
+    a pumping condition in a confined aquifer.
+    The type curve is describing the effective drawdown
+    in a d-dimensional statistical framework,
+    where the conductivity distribution is
+    following a log-normal distribution with an integral
+    correlation function incorporating a roughness parameter.
+
+    The roughness parameter controls the field roughness of
+    log-transmissivity. It's limits are a pure nugget model for
+    r -> 0 and the gaussian model for r -> infinity.
+
+    Parameters
+    ----------
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    r_ref : :class:`float`
+        Reference radius with known head (see `h_ref`)
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+        You can also treat this as transmissivity by leaving 'lat_ext=1'.
+    var : :class:`float`
+        Variance of the log-conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    roughness: :class:`float`, optional
+        Roughness of the model. Should be positive.
+        Default: ``1``
+    dim: :class:`float`, optional
+        Dimension of space.
+        Default: ``2.0``
+    lat_ext : :class:`float`, optional
+        Lateral extend of the aquifer:
+
+            * sqare-root of cross-section in 1D
+            * thickness in 2D
+            * meaningless in 3D
+
+        Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    h_ref : :class:`float`, optional
+        Reference head at the reference-radius `r_ref`. Default: ``0.0``
+    K_well : :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Notes
+    -----
+    If you want to use cartesian coordiantes, just use the formula
+    ``r = sqrt(x**2 + y**2)``
+    """
+    # check the input
+    if cond_gmean <= 0.0:
+        raise ValueError("The gmean conductivity needs to be positive.")
+    if len_scale <= 0.0:
+        raise ValueError("The correlationlength needs to be positive.")
+    if roughness <= 0.0:
+        raise ValueError("Roughness needs to be positive.")
+    if var < 0.0:
+        raise ValueError("The variance needs to be positive.")
+    if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'"
+        )
+    if isinstance(K_well, float) and K_well <= 0.0:
+        raise ValueError("The well-conductivity needs to be positive.")
+    if prop <= 0.0:
+        raise ValueError("The proportionality factor needs to be positive.")
+    cond = ft.partial(
+        Int_CG,
+        cond_gmean=cond_gmean,
+        len_scale=len_scale,
+        var=var,
+        roughness=roughness,
+        anis=1,
+        dim=dim,
+        K_well=K_well,
+        prop=prop,
+    )
+    return ext_grf_steady(
+        rad=rad,
+        r_ref=r_ref,
+        conductivity=cond,
+        dim=dim,
+        lat_ext=lat_ext,
+        rate=rate,
+        h_ref=h_ref,
+    )
+
+
+def ext_thiem_int_3d(
+    rad,
+    r_ref,
+    cond_gmean,
+    var,
+    len_scale,
+    roughness=1.0,
+    anis=1,
+    lat_ext=1.0,
+    rate=-1e-4,
+    h_ref=0.0,
+    K_well="KH",
+    prop=1.6,
+):
+    """
+    The extended Theis solution for the integral variogram in 3D.
+
+    The extended Theis solution for transient flow under
+    a pumping condition in a confined aquifer with anisotropy in 3D.
+    The type curve is describing the effective drawdown
+    in a 3-dimensional statistical framework,
+    where the conductivity distribution is
+    following a log-normal distribution with an integral
+    correlation function incorporating a roughness parameter.
+
+    The roughness parameter controls the field roughness of
+    log-transmissivity. It's limits are a pure nugget model for
+    r -> 0 and the gaussian model for r -> infinity.
+
+    Parameters
+    ----------
+    time : :class:`numpy.ndarray`
+        Array with all time-points where the function should be evaluated
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    storage : :class:`float`
+        Storage of the aquifer.
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+    var : :class:`float`
+        Variance of the log-conductivity.
+    len_scale : :class:`float`
+        Corralation-length of log-conductivity.
+    roughness: :class:`float`, optional
+        Roughness of the model. Should be positive.
+        Default: ``1``
+    anis : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        Default: 1.0
+    lat_ext : :class:`float`, optional
+        Lateral extend of the aquifer (thickness).
+        Default: ``1.0``
+    rate : :class:`float`, optional
+        Pumpingrate at the well. Default: -1e-4
+    r_well : :class:`float`, optional
+        Radius of the pumping-well. Default: ``0.0``
+    r_bound : :class:`float`, optional
+        Radius of the outer boundary of the aquifer. Default: ``np.inf``
+    h_bound : :class:`float`, optional
+        Reference head at the outer boundary as well as initial condition.
+        Default: ``0.0``
+    K_well : :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
+        arbitrary float value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+    far_err : :class:`float`, optional
+        Relative error for the farfield transmissivity for calculating the
+        cutoff-point of the solution. Default: ``0.01``
+    struc_grid : :class:`bool`, optional
+        If this is set to ``False``, the `rad` and `time` array will be merged
+        and interpreted as single, r-t points. In this case they need to have
+        the same shapes. Otherwise a structured r-t grid is created.
+        Default: ``True``
+    parts : :class:`int`, optional
+        Since the solution is calculated by setting the transmissivity to local
+        constant values, one needs to specify the number of partitions of the
+        transmissivity. Default: ``30``
+    lap_kwargs : :class:`dict` or :any:`None` optional
+        Dictionary for :any:`get_lap_inv` containing `method` and
+        `method_dict`. The default is equivalent to
+        ``lap_kwargs = {"method": "stehfest", "method_dict": None}``.
+        Default: :any:`None`
+
+    Returns
+    -------
+    head : :class:`numpy.ndarray`
+        Array with all heads at the given radii and time-points.
+
+    Notes
+    -----
+    If you want to use cartesian coordiantes, just use the formula
+    ``r = sqrt(x**2 + y**2)``
+    """
+    # check the input
+    if cond_gmean <= 0.0:
+        raise ValueError("The gmean conductivity needs to be positive.")
+    if len_scale <= 0.0:
+        raise ValueError("The correlationlength needs to be positive.")
+    if roughness <= 0.0:
+        raise ValueError("Roughness needs to be positive.")
+    if var < 0.0:
+        raise ValueError("The variance needs to be positive.")
+    if K_well != "KA" and K_well != "KH" and not isinstance(K_well, float):
+        raise ValueError(
+            "The well-conductivity should be given as float or 'KA' resp 'KH'"
+        )
+    if isinstance(K_well, float) and K_well <= 0.0:
+        raise ValueError("The well-conductivity needs to be positive.")
+    if prop <= 0.0:
+        raise ValueError("The proportionality factor needs to be positive.")
+    cond = ft.partial(
+        Int_CG,
+        cond_gmean=cond_gmean,
+        var=var,
+        len_scale=len_scale,
+        roughness=roughness,
         anis=anis,
         dim=3,
         K_well=K_well,

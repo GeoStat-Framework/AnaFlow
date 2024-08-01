@@ -499,8 +499,8 @@ def inc_gamma(s, x):
 
 def tpl_hyp(rad, dim, hurst, corr, prop):
     """Hyp_2F1 for the TPL CG model."""
-    x = 1.0 / (1.0 + (prop * rad / corr) ** 2)
-    return x ** (dim / 2.0) * hyp2f1(dim / 2.0, 1, dim / 2.0 + 1 + hurst, x)
+    x, d = 1 / (1 + (prop * rad / corr) ** 2), dim / 2
+    return x ** d * hyp2f1(d, 1, d + 1 + hurst, x)
 
 
 def neuman2004_trans(rad, trans_gmean, var, len_scale):
