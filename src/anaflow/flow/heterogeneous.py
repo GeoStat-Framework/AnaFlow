@@ -104,7 +104,7 @@ def ext_thiem_2d(
         Reference head at the reference-radius `r_ref`. Default: ``0.0``
     T_well : :class:`float`, optional
         Explicit transmissivity value at the well. Default: ``None``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
 
@@ -216,7 +216,7 @@ def ext_thiem_3d(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
 
@@ -320,6 +320,7 @@ def ext_theis_2d(
     struc_grid=True,
     far_err=0.01,
     parts=30,
+    fix_T_well=False,
     lap_kwargs=None,
 ):
     """
@@ -356,7 +357,7 @@ def ext_theis_2d(
         Default: ``0.0``
     T_well : :class:`float`, optional
         Explicit transmissivity value at the well. Harmonic mean by default.
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
     far_err : :class:`float`, optional
@@ -371,6 +372,8 @@ def ext_theis_2d(
         Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
+    fix_T_well : :class:`bool`, optional
+        Whether to fix the T_well value in the laplace solver. Default: False
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -434,7 +437,10 @@ def ext_theis_2d(
         T_well=T_well,
         prop=prop,
     )
-    T_well = T_CG(r_well, trans_gmean, var, len_scale, T_well, prop)
+    if fix_T_well:
+        T_well = T_CG(r_well, trans_gmean, var, len_scale, T_well, prop)
+    else:
+        T_well = None
     return ext_grf(
         time=time,
         rad=rad,
@@ -469,6 +475,7 @@ def ext_theis_3d(
     far_err=0.01,
     struc_grid=True,
     parts=30,
+    fix_K_well=False,
     lap_kwargs=None,
 ):
     """
@@ -513,7 +520,7 @@ def ext_theis_3d(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
     far_err : :class:`float`, optional
@@ -528,6 +535,8 @@ def ext_theis_3d(
         Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
+    fix_K_well : :class:`bool`, optional
+        Whether to fix the K_well value in the laplace solver. Default: False
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -595,7 +604,10 @@ def ext_theis_3d(
         K_well=K_well,
         prop=prop,
     )
-    K_well = K_CG(r_well, cond_gmean, var, len_scale, anis, K_well, prop)
+    if fix_K_well:
+        K_well = K_CG(r_well, cond_gmean, var, len_scale, anis, K_well, prop)
+    else:
+        K_well = None
     return ext_grf(
         time=time,
         rad=rad,
@@ -637,6 +649,7 @@ def ext_theis_tpl(
     far_err=0.01,
     struc_grid=True,
     parts=30,
+    fix_K_well=False,
     lap_kwargs=None,
 ):
     """
@@ -697,7 +710,7 @@ def ext_theis_tpl(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
     far_err : :class:`float`, optional
@@ -712,6 +725,8 @@ def ext_theis_tpl(
         Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
+    fix_K_well : :class:`bool`, optional
+        Whether to fix the K_well value in the laplace solver. Default: False
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -781,7 +796,12 @@ def ext_theis_tpl(
         K_well=K_well,
         prop=prop,
     )
-    K_well = TPL_CG(r_well, cond_gmean, len_scale, hurst, var, c, 1, dim, K_well, prop)
+    if fix_K_well:
+        K_well = TPL_CG(
+            r_well, cond_gmean, len_scale, hurst, var, c, 1, dim, K_well, prop
+        )
+    else:
+        K_well = None
     return ext_grf(
         time=time,
         rad=rad,
@@ -818,6 +838,7 @@ def ext_theis_tpl_3d(
     far_err=0.01,
     struc_grid=True,
     parts=30,
+    fix_K_well=False,
     lap_kwargs=None,
 ):
     """
@@ -872,7 +893,7 @@ def ext_theis_tpl_3d(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
     far_err : :class:`float`, optional
@@ -887,6 +908,8 @@ def ext_theis_tpl_3d(
         Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
+    fix_K_well : :class:`bool`, optional
+        Whether to fix the K_well value in the laplace solver. Default: False
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -956,7 +979,12 @@ def ext_theis_tpl_3d(
         K_well=K_well,
         prop=prop,
     )
-    K_well = TPL_CG(r_well, cond_gmean, len_scale, hurst, var, c, anis, 3, K_well, prop)
+    if fix_K_well:
+        K_well = TPL_CG(
+            r_well, cond_gmean, len_scale, hurst, var, c, anis, 3, K_well, prop
+        )
+    else:
+        K_well = None
     return ext_grf(
         time=time,
         rad=rad,
@@ -1039,7 +1067,7 @@ def ext_thiem_tpl(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
 
@@ -1162,7 +1190,7 @@ def ext_thiem_tpl_3d(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
     far_err : :class:`float`, optional
@@ -1259,6 +1287,7 @@ def ext_theis_int(
     far_err=0.01,
     struc_grid=True,
     parts=30,
+    fix_K_well=False,
     lap_kwargs=None,
 ):
     """
@@ -1318,7 +1347,7 @@ def ext_theis_int(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
     far_err : :class:`float`, optional
@@ -1333,6 +1362,8 @@ def ext_theis_int(
         Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
+    fix_K_well : :class:`bool`, optional
+        Whether to fix the K_well value in the laplace solver. Default: False
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -1399,7 +1430,12 @@ def ext_theis_int(
         K_well=K_well,
         prop=prop,
     )
-    K_well = Int_CG(r_well, cond_gmean, var, len_scale, roughness, 1, dim, K_well, prop)
+    if fix_K_well:
+        K_well = Int_CG(
+            r_well, cond_gmean, var, len_scale, roughness, 1, dim, K_well, prop
+        )
+    else:
+        K_well = None
     return ext_grf(
         time=time,
         rad=rad,
@@ -1435,6 +1471,7 @@ def ext_theis_int_3d(
     far_err=0.01,
     struc_grid=True,
     parts=30,
+    fix_K_well=False,
     lap_kwargs=None,
 ):
     """
@@ -1488,7 +1525,7 @@ def ext_theis_int_3d(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
     far_err : :class:`float`, optional
@@ -1503,6 +1540,8 @@ def ext_theis_int_3d(
         Since the solution is calculated by setting the transmissivity to local
         constant values, one needs to specify the number of partitions of the
         transmissivity. Default: ``30``
+    fix_K_well : :class:`bool`, optional
+        Whether to fix the K_well value in the laplace solver. Default: False
     lap_kwargs : :class:`dict` or :any:`None` optional
         Dictionary for :any:`get_lap_inv` containing `method` and
         `method_dict`. The default is equivalent to
@@ -1569,9 +1608,12 @@ def ext_theis_int_3d(
         K_well=K_well,
         prop=prop,
     )
-    K_well = Int_CG(
-        r_well, cond_gmean, var, len_scale, roughness, anis, 3, K_well, prop
-    )
+    if fix_K_well:
+        K_well = Int_CG(
+            r_well, cond_gmean, var, len_scale, roughness, anis, 3, K_well, prop
+        )
+    else:
+        K_well = None
     return ext_grf(
         time=time,
         rad=rad,
@@ -1652,7 +1694,7 @@ def ext_thiem_int(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
 
@@ -1770,7 +1812,7 @@ def ext_thiem_int_3d(
         Explicit conductivity value at the well. One can choose between the
         harmonic mean (``"KH"``), the arithmetic mean (``"KA"``) or an
         arbitrary float value. Default: ``"KH"``
-    prop: :class:`float`, optional
+    prop : :class:`float`, optional
         Proportionality factor used within the upscaling procedure.
         Default: ``1.6``
     far_err : :class:`float`, optional
@@ -1858,6 +1900,7 @@ def neuman2004(
     h_bound=0.0,
     struc_grid=True,
     parts=30,
+    fix_T_well=False,
     lap_kwargs=None,
 ):
     """
@@ -1947,7 +1990,10 @@ def neuman2004(
         var=var,
         len_scale=len_scale,
     )
-    T_well = neuman2004_trans(r_well, trans_gmean, var, len_scale)
+    if fix_T_well:
+        T_well = neuman2004_trans(r_well, trans_gmean, var, len_scale)
+    else:
+        T_well = None
     return ext_grf(
         time=time,
         rad=rad,
