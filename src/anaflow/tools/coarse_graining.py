@@ -587,8 +587,8 @@ def Int_CG(
         chi = np.log(K_well / K_efu)
 
     return K_efu * np.exp(
-        (chi * 2 * roughness / (dim + 2 * roughness))
-        * tpl_hyp(rad, dim, roughness, len_scale * anis ** (1 / 3), prop)
+        (chi * roughness / (dim + roughness))
+        * tpl_hyp(rad, dim, roughness / 2, len_scale * anis ** (1 / 3), prop)
     )
 
 
