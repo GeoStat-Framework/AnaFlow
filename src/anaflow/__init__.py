@@ -83,6 +83,7 @@ Helping functions.
    specialrange_cut
 """
 
+from anaflow import flow, tools
 from anaflow.flow import (
     ext_grf,
     ext_grf_steady,
@@ -113,6 +114,7 @@ except ImportError:  # pragma: nocover
     __version__ = "0.0.0.dev0"
 
 __all__ = ["__version__"]
+__all__ += ["flow", "tools"]
 __all__ += [
     "thiem",
     "theis",
