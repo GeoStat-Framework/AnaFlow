@@ -118,7 +118,7 @@ target-version = ["py37"]
     output-format = "colorized"
 
     [tool.pylint.design]
-    max-args = 20
+    max-args = 25
     max-locals = 50
     max-branches = 30
     max-statements = 80
