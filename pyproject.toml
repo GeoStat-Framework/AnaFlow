@@ -1,16 +1,16 @@
 [build-system]
 requires = [
-    "setuptools>=64",
-    "setuptools_scm>=7",
+    "hatchling>=1.8.0",
+    "hatch-vcs",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
 
 [project]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 name = "anaflow"
 authors = [{name = "Sebastian Mueller", email = "sebastian.mueller@ufz.de"}]
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 dynamic = ["version"]
 description = "AnaFlow - analytical solutions for the groundwater-flow equation."
 classifiers = [
@@ -29,10 +29,12 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development",
     "Topic :: Utilities",
@@ -45,17 +47,17 @@ dependencies = [
 
 [project.optional-dependencies]
 doc = [
-    "m2r2>=0.2.8",
-    "matplotlib>=3",
+    "myst-parser",
+    "matplotlib>=3.7",
     "numpydoc>=1.1",
-    "sphinx>=4",
+    "sphinx>=7",
     "sphinx-gallery>=0.8",
-    "sphinx-rtd-theme>=1,<1.1",
+    "sphinx-rtd-theme>=3",
 ]
 test = ["pytest-cov>=3"]
 check = [
-  "black>=24,<25",
-  "isort[colors]<6",
+  "black>=25",
+  "isort[colors]",
   "pylint",
 ]
 
@@ -67,22 +69,39 @@ Tracker = "https://github.com/GeoStat-Framework/anaflow/issues"
 Changelog = "https://github.com/GeoStat-Framework/anaflow/blob/main/CHANGELOG.md"
 Conda-Forge = "https://anaconda.org/conda-forge/anaflow"
 
-[tool.setuptools]
-license-files = ["LICENSE"]
-
-[tool.setuptools_scm]
-write_to = "src/anaflow/_version.py"
-write_to_template = "__version__ = '{version}'"
-local_scheme = "no-local-version"
+[tool.hatch.version]
+source = "vcs"
 fallback_version = "0.0.0.dev0"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/anaflow/_version.py"
+template = "__version__ = '{version}'"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/tests",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/anaflow"]
 
 [tool.isort]
 profile = "black"
 multi_line_output = 3
 
 [tool.black]
-exclude = "_version.py"
-target-version = ["py37"]
+target-version = [
+    "py38",
+    "py39",
+    "py310",
+    "py311",
+    "py312",
+    "py313",
+]
 
 [tool.coverage]
     [tool.coverage.run]
