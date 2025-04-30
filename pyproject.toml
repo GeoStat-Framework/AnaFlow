@@ -143,3 +143,4 @@ target-version = [
     max-statements = 80
     max-attributes = 25
     max-public-methods = 75
+    max-positional-arguments=25
