@@ -11,6 +11,7 @@ References:
 - `Schneider & Attinger 2008 <https://doi.org/10.1029/2007WR005898>`__
 - `Zech & Attinger 2016 <https://doi.org/10.5194/hess-20-1655-2016>`__
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 

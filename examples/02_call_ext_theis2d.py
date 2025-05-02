@@ -12,6 +12,7 @@ transmissivity.
 
 Reference: `Zech et. al. 2016 <http://dx.doi.org/10.1002/2015WR018509>`__
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -51,12 +52,8 @@ for i, step in enumerate(time):
     label_TG = "Theis($T_G$)" if i == 0 else None
     label_TH = "Theis($T_H$)" if i == 0 else None
     label_ef = "extended Theis" if i == 0 else None
-    plt.plot(
-        rad, head_TG[i], label=label_TG, color="C" + str(i), linestyle="--"
-    )
-    plt.plot(
-        rad, head_TH[i], label=label_TH, color="C" + str(i), linestyle=":"
-    )
+    plt.plot(rad, head_TG[i], label=label_TG, color="C" + str(i), linestyle="--")
+    plt.plot(rad, head_TH[i], label=label_TH, color="C" + str(i), linestyle=":")
     plt.plot(rad, head_ef[i], label=label_ef, color="C" + str(i))
     time_ticks.append(head_ef[i][-1])
 

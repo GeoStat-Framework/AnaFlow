@@ -42,6 +42,7 @@ Effective Coarse Graining conductivity/transmissivity solutions.
    T_CG
    K_CG
    TPL_CG
+   Int_CG
 
 Special
 ~~~~~~~
@@ -68,7 +69,8 @@ Helping functions related to the laplace-transformation
    get_lap
    get_lap_inv
 """
-from anaflow.tools.coarse_graining import K_CG, T_CG, TPL_CG
+
+from anaflow.tools.coarse_graining import K_CG, T_CG, TPL_CG, Int_CG
 from anaflow.tools.laplace import get_lap, get_lap_inv
 from anaflow.tools.mean import (
     annular_amean,
@@ -101,4 +103,5 @@ __all__ = [
     "T_CG",
     "K_CG",
     "TPL_CG",
+    "Int_CG",
 ]

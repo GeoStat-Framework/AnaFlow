@@ -14,6 +14,7 @@ The following functions are provided
    annular_hmean
    annular_pmean
 """
+
 # pylint: disable=E1137, C0103
 import numpy as np
 from scipy.integrate import quad as integ
@@ -27,9 +28,7 @@ __all__ = [
 ]
 
 
-def annular_fmean(
-    func, val_arr, f_def, f_inv, ann_dim=2, arg_dict=None, **kwargs
-):
+def annular_fmean(func, val_arr, f_def, f_inv, ann_dim=2, arg_dict=None, **kwargs):
     r"""
     Calculating the annular generalized f-mean.
 
@@ -101,9 +100,7 @@ def annular_fmean(
     if not callable(f_inv):
         raise ValueError("The inverse f-mean function needs to be callable")
     if not np.all(
-        np.isclose(
-            f_inv(f_def(func(val_arr, **kwargs))), func(val_arr, **kwargs)
-        )
+        np.isclose(f_inv(f_def(func(val_arr, **kwargs))), func(val_arr, **kwargs))
     ):
         raise ValueError("f_def and f_inv need to be inverse to each other")
     if len(val_arr) < 2:

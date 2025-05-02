@@ -14,6 +14,7 @@ a transition between the theis solutions for the well- and farfield-conductivity
 
 Reference: `Neuman 2004 <https://doi.org/10.1029/2003WR002405>`__
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -61,12 +62,8 @@ for i, step in enumerate(time):
     label_TG = "Theis($T_G$)" if i == 0 else None
     label_TH = "Theis($T_H$)" if i == 0 else None
     label_ef = "transient Neuman [2004]" if i == 0 else None
-    plt.plot(
-        rad, head_TG[i], label=label_TG, color="C" + str(i), linestyle="--"
-    )
-    plt.plot(
-        rad, head_TH[i], label=label_TH, color="C" + str(i), linestyle=":"
-    )
+    plt.plot(rad, head_TG[i], label=label_TG, color="C" + str(i), linestyle="--")
+    plt.plot(rad, head_TH[i], label=label_TH, color="C" + str(i), linestyle=":")
     plt.plot(rad, head_ef[i], label=label_ef, color="C" + str(i))
     time_ticks.append(head_ef[i][-1])
 

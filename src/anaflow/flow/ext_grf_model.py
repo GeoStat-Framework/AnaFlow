@@ -9,6 +9,7 @@ The following functions are provided
    ext_grf
    ext_grf_steady
 """
+
 # pylint: disable=C0103
 import numpy as np
 from scipy.integrate import quad as integ
@@ -200,9 +201,7 @@ def ext_grf_steady(
         if np.isclose(dim, 2):
             res = np.log(r_ref / Input.rad) / con
         else:
-            res = (
-                (r_ref ** (2 - dim) - Input.rad ** (2 - dim)) / (2 - dim) / con
-            )
+            res = (r_ref ** (2 - dim) - Input.rad ** (2 - dim)) / (2 - dim) / con
 
     res = Input.reshape(res)
     # rescale by pumping rate

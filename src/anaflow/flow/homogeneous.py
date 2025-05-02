@@ -10,6 +10,7 @@ The following functions are provided
    theis
    grf
 """
+
 # pylint: disable=C0103
 import numpy as np
 

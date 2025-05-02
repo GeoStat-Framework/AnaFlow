@@ -16,7 +16,10 @@ The following functions are provided
    K_CG_error
    TPL_CG
    TPL_CG_error
+   Int_CG
+   Int_CG_error
 """
+
 # pylint: disable=C0103
 import numpy as np
 from scipy.optimize import root
@@ -32,6 +35,8 @@ __all__ = [
     "K_CG_error",
     "TPL_CG",
     "TPL_CG_error",
+    "Int_CG",
+    "Int_CG_error",
 ]
 
 
@@ -225,9 +230,7 @@ def K_CG(rad, cond_gmean, var, len_scale, anis, K_well="KH", prop=1.6):
         chi = np.log(K_well / K_efu)
 
     return K_efu * np.exp(
-        chi
-        / np.sqrt(1.0 + (prop * rad / (len_scale * anis ** (1.0 / 3.0))) ** 2)
-        ** 3
+        chi / np.sqrt(1.0 + (prop * rad / (len_scale * anis ** (1.0 / 3.0))) ** 2) ** 3
     )
 
 
@@ -334,9 +337,7 @@ def K_CG_error(err, cond_gmean, var, len_scale, anis, K_well="KH", prop=1.6):
 
     if chi > 0.0:
         if chi / np.log(1.0 + err) >= 1.0:
-            return coef * np.sqrt(
-                (chi / np.log(1.0 + err)) ** (2.0 / 3.0) - 1.0
-            )
+            return coef * np.sqrt((chi / np.log(1.0 + err)) ** (2.0 / 3.0) - 1.0)
         # standard value if the error is less then the variation
         return 0
 
@@ -511,6 +512,171 @@ def TPL_CG_error(
                 hurst=hurst,
                 var=var,
                 c=c,
+                anis=anis,
+                dim=dim,
+                K_well=K_well,
+                prop=prop,
+            )
+            - per
+        )
+
+    return root(curve, 2 * len_scale)["x"][0]
+
+
+def Int_CG(
+    rad,
+    cond_gmean,
+    var,
+    len_scale,
+    roughness=1.0,
+    anis=1,
+    dim=2.0,
+    K_well="KH",
+    prop=1.6,
+):
+    """
+    The integral coarse-graining conductivity.
+
+    The roughness parameter controls the field roughness of
+    log-transmissivity. It's limits are a pure nugget model for
+    r -> 0 and the gaussian model for r -> infinity.
+
+    Parameters
+    ----------
+    rad : :class:`numpy.ndarray`
+        Array with all radii where the function should be evaluated
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity.
+    var : :class:`float` or :any:`None`, optional
+        Variance of log-conductivity.
+    len_scale : :class:`float`
+        Correlation-length of log-conductivity.
+    roughness: :class:`float`, optional
+        Roughness of the model. Should be positive.
+        Default: 1.0
+    anis : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        This is only applied in 3 dimensions.
+        Default: 1.0
+    dim: :class:`float`, optional
+        Dimension of space.
+        Default: ``2.0``
+    K_well :  :class:`str` or  :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``),
+        the arithmetic mean (``"KA"``) or an arbitrary float
+        value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+
+    Returns
+    -------
+    Int_CG : :class:`numpy.ndarray`
+        Array containing the effective conductivity values.
+    """
+    # handle special case in 3D with anisotropy
+    anis = 1 if not np.isclose(dim, 3) else anis
+    ani = aniso(anis) if np.isclose(dim, 3) else 1 / dim
+    K_efu = cond_gmean * np.exp(var * (0.5 - ani))
+    if K_well == "KH":
+        chi = var * (ani - 1)
+    elif K_well == "KA":
+        chi = var * ani
+    else:
+        chi = np.log(K_well / K_efu)
+
+    return K_efu * np.exp(
+        (chi * roughness / (dim + roughness))
+        * tpl_hyp(rad, dim, roughness / 2, len_scale * anis ** (1 / 3), prop)
+    )
+
+
+def Int_CG_error(
+    err,
+    cond_gmean,
+    var,
+    len_scale,
+    roughness=1.0,
+    anis=1,
+    dim=2.0,
+    K_well="KH",
+    prop=1.6,
+):
+    """
+    Calculating the radial-point for given error.
+
+    Calculating the radial-point where the relative error of the farfield
+    value is less than the given tollerance.
+    See: :func:`Int_CG`
+
+    Parameters
+    ----------
+    err : :class:`float`
+        Given relative error for the farfield conductivity
+    cond_gmean : :class:`float`
+        Geometric-mean conductivity
+    var : :class:`float` or :any:`None`, optional
+        Variance of log-conductivity.
+    len_scale : :class:`float`
+        Correlation-length of log-conductivity.
+    roughness: :class:`float`, optional
+        Roughness of the model. Should be positive.
+        Default: 1.0
+    anis : :class:`float`, optional
+        Anisotropy-ratio of the vertical and horizontal corralation-lengths.
+        This is only applied in 3 dimensions.
+        Default: 1.0
+    dim: :class:`float`, optional
+        Dimension of space.
+        Default: ``2.0``
+    K_well :  :class:`str` or  :class:`float`, optional
+        Explicit conductivity value at the well. One can choose between the
+        harmonic mean (``"KH"``),
+        the arithmetic mean (``"KA"``) or an arbitrary float
+        value. Default: ``"KH"``
+    prop: :class:`float`, optional
+        Proportionality factor used within the upscaling procedure.
+        Default: ``1.6``
+
+    Returns
+    -------
+    rad : :class:`float`
+        Radial point, where the relative error is less than the given one.
+    """
+    # handle special case in 3D with anisotropy
+    anis = 1 if not np.isclose(dim, 3) else anis
+    ani = aniso(anis) if np.isclose(dim, 3) else 1 / dim
+    K_efu = cond_gmean * np.exp(var * (0.5 - ani))
+    if K_well == "KH":
+        chi = var * (ani - 1)
+    elif K_well == "KA":
+        chi = var * ani
+    else:
+        chi = np.log(K_well / K_efu)
+    Kw = np.exp(chi + np.log(K_efu))
+
+    # define a curve, that has its root at the wanted percentile
+    if chi > 0:
+        per = (1 + err) * K_efu
+        if not per < Kw:
+            return 0
+    elif chi < 0:
+        per = (1 - err) * K_efu
+        if not per > Kw:
+            return 0
+    else:
+        return 0
+
+    def curve(x):
+        """Curve for fitting."""
+        return (
+            Int_CG(
+                x,
+                cond_gmean=cond_gmean,
+                var=var,
+                len_scale=len_scale,
+                roughness=roughness,
                 anis=anis,
                 dim=dim,
                 K_well=K_well,

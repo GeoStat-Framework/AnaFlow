@@ -14,6 +14,7 @@ conductivity.
 
 Reference: `Müller 2015 <http://dx.doi.org/10.13140/RG.2.2.34074.24002>`__
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -59,12 +60,8 @@ for i, step in enumerate(time):
     label_TG = "Theis($K_{efu}$)" if i == 0 else None
     label_TH = "Theis($K_H$)" if i == 0 else None
     label_ef = "extended Theis 3D" if i == 0 else None
-    plt.plot(
-        rad, head_Kefu[i], label=label_TG, color="C" + str(i), linestyle="--"
-    )
-    plt.plot(
-        rad, head_KH[i], label=label_TH, color="C" + str(i), linestyle=":"
-    )
+    plt.plot(rad, head_Kefu[i], label=label_TG, color="C" + str(i), linestyle="--")
+    plt.plot(rad, head_KH[i], label=label_TH, color="C" + str(i), linestyle=":")
     plt.plot(rad, head_ef[i], label=label_ef, color="C" + str(i))
     time_ticks.append(head_ef[i][-1])
 

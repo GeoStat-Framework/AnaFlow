@@ -63,9 +63,7 @@ class TestAnaFlow(unittest.TestCase):
             self.assertTrue(inc(rad_arr, self.delta))
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
-        self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])), 0.0, places=4
-        )
+        self.assertAlmostEqual(np.abs(np.max(steady - transient[-1, :])), 0.0, places=4)
 
     def test_ext_2d(self):
         steady = af.ext_thiem_2d(
@@ -93,9 +91,7 @@ class TestAnaFlow(unittest.TestCase):
             self.assertTrue(inc(rad_arr, self.delta))
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
-        self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])), 0.0, places=4
-        )
+        self.assertAlmostEqual(np.abs(np.max(steady - transient[-1, :])), 0.0, places=4)
 
     def test_ext_3d(self):
         steady = af.ext_thiem_3d(
@@ -127,9 +123,7 @@ class TestAnaFlow(unittest.TestCase):
             self.assertTrue(inc(rad_arr, self.delta))
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
-        self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])), 0.0, places=4
-        )
+        self.assertAlmostEqual(np.abs(np.max(steady - transient[-1, :])), 0.0, places=4)
 
     def test_neuman(self):
         steady = af.neuman2004_steady(
@@ -157,9 +151,7 @@ class TestAnaFlow(unittest.TestCase):
             self.assertTrue(inc(rad_arr, self.delta))
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
-        self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])), 0.0, places=4
-        )
+        self.assertAlmostEqual(np.abs(np.max(steady - transient[-1, :])), 0.0, places=4)
 
     def test_tpl(self):
         steady = af.ext_thiem_tpl(
@@ -193,9 +185,7 @@ class TestAnaFlow(unittest.TestCase):
             self.assertTrue(inc(rad_arr, self.delta))
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
-        self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])), 0.0, places=3
-        )
+        self.assertAlmostEqual(np.abs(np.max(steady - transient[-1, :])), 0.0, places=3)
 
     def test_tpl_3d(self):
         steady = af.ext_thiem_tpl_3d(
@@ -229,9 +219,75 @@ class TestAnaFlow(unittest.TestCase):
             self.assertTrue(inc(rad_arr, self.delta))
         for time_arr in transient.T:
             self.assertTrue(dec(time_arr, self.delta))
-        self.assertAlmostEqual(
-            np.abs(np.max(steady - transient[-1, :])), 0.0, places=2
+        self.assertAlmostEqual(np.abs(np.max(steady - transient[-1, :])), 0.0, places=2)
+
+    def test_int(self):
+        steady = af.ext_thiem_int(
+            rad=self.rad,
+            r_ref=self.r_ref,
+            cond_gmean=self.t_gmean,
+            var=self.var,
+            len_scale=self.len_scale,
+            lat_ext=self.lat_ext,
+            roughness=self.hurst,
+            dim=self.frac_dim,
+            rate=self.rate,
+            h_ref=self.h_ref,
         )
+        transient = af.ext_theis_int(
+            time=self.time,
+            rad=self.rad,
+            storage=self.storage,
+            cond_gmean=self.t_gmean,
+            var=self.var,
+            len_scale=self.len_scale,
+            lat_ext=self.lat_ext,
+            roughness=self.hurst,
+            dim=self.frac_dim,
+            rate=self.rate,
+            r_bound=self.r_ref,
+            h_bound=self.h_ref,
+        )
+        self.assertTrue(inc(steady, self.delta))
+        for rad_arr in transient:
+            self.assertTrue(inc(rad_arr, self.delta))
+        for time_arr in transient.T:
+            self.assertTrue(dec(time_arr, self.delta))
+        self.assertAlmostEqual(np.abs(np.max(steady - transient[-1, :])), 0.0, places=3)
+
+    def test_int_3d(self):
+        steady = af.ext_thiem_int_3d(
+            rad=self.rad,
+            r_ref=self.r_ref,
+            cond_gmean=self.t_gmean,
+            var=self.var,
+            len_scale=self.len_scale,
+            lat_ext=self.lat_ext,
+            roughness=self.hurst,
+            anis=self.anis,
+            rate=self.rate,
+            h_ref=self.h_ref,
+        )
+        transient = af.ext_theis_int_3d(
+            time=self.time,
+            rad=self.rad,
+            storage=self.storage,
+            cond_gmean=self.t_gmean,
+            var=self.var,
+            len_scale=self.len_scale,
+            lat_ext=self.lat_ext,
+            roughness=self.hurst,
+            anis=self.anis,
+            rate=self.rate,
+            r_bound=self.r_ref,
+            h_bound=self.h_ref,
+        )
+        self.assertTrue(inc(steady, self.delta))
+        for rad_arr in transient:
+            self.assertTrue(inc(rad_arr, self.delta))
+        for time_arr in transient.T:
+            self.assertTrue(dec(time_arr, self.delta))
+        self.assertAlmostEqual(np.abs(np.max(steady - transient[-1, :])), 0.0, places=2)
 
         # plt.plot(self.rad, steady)
         # for rad_arr in transient:

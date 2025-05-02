@@ -9,6 +9,7 @@ the unbounded quasi steady solution and the steady state.
 
 Reference: `Barker 1988 <https://doi.org/10.1029/WR024i010p01796>`__
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -30,9 +31,7 @@ head3 -= head3[-1]  # quasi-steady
 
 plt.plot(rad, head1, label="Ext GRF steady")
 plt.plot(rad, head2, label="Ext GRF (t={})".format(time), linestyle="--")
-plt.plot(
-    rad, head3, label="GRF quasi-steady (t={})".format(time), linestyle=":"
-)
+plt.plot(rad, head3, label="GRF quasi-steady (t={})".format(time), linestyle=":")
 
 plt.xlabel("r in [m]")
 plt.ylabel("h in [m]")

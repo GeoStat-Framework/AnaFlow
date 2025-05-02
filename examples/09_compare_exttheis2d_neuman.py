@@ -13,6 +13,7 @@ References:
 - `Neuman 2004 <https://doi.org/10.1029/2003WR002405>`__
 - `Zech et. al. 2016 <http://dx.doi.org/10.1002/2015WR018509>`__
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -40,9 +41,7 @@ for i, step in enumerate(time):
     plt.plot(rad, head2[i], label=label2, color="C" + str(i), linestyle="--")
     time_ticks.append(head1[i][-1])
 
-plt.title(
-    "$T_G={}$, $\sigma^2={}$, $\ell={}$, $S={}$".format(TG, var, len_scale, S)
-)
+plt.title(r"$T_G={}$, $\sigma^2={}$, $\ell={}$, $S={}$".format(TG, var, len_scale, S))
 plt.xlabel("r in [m]")
 plt.ylabel("h in [m]")
 plt.legend()

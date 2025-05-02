@@ -1,4 +1,0 @@
-prune **
-recursive-include tests *.py
-recursive-include src/anaflow *.py
-include LICENSE README.md pyproject.toml
