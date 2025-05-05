@@ -75,6 +75,10 @@ The following functions are provided directly
 * ``ext_theis_tpl`` extended Theis solution for truncated power laws
 * ``ext_thiem_tpl_3d`` extended Thiem solution in 3D for truncated power laws
 * ``ext_theis_tpl_3d`` extended Theis solution in 3D for truncated power laws
+* ``ext_thiem_int`` extended Thiem solution for the Integral variogram model
+* ``ext_theis_int`` extended Theis solution for the Integral variogram model
+* ``ext_thiem_int_3d`` extended Thiem solution in 3D for the Integral variogram model
+* ``ext_theis_int_3d`` extended Theis solution in 3D for the Integral variogram model
 
 
 ### Laplace Transformation
