@@ -62,6 +62,7 @@ check = [
   "black>=25",
   "isort[colors]",
   "ruff>=0.5.0",
+  "cython-lint",
 ]
 
 [project.urls]
