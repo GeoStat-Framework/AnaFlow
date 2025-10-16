@@ -18,10 +18,8 @@ from scipy.special import erfcx, gamma
 from anaflow.tools.special import sph_surf
 
 try:
-    from ._laplace_accel import (
-        solve_homogeneous as _solve_homogeneous,
-        solve_multilayer as _solve_multilayer,
-    )
+    from ._laplace_accel import solve_homogeneous as _solve_homogeneous
+    from ._laplace_accel import solve_multilayer as _solve_multilayer
 except ImportError as exc:  # pragma: no cover - extension is mandatory
     raise ImportError(
         "anaflow.flow._laplace_accel extension missing. "
@@ -143,15 +141,9 @@ def grf_laplace(
     # ensure that input is treated as contiguous arrays
     s = np.ascontiguousarray(np.atleast_1d(np.asarray(s, dtype=np.float64)))
     rad = np.ascontiguousarray(np.atleast_1d(np.asarray(rad, dtype=np.float64)))
-    S_part = np.ascontiguousarray(
-        np.atleast_1d(np.asarray(S_part, dtype=np.float64))
-    )
-    K_part = np.ascontiguousarray(
-        np.atleast_1d(np.asarray(K_part, dtype=np.float64))
-    )
-    R_part = np.ascontiguousarray(
-        np.atleast_1d(np.asarray(R_part, dtype=np.float64))
-    )
+    S_part = np.ascontiguousarray(np.atleast_1d(np.asarray(S_part, dtype=np.float64)))
+    K_part = np.ascontiguousarray(np.atleast_1d(np.asarray(K_part, dtype=np.float64)))
+    R_part = np.ascontiguousarray(np.atleast_1d(np.asarray(R_part, dtype=np.float64)))
 
     # the dimension is used by nu in the literature (See Barker 88)
     dim = float(dim)
@@ -192,24 +184,13 @@ def grf_laplace(
     diff_sr0 = float(np.sqrt(S_part[0] / K_part[0]))
     cond_vals = np.asarray(pump_cond(s, **cond_kw), dtype=np.float64)
     if cond_vals.shape != s.shape:
-        cond_vals = np.broadcast_to(cond_vals, s.shape).astype(
-            np.float64, copy=True
-        )
+        cond_vals = np.broadcast_to(cond_vals, s.shape).astype(np.float64, copy=True)
     cond_vals = np.ascontiguousarray(cond_vals, dtype=np.float64)
 
     if R_part[0] > 0.0:
-        qs = (
-            -np.power(s, -0.5)
-            / diff_sr0
-            * R_part[0] ** nu1
-            * cond_vals
-        )
+        qs = -np.power(s, -0.5) / diff_sr0 * R_part[0] ** nu1 * cond_vals
     else:
-        qs = (
-            -np.power(2.0 / diff_sr0, nu)
-            * np.power(s, -nu / 2.0)
-            * cond_vals
-        )
+        qs = -np.power(2.0 / diff_sr0, nu) * np.power(s, -nu / 2.0) * cond_vals
     qs = np.ascontiguousarray(qs, dtype=np.float64)
 
     difsr = np.ascontiguousarray(np.sqrt(S_part / K_part), dtype=np.float64)

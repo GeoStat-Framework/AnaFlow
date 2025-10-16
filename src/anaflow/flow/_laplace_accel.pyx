@@ -11,13 +11,14 @@ The Python wrapper takes care of all argument validation and prepares the
 NumPy arrays that are passed into these routines.
 """
 
-from libc.math cimport fabs, isnan, isinf, sqrt
+from libc.math cimport fabs, isinf, isnan, sqrt
 
 import numpy as np
-cimport numpy as np
 
+cimport numpy as np
 from pentapy.solver cimport c_penta_solver2
-from scipy.special.cython_special cimport iv as cy_iv, kv as cy_kv
+from scipy.special.cython_special cimport iv as cy_iv
+from scipy.special.cython_special cimport kv as cy_kv
 
 ctypedef np.float64_t DTYPE_t
 ctypedef np.intp_t ITYPE_t
