@@ -44,9 +44,9 @@ jobs:
         run: |
           python -m isort --check --diff --color .
 
-      - name: pylint check
+      - name: ruff check
         run: |
-          python -m pylint src/anaflow/
+          python -m ruff check src/
 
       - name: cython-lint check
         run: |

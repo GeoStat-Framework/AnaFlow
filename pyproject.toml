@@ -61,7 +61,7 @@ test = ["pytest-cov>=3"]
 check = [
   "black>=25",
   "isort[colors]",
-  "pylint",
+  "ruff>=0.5.0",
 ]
 
 [project.urls]
@@ -116,33 +116,17 @@ target-version = [
         "def __str__",
     ]
 
-[tool.pylint]
-    [tool.pylint.main]
-    extension-pkg-whitelist = [
-        "numpy",
-        "scipy",
-    ]
-    ignore = "_version.py"
-    load-plugins = [
-        "pylint.extensions.no_self_use",
-    ]
+[tool.ruff]
+line-length = 88
+target-version = "py39"
 
-    [tool.pylint.message_control]
-    disable = [
-        "R0801",
-    ]
-
-    [tool.pylint.reports]
-    output-format = "colorized"
-
-    [tool.pylint.design]
-    max-args = 25
-    max-locals = 50
-    max-branches = 30
-    max-statements = 80
-    max-attributes = 25
-    max-public-methods = 75
-    max-positional-arguments=25
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+]
 
 [tool.cibuildwheel]
 # Switch to using build
