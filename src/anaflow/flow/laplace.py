@@ -12,13 +12,19 @@ The following functions are provided
 """
 
 # pylint: disable=C0103,R0915
-import warnings
-
 import numpy as np
-from pentapy import solve
-from scipy.special import erfcx, gamma, iv, kv
+from scipy.special import erfcx, gamma
 
 from anaflow.tools.special import sph_surf
+
+try:
+    from ._laplace_accel import solve_homogeneous as _solve_homogeneous
+    from ._laplace_accel import solve_multilayer as _solve_multilayer
+except ImportError as exc:  # pragma: no cover - extension is mandatory
+    raise ImportError(
+        "anaflow.flow._laplace_accel extension missing. "
+        "Please build the Cython module (e.g. `python setup.py build_ext --inplace`)."
+    ) from exc
 
 __all__ = ["grf_laplace"]
 
@@ -130,13 +136,15 @@ def grf_laplace(
            [-4.58447458e-01, -1.12056319e-02, -9.85673855e-04]])
     """
     cond_kw = {} if cond_kw is None else cond_kw
-    cond = cond if callable(cond) else PUMP_COND[cond]
-    # ensure that input is treated as arrays
-    s = np.squeeze(s).reshape(-1)
-    rad = np.squeeze(rad).reshape(-1)
-    S_part = np.squeeze(S_part).reshape(-1)
-    K_part = np.squeeze(K_part).reshape(-1)
-    R_part = np.squeeze(R_part).reshape(-1)
+    pump_cond = cond if callable(cond) else PUMP_COND[cond]
+
+    # ensure that input is treated as contiguous arrays
+    s = np.ascontiguousarray(np.atleast_1d(np.asarray(s, dtype=np.float64)))
+    rad = np.ascontiguousarray(np.atleast_1d(np.asarray(rad, dtype=np.float64)))
+    S_part = np.ascontiguousarray(np.atleast_1d(np.asarray(S_part, dtype=np.float64)))
+    K_part = np.ascontiguousarray(np.atleast_1d(np.asarray(K_part, dtype=np.float64)))
+    R_part = np.ascontiguousarray(np.atleast_1d(np.asarray(R_part, dtype=np.float64)))
+
     # the dimension is used by nu in the literature (See Barker 88)
     dim = float(dim)
     nu = 1.0 - dim / 2.0
@@ -148,6 +156,7 @@ def grf_laplace(
     parts = len(K_part)
     # set the conductivity at the well
     K_well = K_part[0] if K_well is None else float(K_well)
+
     # check the input
     if not len(R_part) - 1 == len(S_part) == len(K_part) > 0:
         raise ValueError("R_part, S_part and K_part need matching lengths.")
@@ -168,148 +177,70 @@ def grf_laplace(
     if K_well <= 0:
         raise ValueError("The well conductivity needs to be positiv.")
 
-    # initialize the result
-    res = np.zeros(s.shape + rad.shape)
-    # the first sqrt of the diffusivity values
-    diff_sr0 = np.sqrt(S_part[0] / K_part[0])
-    # set the general pumping-condtion depending on the well-radius
+    cut_off_prec = float(cut_off_prec)
+
+    # pre-compute helper arrays
+    res = np.zeros((s.size, rad.size), dtype=np.float64)
+    diff_sr0 = float(np.sqrt(S_part[0] / K_part[0]))
+    cond_vals = np.asarray(pump_cond(s, **cond_kw), dtype=np.float64)
+    if cond_vals.shape != s.shape:
+        cond_vals = np.broadcast_to(cond_vals, s.shape).astype(np.float64, copy=True)
+    cond_vals = np.ascontiguousarray(cond_vals, dtype=np.float64)
+
     if R_part[0] > 0.0:
-        Qs = -(s ** (-0.5)) / diff_sr0 * R_part[0] ** nu1 * cond(s, **cond_kw)
+        qs = -np.power(s, -0.5) / diff_sr0 * R_part[0] ** nu1 * cond_vals
     else:
-        Qs = -((2 / diff_sr0) ** nu) * s ** (-nu / 2) * cond(s, **cond_kw)
+        qs = -np.power(2.0 / diff_sr0, nu) * np.power(s, -nu / 2.0) * cond_vals
+    qs = np.ascontiguousarray(qs, dtype=np.float64)
 
-    # if there is a homgeneouse aquifer, compute the result by hand
+    difsr = np.ascontiguousarray(np.sqrt(S_part / K_part), dtype=np.float64)
+    rad_pow = np.ascontiguousarray(np.power(rad, nu), dtype=np.float64)
+    gamma_1_minus_nu = float(gamma(1.0 - nu))
+    two_over_gamma_nu = 2.0 / float(gamma(nu))
+
     if parts == 1:
-        # initialize the equation system
-        V = np.zeros(2, dtype=float)
-        M = np.array([[-gamma(1 - nu), 2.0 / gamma(nu)], [0, 1]])
-
-        for si, se in enumerate(s):
-            Cs = np.sqrt(se) * diff_sr0
-            # set the pumping-condition at the well
-            V[0] = Qs[si]
-            # incorporate the boundary-conditions
-            if R_part[0] > 0.0:
-                M[0, :] = [-kv(nu1, Cs * R_part[0]), iv(nu1, Cs * R_part[0])]
-            if R_part[-1] < np.inf:
-                M[1, :] = [kv(nu, Cs * R_part[-1]), iv(nu, Cs * R_part[-1])]
-            else:
-                M[0, 1] = 0  # Bs is 0 in this case either way
-            # solve the equation system
-            As, Bs = np.linalg.solve(M, V)
-
-            # calculate the head
-            for ri, re in enumerate(rad):
-                if re < R_part[-1]:
-                    res[si, ri] = re**nu * (As * kv(nu, Cs * re) + Bs * iv(nu, Cs * re))
-
-    # if there is more than one partition, create an equation system
+        _solve_homogeneous(
+            s,
+            rad,
+            rad_pow,
+            float(R_part[0]),
+            float(R_part[-1]),
+            diff_sr0,
+            nu,
+            nu1,
+            gamma_1_minus_nu,
+            two_over_gamma_nu,
+            qs,
+            cut_off_prec,
+            res,
+        )
     else:
-        # initialize LHS and RHS for the linear equation system
-        # Mb is the banded matrix for the Eq-System
-        V = np.zeros(2 * parts)
-        Mb = np.zeros((5, 2 * parts))
-        X = np.zeros(2 * parts)
-        # set the standard boundary conditions for rwell=0.0 and rinf=np.inf
-        Mb[2, 0] = -gamma(1 - nu)
-        Mb[1, 1] = 2.0 / gamma(nu)
-        Mb[2, -1] = 1.0
+        tmp = np.ascontiguousarray(
+            (K_part[:-1] / K_part[1:]) * (difsr[:-1] / difsr[1:]),
+            dtype=np.float64,
+        )
+        pos = np.ascontiguousarray(
+            np.searchsorted(R_part, rad, side="left") - 1, dtype=np.intp
+        )
+        _solve_multilayer(
+            s,
+            rad,
+            rad_pow,
+            R_part,
+            difsr,
+            tmp,
+            pos,
+            nu,
+            nu1,
+            gamma_1_minus_nu,
+            two_over_gamma_nu,
+            qs,
+            cut_off_prec,
+            res,
+        )
 
-        # calculate the consecutive fractions of the conductivities
-        Kfrac = K_part[:-1] / K_part[1:]
-        # calculate the square-root of the diffusivities
-        difsr = np.sqrt(S_part / K_part)
-        # calculate a temporal substitution (factor from mass-conservation)
-        tmp = Kfrac * difsr[:-1] / difsr[1:]
-        # match the radii to the different disks
-        pos = np.searchsorted(R_part, rad) - 1
-
-        # iterate over the laplace-variable
-        for si, se in enumerate(s):
-            Cs = np.sqrt(se) * difsr
-
-            # set the pumping-condition at the well
-            # --> implement other pumping conditions
-            V[0] = Qs[si]
-
-            # generate the equation system as banded matrix
-            for i in range(parts - 1):
-                Mb[0, 2 * i + 3] = -iv(nu, Cs[i + 1] * R_part[i + 1])
-                Mb[1, 2 * i + 2 : 2 * i + 4] = [
-                    -kv(nu, Cs[i + 1] * R_part[i + 1]),
-                    -iv(nu1, Cs[i + 1] * R_part[i + 1]),
-                ]
-                Mb[2, 2 * i + 1 : 2 * i + 3] = [
-                    iv(nu, Cs[i] * R_part[i + 1]),
-                    kv(nu1, Cs[i + 1] * R_part[i + 1]),
-                ]
-                Mb[3, 2 * i : 2 * i + 2] = [
-                    kv(nu, Cs[i] * R_part[i + 1]),
-                    tmp[i] * iv(nu1, Cs[i] * R_part[i + 1]),
-                ]
-                Mb[4, 2 * i] = -tmp[i] * kv(nu1, Cs[i] * R_part[i + 1])
-
-            # set the boundary-conditions if needed
-            if R_part[0] > 0.0:
-                Mb[2, 0] = -kv(nu1, Cs[0] * R_part[0])
-                Mb[1, 1] = iv(nu1, Cs[0] * R_part[0])
-            if R_part[-1] < np.inf:
-                Mb[-2, -2] = kv(nu, Cs[-1] * R_part[-1])
-                Mb[2, -1] = iv(nu, Cs[-1] * R_part[-1])
-            else:  # erase the last row, since X[-1] will be 0
-                Mb[0, -1] = 0
-                Mb[1, -1] = 0
-
-            # find first disk which has no impact
-            Mb_cond = np.max(np.abs(Mb), axis=0)
-            Mb_cond_lo = Mb_cond < cut_off_prec
-            Mb_cond_hi = Mb_cond > 1 / cut_off_prec
-            Mb_cond = np.logical_or(Mb_cond_lo, Mb_cond_hi)
-            cond = np.where(Mb_cond)[0]
-            found = cond.shape[0] > 0
-            first = cond[0] // 2 if found else parts
-
-            # initialize coefficients
-            X[2 * first :] = 0.0
-            # only the first disk has an impact
-            if first <= 1:
-                M_sgl = np.eye(2, dtype=float)
-                M_sgl[:, 0] = Mb[2:4, 0]
-                M_sgl[:, 1] = Mb[1:3, 1]
-                # solve the equation system
-                try:
-                    X[:2] = np.linalg.solve(M_sgl, V[:2])
-                except np.linalg.LinAlgError:
-                    # set 0 if matrix singular
-                    X[:2] = 0
-            elif first > 1:
-                # shrink the matrix
-                M_sgl = Mb[:, : 2 * first]
-                if first < parts:
-                    M_sgl[-1, -1] = 0
-                    M_sgl[-2, -1] = 0
-                    M_sgl[-1, -2] = 0
-                X[: 2 * first] = solve(
-                    M_sgl, V[: 2 * first], is_flat=True, index_row_wise=False
-                )
-            np.nan_to_num(X, copy=False)
-
-            # calculate the head (ignore small values)
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", RuntimeWarning)
-                k0_sub = X[2 * pos] * kv(nu, Cs[pos] * rad)
-                k0_sub[np.abs(X[2 * pos]) < cut_off_prec] = 0
-                i0_sub = X[2 * pos + 1] * iv(nu, Cs[pos] * rad)
-                i0_sub[np.abs(X[2 * pos + 1]) < cut_off_prec] = 0
-                res[si, :] = rad**nu * (k0_sub + i0_sub)
-
-    # set problematic values to 0
-    # --> the algorithm tends to violate small values,
-    #     therefore this approach is suitable
     np.nan_to_num(res, copy=False)
-    # scale to pumpingrate
     res *= rate / (K_well * sph_surf(dim) * lat_ext ** (3.0 - dim))
-
     return res
 
 

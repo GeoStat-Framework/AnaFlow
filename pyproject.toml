@@ -1,16 +1,22 @@
 [build-system]
 requires = [
-    "hatchling>=1.8.0",
-    "hatch-vcs",
+    "setuptools>=77",
+    "wheel",
+    "Cython>=3",
+    "numpy>=2",
+    "scipy>=1.5.4",
+    "pentapy>=1.1.0,<2",
+    "setuptools_scm[toml]>=7",
 ]
-build-backend = "hatchling.build"
+build-backend = "setuptools.build_meta"
 
 [project]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 name = "anaflow"
 authors = [{name = "Sebastian Mueller", email = "sebastian.mueller@ufz.de"}]
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE"]
 dynamic = ["version"]
 description = "AnaFlow - analytical solutions for the groundwater-flow equation."
 classifiers = [
@@ -18,7 +24,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: MacOS",
     "Operating System :: MacOS :: MacOS X",
@@ -29,20 +34,20 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development",
     "Topic :: Utilities",
 ]
 dependencies = [
-    "numpy>=1.14.5",
+    "numpy>=1.20.0",
     "pentapy>=1.1.0,<2",
-    "scipy>=1.1.0",
+    "scipy>=1.5.4",
 ]
 
 [project.optional-dependencies]
@@ -58,7 +63,8 @@ test = ["pytest-cov>=3"]
 check = [
   "black>=25",
   "isort[colors]",
-  "pylint",
+  "ruff>=0.5.0",
+  "cython-lint",
 ]
 
 [project.urls]
@@ -69,25 +75,11 @@ Tracker = "https://github.com/GeoStat-Framework/anaflow/issues"
 Changelog = "https://github.com/GeoStat-Framework/anaflow/blob/main/CHANGELOG.md"
 Conda-Forge = "https://anaconda.org/conda-forge/anaflow"
 
-[tool.hatch.version]
-source = "vcs"
-fallback_version = "0.0.0.dev0"
-
-[tool.hatch.version.raw-options]
+[tool.setuptools_scm]
+write_to = "src/anaflow/_version.py"
+write_to_template = "__version__ = '{version}'"
 local_scheme = "no-local-version"
-
-[tool.hatch.build.hooks.vcs]
-version-file = "src/anaflow/_version.py"
-template = "__version__ = '{version}'"
-
-[tool.hatch.build.targets.sdist]
-include = [
-  "/src",
-  "/tests",
-]
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/anaflow"]
+fallback_version = "0.0.0.dev0"
 
 [tool.isort]
 profile = "black"
@@ -95,7 +87,6 @@ multi_line_output = 3
 
 [tool.black]
 target-version = [
-    "py38",
     "py39",
     "py310",
     "py311",
@@ -120,27 +111,27 @@ target-version = [
         "def __str__",
     ]
 
-[tool.pylint]
-    [tool.pylint.master]
-    extension-pkg-whitelist = [
-        "numpy",
-        "scipy",
-    ]
-    ignore = "_version.py"
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+exclude = ["_version.py"]
 
-    [tool.pylint.message_control]
-    disable = [
-        "R0801",
-    ]
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+]
 
-    [tool.pylint.reports]
-    output-format = "colorized"
+[tool.cibuildwheel]
+# Switch to using build
+build-frontend = "build"
+# Disable building py3.6/7/8, pp3.8, 32bit linux
+skip = ["*-win32", "*_i686", "*-musllinux_*", "cp31?t-*"]
+# Run the package tests using `pytest`
+test-extras = "test"
+test-command = "pytest -v {package}/tests"
 
-    [tool.pylint.design]
-    max-args = 25
-    max-locals = 50
-    max-branches = 30
-    max-statements = 80
-    max-attributes = 25
-    max-public-methods = 75
-    max-positional-arguments=25
+environment.PIP_ONLY_BINARY = "numpy,scipy"
+environment.PIP_PREFER_BINARY = "1"
