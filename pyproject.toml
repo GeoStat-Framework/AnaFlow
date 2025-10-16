@@ -132,7 +132,10 @@ select = [
 # Switch to using build
 build-frontend = "build"
 # Disable building py3.6/7/8, pp3.8, 32bit linux
-skip = ["cp314*", "cp36-*", "cp37-*", "cp38-*", "*_i686", "*-musllinux_*", "cp31?t-*"]
+skip = ["cp314*", "*-win32", "*_i686", "*-musllinux_*", "cp31?t-*"]
 # Run the package tests using `pytest`
 test-extras = "test"
 test-command = "pytest -v {package}/tests"
+
+environment.PIP_ONLY_BINARY = "numpy,scipy"
+environment.PIP_PREFER_BINARY = "1"
