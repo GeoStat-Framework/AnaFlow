@@ -4,14 +4,14 @@ requires = [
     "wheel",
     "Cython>=3",
     "numpy>=2",
-    "scipy>=1.1.0",
+    "scipy>=1.5.4",
     "pentapy>=1.1.0,<2",
     "setuptools_scm[toml]>=7",
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 name = "anaflow"
 authors = [{name = "Sebastian Mueller", email = "sebastian.mueller@ufz.de"}]
 readme = "README.md"
@@ -33,7 +33,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -44,9 +43,9 @@ classifiers = [
     "Topic :: Utilities",
 ]
 dependencies = [
-    "numpy>=2",
+    "numpy>=1.20.0",
     "pentapy>=1.1.0,<2",
-    "scipy>=1.1.0",
+    "scipy>=1.5.4",
 ]
 
 [project.optional-dependencies]
@@ -145,10 +144,8 @@ target-version = [
 [tool.cibuildwheel]
 # Switch to using build
 build-frontend = "build"
-# explicitly enable pypy
-enable = ["pypy"]
 # Disable building py3.6/7/8, pp3.8, 32bit linux
-skip = ["cp314*", "cp36-*", "cp37-*", "cp38-*", "pp38-*", "*_i686"]
+skip = ["cp314*", "cp36-*", "cp37-*", "cp38-*", "*_i686"]
 # Run the package tests using `pytest`
 test-extras = "test"
 test-command = "pytest -v {package}/tests"
