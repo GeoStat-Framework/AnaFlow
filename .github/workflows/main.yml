@@ -19,6 +19,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -28,8 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --editable .[check,test]
-          pip install "coveralls>=3.0.0"
+          pip install -v --editable '.[check]'
 
       - name: black check
         run: |
@@ -47,60 +48,134 @@ jobs:
         run: |
           python -m pylint src/anaflow/
 
-      - name: coveralls check
+      - name: cython-lint check
         run: |
-          python -m pytest --cov anaflow --cov-report term-missing -v tests/
-          python -m coveralls --service=github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          cython-lint src/anaflow/
 
-  build_sdist:
-    name: sdist on ${{ matrix.os }} with py ${{ matrix.python-version }}
+  build_wheels:
+    name: wheels for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13]
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, windows-11-arm, macos-15-intel, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v3.2.1
+        with:
+          output-dir: dist-wheel-${{ matrix.os }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-wheel-${{ matrix.os }}
+          path: ./dist-wheel-${{ matrix.os }}/*.whl
+
+  build_sdist:
+    name: sdist on ${{ matrix.os }} with py ${{ matrix.ver.py }} numpy${{ matrix.ver.np }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-14]
+        ver:
+          - { py: "3.8", np: "==1.20.0", sp: "==1.5.4" }
+          - { py: "3.9", np: "==1.20.0", sp: "==1.5.4" }
+          - { py: "3.10", np: "==1.21.6", sp: "==1.7.2" }
+          - { py: "3.11", np: "==1.23.2", sp: "==1.9.2" }
+          - { py: "3.12", np: "==1.26.2", sp: "==1.11.2" }
+          - { py: "3.13", np: "==2.1.0", sp: "==1.14.1" }
+          # - { py: "3.14", np: "==2.3.2", sp: "==1.16.1" }
+          # - { py: "3.14", np: ">=2.3.2", sp: ">=1.16.1" }
+        exclude:
+          - os: ubuntu-24.04-arm
+            ver: { py: "3.8", np: "==1.20.0", sp: "==1.5.4" }
+          - os: macos-14
+            ver: { py: "3.8", np: "==1.20.0", sp: "==1.5.4" }
+          - os: macos-14
+            ver: { py: "3.9", np: "==1.20.0", sp: "==1.5.4" }
+          - os: macos-14
+            ver: { py: "3.10", np: "==1.21.6", sp: "==1.7.2" }
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+
+      - name: Set up Python ${{ matrix.ver.py }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.ver.py }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Install anaflow
+        run: |
+          pip install -v --editable .[test]
+
+      - name: Run tests
+        run: |
+          pip install "numpy${{ matrix.ver.np }}" "scipy${{ matrix.ver.sp }}"
+          python -m pytest -v tests/
+
+      - name: Build sdist
+        run: |
+          # PEP 517 package builder from pypa
+          python -m build --sdist --outdir dist-sdist .
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.os == 'ubuntu-latest' && matrix.ver.py == '3.11'
+        with:
+          name: dist-sdist
+          path: dist-sdist/*.tar.gz
+
+  coverage:
+    name: coverage
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: '0'
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.11
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install build
-          pip install --editable .[test]
+          pip install "coveralls>=3.0.0"
+
+      - name: Install anaflow
+        run: |
+          pip install -v --editable .[test]
 
       - name: Run tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          pip install "numpy${{ matrix.ver.np }}"
           python -m pytest --cov anaflow --cov-report term-missing -v tests/
-
-      - name: Build sdist
-        run: |
-          python -m build
-
-      - uses: actions/upload-artifact@v4
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        with:
-          name: dist
-          path: dist/*
+          python -m coveralls --service=github
 
   upload_to_pypi:
-    needs: [build_sdist]
+    needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: dist
+          pattern: dist-*
+          merge-multiple: true
           path: dist
 
       - name: Publish to Test PyPI

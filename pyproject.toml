@@ -141,3 +141,14 @@ target-version = [
     max-attributes = 25
     max-public-methods = 75
     max-positional-arguments=25
+
+[tool.cibuildwheel]
+# Switch to using build
+build-frontend = "build"
+# explicitly enable pypy
+enable = ["pypy"]
+# Disable building py3.6/7/8, pp3.8, 32bit linux
+skip = ["cp314*", "cp36-*", "cp37-*", "cp38-*", "pp38-*", "*_i686"]
+# Run the package tests using `pytest`
+test-extras = "test"
+test-command = "pytest -v {package}/tests"
