@@ -1,16 +1,21 @@
 [build-system]
 requires = [
-    "hatchling>=1.8.0",
-    "hatch-vcs",
+    "setuptools>=64",
+    "wheel",
+    "Cython>=3",
+    "numpy>=2",
+    "scipy>=1.1.0",
+    "pentapy>=1.1.0,<2",
+    "setuptools_scm[toml]>=7",
 ]
-build-backend = "hatchling.build"
+build-backend = "setuptools.build_meta"
 
 [project]
 requires-python = ">=3.8"
 name = "anaflow"
 authors = [{name = "Sebastian Mueller", email = "sebastian.mueller@ufz.de"}]
 readme = "README.md"
-license = "MIT"
+license = { text = "MIT License" }
 dynamic = ["version"]
 description = "AnaFlow - analytical solutions for the groundwater-flow equation."
 classifiers = [
@@ -18,7 +23,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: MacOS",
     "Operating System :: MacOS :: MacOS X",
@@ -40,7 +44,7 @@ classifiers = [
     "Topic :: Utilities",
 ]
 dependencies = [
-    "numpy>=1.14.5",
+    "numpy>=2",
     "pentapy>=1.1.0,<2",
     "scipy>=1.1.0",
 ]
@@ -69,25 +73,18 @@ Tracker = "https://github.com/GeoStat-Framework/anaflow/issues"
 Changelog = "https://github.com/GeoStat-Framework/anaflow/blob/main/CHANGELOG.md"
 Conda-Forge = "https://anaconda.org/conda-forge/anaflow"
 
-[tool.hatch.version]
-source = "vcs"
-fallback_version = "0.0.0.dev0"
+[tool.setuptools]
+package-dir = {"" = "src"}
 
-[tool.hatch.version.raw-options]
-local_scheme = "no-local-version"
+[tool.setuptools.packages.find]
+where = ["src"]
 
-[tool.hatch.build.hooks.vcs]
-version-file = "src/anaflow/_version.py"
-template = "__version__ = '{version}'"
+[tool.setuptools.package-data]
+"anaflow.flow" = ["*.pyx", "*.pxd"]
 
-[tool.hatch.build.targets.sdist]
-include = [
-  "/src",
-  "/tests",
-]
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/anaflow"]
+[tool.setuptools_scm]
+write_to = "src/anaflow/_version.py"
+write_to_template = "__version__ = '{version}'"
 
 [tool.isort]
 profile = "black"
