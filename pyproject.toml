@@ -119,6 +119,7 @@ target-version = [
 [tool.ruff]
 line-length = 88
 target-version = "py39"
+exclude = ["_version.py"]
 
 [tool.ruff.lint]
 select = [
