@@ -2,23 +2,22 @@
 
 All notable changes to **AnaFlow** will be documented in this file.
 
-## [1.2.0] - 2025-05
-
-See [#12](https://github.com/GeoStat-Framework/AnaFlow/pull/12)
+## [1.2.0] - 2025-10
 
 ### Enhancements
-- added solutions based on the effective transmissivity for the ["Integral" variogram model](https://geostat-framework.readthedocs.io/projects/gstools/en/v1.7.0/api/gstools.covmodel.Integral.html):
+- added solutions based on the effective transmissivity for the ["Integral" variogram model](https://geostat-framework.readthedocs.io/projects/gstools/en/v1.7.0/api/gstools.covmodel.Integral.html) ([#13](https://github.com/GeoStat-Framework/AnaFlow/pull/13)):
   - `ext_thiem_int`: steady state solution
   - `ext_thiem_int_3d`: steady state solution incorporating vertical anisotropy
   - `ext_theis_int`: transient solution
   - `ext_theis_int_3d`: transient solution incorporating vertical anisotropy
-- added `fix_T_well` and `fix_K_well` bool flag to transient heterogeneous solutions to be able to set if the well value for the effective transmissivity/conductivity should be determined from the limit (`True`) or from the upscaled value in the first ring segment (`False`, default)
+- added `fix_T_well` and `fix_K_well` bool flag to transient heterogeneous solutions to be able to set if the well value for the effective transmissivity/conductivity should be determined from the limit (`True`) or from the upscaled value in the first ring segment (`False`, default) ([#13](https://github.com/GeoStat-Framework/AnaFlow/pull/13))
   - **breaking**: the previous behavior was effectively this set to `True`, which for steep effective curves resulted in an increasing error in the effective head near the well
+- converted the `grf_laplace` solver to a Cython extension to improve laplace-space runtime and keep the Python API unchanged ([#15](https://github.com/GeoStat-Framework/AnaFlow/pull/15))
 
 ### Changes
 - updated docs (use myst parser for markdown files, only generate html and pdf)
-- updated CI (fixed artifacts up-/download action, see #14)
-- use hatchling as build backend
+- updated CI (fixed artifacts up-/download action)
+- package now depends on Cython and is not system independent anymore but wheels are provided for all supported platforms and Python versions
 
 
 ## [1.1.0] - 2023-04
